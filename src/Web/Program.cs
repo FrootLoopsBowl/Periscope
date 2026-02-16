@@ -11,9 +11,6 @@ using Web.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-app.UseDefaultFiles();
-app.UseStaticFiles();
-
 builder.Environment.WebRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
 builder.Services
     .AddApplicationServices(builder.Configuration)
@@ -64,6 +61,8 @@ builder.Services.AddCors(options =>
 
 
 var app = builder.Build();
+app.UseDefaultFiles();
+app.UseStaticFiles();
 await app.Services.InitializeAndSeedDatabase();
 
 var supportedCultures = new[] { "en-CA", "fr-CA" };
