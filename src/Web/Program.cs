@@ -11,7 +11,10 @@ using Web.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
+app.UseDefaultFiles();
+app.UseStaticFiles();
 
+builder.Environment.WebRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
 builder.Services
     .AddApplicationServices(builder.Configuration)
     .AddPersistenceServices(builder.Configuration)
