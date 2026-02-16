@@ -105,4 +105,10 @@ app.UseSwaggerGen();
 // SPA fallback - serve Vue app for any non-API route
 app.MapFallbackToFile("vue/index.html");
 
+using (var scope = app.Services.CreateScope())
+{
+    var initialiser = scope.ServiceProvider.GetRequiredService<GarneauTemplateDbContextInitializer>();
+    await initialiser.InitialiseAsync(); // Ceci doit contenir context.Database.MigrateAsync()
+}
+
 app.Run();
