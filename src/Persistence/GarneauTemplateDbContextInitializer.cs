@@ -49,6 +49,7 @@ public class GarneauTemplateDbContextInitializer
             await SeedRoles();
             await SeedAdmins();
             await SeedMembers();
+            await SeedEntraineurs();
         }
         catch (Exception ex)
         {
@@ -64,6 +65,27 @@ public class GarneauTemplateDbContextInitializer
 
         if (!_roleManager.RoleExistsAsync(Roles.MEMBER).Result)
             await _roleManager.CreateAsync(new Role { Name = Roles.MEMBER, NormalizedName = Roles.MEMBER.Normalize() });
+
+        if (!_roleManager.RoleExistsAsync(Roles.ENTRAINEUR).Result)
+            await _roleManager.CreateAsync(new Role { Name = Roles.ENTRAINEUR, NormalizedName = Roles.ENTRAINEUR.Normalize() });
+    }
+
+    private async Task SeedEntraineurs()
+    {
+        const string entraineurEmail = "entraineur@gmail.com";
+        var user = await _userManager.FindByEmailAsync(entraineurEmail);
+        if (user != null)
+            return;
+
+        user = BuildUser(entraineurEmail);
+        var result = await _userManager.CreateAsync(user, Password);
+
+        if (result.Succeeded)
+            await _userManager.AddToRoleAsync(user, Roles.ENTRAINEUR);
+        else
+            throw new Exception($"Could not seed/create {Roles.ENTRAINEUR} user.");
+
+        // Optionally create a Trainer entity in the future. For now, only the user is needed to login.
     }
 
     private async Task SeedAdmins()
