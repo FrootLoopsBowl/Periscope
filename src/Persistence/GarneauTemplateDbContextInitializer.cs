@@ -11,6 +11,7 @@ public class GarneauTemplateDbContextInitializer
 {
     private const string MemberEmail = "member@gmail.com";
     private const string AdminEmail = "admin@gmail.com";
+    private const string entraineurEmail = "entraineur@gmail.com";
     private const string Password = "Qwerty123!";
 
     private readonly ILogger<GarneauTemplateDbContextInitializer> _logger;
@@ -72,7 +73,7 @@ public class GarneauTemplateDbContextInitializer
 
     private async Task SeedEntraineurs()
     {
-        const string entraineurEmail = "entraineur@gmail.com";
+        
         var user = await _userManager.FindByEmailAsync(entraineurEmail);
         if (user != null)
             return;
@@ -85,7 +86,6 @@ public class GarneauTemplateDbContextInitializer
         else
             throw new Exception($"Could not seed/create {Roles.ENTRAINEUR} user.");
 
-        // Optionally create a Trainer entity in the future. For now, only the user is needed to login.
     }
 
     private async Task SeedAdmins()
