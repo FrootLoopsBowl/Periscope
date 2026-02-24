@@ -24,6 +24,16 @@ public class CreateAthleteEndpoint : EndpointWithSanitizedRequest<CreateAthleteR
 
     public override async Task HandleAsync(CreateAthleteRequest req, CancellationToken ct)
     {
+        if (await _athleteRepository.ExistsByEmailAsync(req.Email))
+        {
+            HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+            await HttpContext.Response.WriteAsJsonAsync(new
+            {
+                errors = new[] { new { errorType = "AthleteWithEmailAlreadyExists", errorMessage = "An athlete with this email already exists." } }
+            }, ct);
+            return;
+        }
+
         var athlete = new Athlete(req.FirstName, req.LastName, req.Email, req.DateOfBirth);
 
         await _athleteRepository.CreateAsync(athlete);

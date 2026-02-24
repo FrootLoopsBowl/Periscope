@@ -138,7 +138,8 @@
           "invalidLastName": "The last name is invalid.",
           "invalidEmail": "The email is invalid.",
           "invalidEmailFormat": "The email format is invalid.",
-          "invalidDateOfBirth": "The date of birth is invalid."
+          "invalidDateOfBirth": "The date of birth is invalid.",
+          "athleteWithEmailAlreadyExists": "An athlete with this email already exists."
         }
       }
     },

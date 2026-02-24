@@ -21,6 +21,13 @@ public class AthleteRepository : IAthleteRepository
         await _context.SaveChangesAsync();
     }
 
+    public async Task<bool> ExistsByEmailAsync(string email)
+    {
+        return await _context.Athletes
+            .AsNoTracking()
+            .AnyAsync(x => x.Email == email);
+    }
+
     public async Task<Athlete?> FindBySubmissionTokenAsync(Guid token)
     {
         return await _context.Athletes
