@@ -61,7 +61,7 @@ function toggleExpansion() {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .expand-leave-active,
 .expand-enter-active {
   transition: max-height 0.2s cubic-bezier(0.69, 0.33, 0.16, 0.97);
