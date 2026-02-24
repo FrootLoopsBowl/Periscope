@@ -8,7 +8,10 @@ import ForgotPassword from "@/views/ForgotPassword.vue";
 import ResetPassword from "@/views/ResetPassword.vue";
 import Account from "@/views/shared/Account.vue";
 
+import AthleteSubmission from "@/views/AthleteSubmission.vue";
 import Admin from "../views/admin/Admin.vue";
+import AdminAthleteIndex from "@/views/admin/athletes/AdminAthleteIndex.vue";
+import AdminAddAthleteForm from "@/views/admin/athletes/AdminAddAthleteForm.vue";
 import AdminMemberIndex from "@/views/admin/members/AdminMemberIndex.vue";
 import AdminAddMemberForm from "@/views/admin/members/AdminAddMemberForm.vue";
 import AdminEditMemberForm from "@/views/admin/members/AdminEditMemberForm.vue";
@@ -76,6 +79,15 @@ const router = createRouter({
       }
     },
     {
+      // Route publique — pas de requiredRole, le guard laisse passer sans authentification
+      path: i18n.t("routes.athleteForm.path"),
+      name: "athleteForm",
+      component: AthleteSubmission,
+      meta: {
+        title: "routes.athleteForm.name"
+      }
+    },
+    {
       path: i18n.t("routes.admin.path"),
       name: "admin",
       component: Admin,
@@ -84,6 +96,23 @@ const router = createRouter({
         noLinkInBreadcrumbs: true,
       },
       children: [
+        {
+          path: i18n.t("routes.admin.children.athletes.path"),
+          name: "admin.children.athletes",
+          component: Admin,
+          children: [
+            {
+              path: "",
+              name: "admin.children.athletes.index",
+              component: AdminAthleteIndex,
+            },
+            {
+              path: i18n.t("routes.admin.children.athletes.add.path"),
+              name: "admin.children.athletes.add",
+              component: AdminAddAthleteForm,
+            },
+          ],
+        },
         {
           path: i18n.t("routes.admin.children.members.path"),
           name: "admin.children.members",

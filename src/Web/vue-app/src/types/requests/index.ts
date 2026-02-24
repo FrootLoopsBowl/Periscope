@@ -1,5 +1,6 @@
 export * from './changeEmailRequest'
 export * from './changePasswordRequest'
+export * from './createAthleteRequest'
 export * from './createBookRequest'
 export * from './editBookRequest'
 export * from './forgotPasswordRequest'
