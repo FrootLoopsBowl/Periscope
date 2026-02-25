@@ -12,6 +12,8 @@ import AthleteSubmission from "@/views/AthleteSubmission.vue";
 import Admin from "../views/admin/Admin.vue";
 import AdminAthleteIndex from "@/views/admin/athletes/AdminAthleteIndex.vue";
 import AdminAddAthleteForm from "@/views/admin/athletes/AdminAddAthleteForm.vue";
+import AdminTeamIndex from "@/views/admin/teams/AdminTeamIndex.vue";
+import AdminAddTeamForm from "@/views/admin/teams/AdminAddTeamForm.vue";
 import AdminMemberIndex from "@/views/admin/members/AdminMemberIndex.vue";
 import AdminAddMemberForm from "@/views/admin/members/AdminAddMemberForm.vue";
 import AdminEditMemberForm from "@/views/admin/members/AdminEditMemberForm.vue";
@@ -110,6 +112,23 @@ const router = createRouter({
               path: i18n.t("routes.admin.children.athletes.add.path"),
               name: "admin.children.athletes.add",
               component: AdminAddAthleteForm,
+            },
+          ],
+        },
+        {
+          path: i18n.t("routes.admin.children.teams.path"),
+          name: "admin.children.teams",
+          component: Admin,
+          children: [
+            {
+              path: "",
+              name: "admin.children.teams.index",
+              component: AdminTeamIndex,
+            },
+            {
+              path: i18n.t("routes.admin.children.teams.add.path"),
+              name: "admin.children.teams.add",
+              component: AdminAddTeamForm,
             },
           ],
         },
