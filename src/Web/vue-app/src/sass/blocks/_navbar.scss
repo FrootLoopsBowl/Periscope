@@ -24,6 +24,14 @@
     line-height: rem(16);
     border-top: 1px solid $color-green;
   }
+  &__brand {
+    display: block;
+    padding: 18px 16px 14px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    text-decoration: none;
+    font-size: 18px;
+  }
 
   &__drawer-btn {
     font-size: rem(16);
@@ -68,6 +76,27 @@
     align-items: flex-start;
     gap: 32px;
   }
+  &__brand {
+    display: block;
+    font-weight: 900;
+    letter-spacing: 1px;
+    text-decoration: none !important;
+    color: #fff !important;
+    font-size: 18px !important;
+  }
+
+  &__item {
+    display: block;
+    padding: 10px 16px;
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+  }
+
+  &__item:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+  }
+ 
 }
 
 //Breakpoints ==================================

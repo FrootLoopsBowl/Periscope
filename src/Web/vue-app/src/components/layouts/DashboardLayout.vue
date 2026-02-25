@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard">
-    <Navbar :member-is-loading="userIsLoading"/>
+     <Navbar :member-is-loading="userIsLoading"/> 
 
     <main class="dashboard__content">
       <LogoutPopup/>
@@ -11,9 +11,9 @@
         <div class="dashboard__content-header" v-if="!isMobile">
           <UserAvatar/>
           <LangSwitcher/>
-        </div>
+        </div> 
 
-        <RouterView v-slot="{Component}">
+       <RouterView v-slot="{Component}">
           <template v-if="Component">
             <Suspense>
               <component :is="Component"/>
@@ -22,7 +22,7 @@
               </template>
             </Suspense>
           </template>
-        </RouterView>
+        </RouterView> 
       </div>
     </main>
   </div>

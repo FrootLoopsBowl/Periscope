@@ -1,6 +1,7 @@
 <template>
   <AuthenticationLayout v-if="!userStore.user.email || isAuthenticationPath"/>
-  <DashboardLayout v-else/>
+  <router-view />
+
 </template>
 
 <script lang="ts" setup>
