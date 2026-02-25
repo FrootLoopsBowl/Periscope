@@ -11,6 +11,7 @@ using Infrastructure.Repositories.Admins;
 using Infrastructure.Repositories.Athletes;
 using Infrastructure.Repositories.Authentication;
 using Infrastructure.Repositories.Books;
+using Infrastructure.Repositories.Teams;
 using Infrastructure.Repositories.Members;
 using Infrastructure.Repositories.Users;
 using Infrastructure.Services;
@@ -64,6 +65,7 @@ public static class ConfigureServices
 
         services.AddScoped<IAdministratorRepository, AdministratorRepository>();
         services.AddScoped<IAthleteRepository, AthleteRepository>();
+        services.AddScoped<ITeamRepository, TeamRepository>();
         services.AddScoped<IBookRepository, BookRepository>();
         services.AddScoped<IMemberRepository, MemberRepository>();
         services.AddScoped<IUserRepository, UserRepository>();

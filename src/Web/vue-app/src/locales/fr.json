@@ -44,6 +44,16 @@
             "name": "Ajouter un athlète"
           }
         },
+        "teams": {
+          "path": "equipes",
+          "fullPath": "/administration/equipes",
+          "name": "Équipes",
+          "add": {
+            "path": "ajouter",
+            "fullPath": "/administration/equipes/ajouter",
+            "name": "Ajouter une équipe"
+          }
+        },
         "members": {
           "path": "membres",
           "fullPath": "/administration/membres",
@@ -143,6 +153,16 @@
           "invalidEmailFormat": "Le format du courriel est invalide.",
           "invalidDateOfBirth": "La date de naissance est invalide.",
           "athleteWithEmailAlreadyExists": "Un athlète avec ce courriel existe déjà."
+        }
+      }
+    },
+    "teams": {
+      "create": {
+        "validation": {
+          "successMessage": "L'équipe a été créée avec succès.",
+          "failedMessage": "Une erreur est survenue lors de la création de l'équipe.",
+          "invalidName": "Le nom est invalide.",
+          "teamWithNameAlreadyExists": "Une équipe avec ce nom existe déjà."
         }
       }
     },
