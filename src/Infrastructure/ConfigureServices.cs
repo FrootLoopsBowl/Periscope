@@ -8,8 +8,10 @@ using Infrastructure.ExternalApis.Azure.Consumers;
 using Infrastructure.ExternalApis.Azure.Http;
 using Infrastructure.Mailing;
 using Infrastructure.Repositories.Admins;
+using Infrastructure.Repositories.Athletes;
 using Infrastructure.Repositories.Authentication;
 using Infrastructure.Repositories.Books;
+using Infrastructure.Repositories.Teams;
 using Infrastructure.Repositories.Members;
 using Infrastructure.Repositories.Entraineurs;
 using Infrastructure.Repositories.Users;
@@ -63,6 +65,8 @@ public static class ConfigureServices
         services.AddSingleton<IHttpContextUserService, HttpContextUserService>();
 
         services.AddScoped<IAdministratorRepository, AdministratorRepository>();
+        services.AddScoped<IAthleteRepository, AthleteRepository>();
+        services.AddScoped<ITeamRepository, TeamRepository>();
         services.AddScoped<IBookRepository, BookRepository>();
         services.AddScoped<IMemberRepository, MemberRepository>();
         services.AddScoped<IEntraineurRepository, EntraineurRepository>();
