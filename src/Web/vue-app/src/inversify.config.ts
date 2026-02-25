@@ -6,6 +6,7 @@ import {TYPES} from "@/injection/types";
 import {
   IAdministratorService,
   IApiService,
+  IAthleteService,
   IAuthenticationService,
   IBookService,
   IMemberService,
@@ -13,6 +14,7 @@ import {
 } from "@/injection/interfaces";
 import {
   ApiService,
+  AthleteService,
   AuthenticationService,
   BookService,
   MemberService,
@@ -24,6 +26,7 @@ const dependencyInjection = new Container();
 dependencyInjection.bind<AxiosInstance>(TYPES.AxiosInstance).toConstantValue(axios.create())
 dependencyInjection.bind<IApiService>(TYPES.IApiService).to(ApiService).inSingletonScope()
 dependencyInjection.bind<IAdministratorService>(TYPES.IAdministratorService).to(AdministratorService).inSingletonScope()
+dependencyInjection.bind<IAthleteService>(TYPES.IAthleteService).to(AthleteService).inSingletonScope()
 dependencyInjection.bind<IAuthenticationService>(TYPES.IAuthenticationService).to(AuthenticationService).inSingletonScope()
 dependencyInjection.bind<IBookService>(TYPES.IBookService).to(BookService).inSingletonScope()
 dependencyInjection.bind<IMemberService>(TYPES.IMemberService).to(MemberService).inSingletonScope()
@@ -31,6 +34,10 @@ dependencyInjection.bind<IUserService>(TYPES.IUserService).to(UserService).inSin
 
 function useAdministratorService() {
   return dependencyInjection.get<IAdministratorService>(TYPES.IAdministratorService);
+}
+
+function useAthleteService() {
+  return dependencyInjection.get<IAthleteService>(TYPES.IAthleteService);
 }
 
 function useAuthenticationService() {
@@ -53,6 +60,7 @@ function useUserService() {
 export {
   dependencyInjection,
   useAdministratorService,
+  useAthleteService,
   useAuthenticationService,
   useBookService,
   useMemberService,
