@@ -12,6 +12,7 @@ using Infrastructure.Repositories.Athletes;
 using Infrastructure.Repositories.Authentication;
 using Infrastructure.Repositories.Books;
 using Infrastructure.Repositories.Members;
+using Infrastructure.Repositories.Entraineurs;
 using Infrastructure.Repositories.Users;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -66,6 +67,7 @@ public static class ConfigureServices
         services.AddScoped<IAthleteRepository, AthleteRepository>();
         services.AddScoped<IBookRepository, BookRepository>();
         services.AddScoped<IMemberRepository, MemberRepository>();
+        services.AddScoped<IEntraineurRepository, EntraineurRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();

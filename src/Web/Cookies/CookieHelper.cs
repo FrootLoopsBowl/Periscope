@@ -26,13 +26,15 @@ public static class CookieHelper
 
         var cookieOptions = new CookieOptions
         {
-            Domain = domain,
             Path = "/",
             Secure = secure,
             HttpOnly = httpOnly,
             IsEssential = true,
             SameSite = SameSiteMode.Strict
         };
+
+        if (!string.IsNullOrWhiteSpace(domain))
+            cookieOptions.Domain = domain;
 
         response.Cookies.Append(cookieName, cookieValue, cookieOptions);
     }

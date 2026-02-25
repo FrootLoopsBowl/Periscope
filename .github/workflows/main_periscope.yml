@@ -1,6 +1,3 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
 name: Build and deploy ASP.Net Core app to Azure Web App - periscope
 
 on:
@@ -9,11 +6,14 @@ on:
       - main
   workflow_dispatch:
 
+# Requis pour l'authentification Azure OIDC (le jeton federated)
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   build:
     runs-on: windows-latest
-    permissions:
-      contents: read #This is required for actions/checkout
 
     steps:
       - uses: actions/checkout@v4
@@ -23,11 +23,22 @@ jobs:
         with:
           dotnet-version: '10.x'
 
-      - name: Build with dotnet
-        run: dotnet build --configuration Release
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
 
+      # 1. Builder le frontend Vue.js
+      # Assure-toi que ton vite.config.ts envoie le build vers ../wwwroot
+      - name: Install and Build Vue App
+        run: |
+          cd src/Web/vue-app
+          npm install
+          npm run build
+
+      # 2. Publier uniquement le projet Web
       - name: dotnet publish
-        run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}/myapp"
+        run: dotnet publish src/Web/Web.csproj -c Release -o "${{env.DOTNET_ROOT}}/myapp"
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -38,16 +49,14 @@ jobs:
   deploy:
     runs-on: windows-latest
     needs: build
-    permissions:
-      id-token: write #This is required for requesting the JWT
-      contents: read #This is required for actions/checkout
-
+    
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
           name: .net-app
-      
+          path: ./publish
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -61,5 +70,4 @@ jobs:
         with:
           app-name: 'periscope'
           slot-name: 'Production'
-          package: .
-          
+          package: ./publish
