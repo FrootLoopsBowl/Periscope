@@ -73,19 +73,35 @@ public class GarneauTemplateDbContextInitializer
 
     private async Task SeedEntraineurs()
     {
-        
         var user = await _userManager.FindByEmailAsync(entraineurEmail);
-        if (user != null)
+        if (user == null)
+        {
+            user = BuildUser(entraineurEmail);
+            var result = await _userManager.CreateAsync(user, Password);
+
+            if (result.Succeeded)
+                await _userManager.AddToRoleAsync(user, Roles.ENTRAINEUR);
+            else
+                throw new Exception($"Could not seed/create {Roles.ENTRAINEUR} user.");
+        }
+
+        var existingEntraineur = _context.Entraineurs.IgnoreQueryFilters().FirstOrDefault(x => x.User.Id == user.Id);
+        if (existingEntraineur is { Deleted: null })
             return;
 
-        user = BuildUser(entraineurEmail);
-        var result = await _userManager.CreateAsync(user, Password);
-
-        if (result.Succeeded)
-            await _userManager.AddToRoleAsync(user, Roles.ENTRAINEUR);
+        if (existingEntraineur == null)
+        {
+            var entraineur = new Entraineur("Entraineur", "Entraine");
+            entraineur.SetUser(user);
+            _context.Entraineurs.Add(entraineur);
+            await _context.SaveChangesAsync();
+        }
         else
-            throw new Exception($"Could not seed/create {Roles.ENTRAINEUR} user.");
-
+        {
+            existingEntraineur.Restore();
+            _context.Entraineurs.Update(existingEntraineur);
+            await _context.SaveChangesAsync();
+        }
     }
 
     private async Task SeedAdmins()
