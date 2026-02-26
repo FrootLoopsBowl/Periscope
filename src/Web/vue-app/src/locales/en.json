@@ -25,11 +25,35 @@
       "fullPath": "/my-account",
       "name": "My account"
     },
+    "athleteForm": {
+      "path": "/athlete-form/:token",
+      "name": "Athlete form"
+    },
     "admin": {
       "path": "/administration",
       "fullPath": "/administration",
       "name": "Administration",
       "children": {
+        "athletes": {
+          "path": "athletes",
+          "fullPath": "/administration/athletes",
+          "name": "Athletes",
+          "add": {
+            "path": "add",
+            "fullPath": "/administration/athletes/add",
+            "name": "Add an athlete"
+          }
+        },
+        "teams": {
+          "path": "teams",
+          "fullPath": "/administration/teams",
+          "name": "Teams",
+          "add": {
+            "path": "add",
+            "fullPath": "/administration/teams/add",
+            "name": "Add a team"
+          }
+        },
         "members": {
           "path": "members",
           "fullPath": "/administration/members",
@@ -109,6 +133,34 @@
         "passwordMismatch": "The password entered does not match your current password.",
         "passwordAndConfirmationMustMatch": "The password and its confirmation must match.",
         "errorOccured": "An error occured during password reset."
+      }
+    },
+    "athleteForm": {
+      "success": "Hello {firstName}, your physical effort form is working correctly!",
+      "notFound": "This link is invalid or your access has been revoked."
+    },
+    "athletes": {
+      "create": {
+        "validation": {
+          "successMessage": "The athlete was added and an email has been sent to them.",
+          "failedMessage": "An error occured during athlete creation.",
+          "invalidFirstName": "The first name is invalid.",
+          "invalidLastName": "The last name is invalid.",
+          "invalidEmail": "The email is invalid.",
+          "invalidEmailFormat": "The email format is invalid.",
+          "invalidDateOfBirth": "The date of birth is invalid.",
+          "athleteWithEmailAlreadyExists": "An athlete with this email already exists."
+        }
+      }
+    },
+    "teams": {
+      "create": {
+        "validation": {
+          "successMessage": "The team was successfully created.",
+          "failedMessage": "An error occured during team creation.",
+          "invalidName": "The name is invalid.",
+          "teamWithNameAlreadyExists": "A team with this name already exists."
+        }
       }
     },
     "members": {
@@ -221,6 +273,8 @@
     "submit": "Submit",
     "firstName": "First name",
     "lastName": "Last name",
+    "dateOfBirth": "Date of birth",
+    "team": "Team",
     "fullName": "Full name",
     "email": "Email",
     "phoneNumber": "Phone number",

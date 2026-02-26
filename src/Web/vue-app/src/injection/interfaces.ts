@@ -1,6 +1,8 @@
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 import {
+  ICreateAthleteRequest,
   ICreateBookRequest,
+  ICreateTeamRequest,
   IEditBookRequest,
   IForgotPasswordRequest,
   ILoginRequest,
@@ -8,7 +10,7 @@ import {
   ITwoFactorRequest
 } from "@/types/requests"
 import {PaginatedResponse, SucceededOrNotResponse} from "@/types/responses"
-import {Administrator, Book, Member, User} from "@/types/entities"
+import {Administrator, Athlete, Book, Member, Team, User} from "@/types/entities"
 import {Guid} from "@/types";
 
 export interface IApiService {
@@ -21,6 +23,12 @@ export interface IApiService {
 
 export interface IAdministratorService {
   getAuthenticated(): Promise<Administrator | undefined>
+}
+
+export interface IAthleteService {
+  createAthlete(request: ICreateAthleteRequest): Promise<SucceededOrNotResponse>
+  getBySubmissionToken(token: string): Promise<{ firstName: string; lastName: string } | null>
+  getAll(pageIndex: number, pageSize: number): Promise<PaginatedResponse<Athlete>>
 }
 
 
@@ -61,6 +69,11 @@ export interface IBookService {
   createBook(request: ICreateBookRequest): Promise<SucceededOrNotResponse>
 
   editBook(request: IEditBookRequest): Promise<SucceededOrNotResponse>
+}
+
+export interface ITeamService {
+  createTeam(request: ICreateTeamRequest): Promise<SucceededOrNotResponse>
+  getAll(pageIndex: number, pageSize: number): Promise<PaginatedResponse<Team>>
 }
 
 export interface IUserService {

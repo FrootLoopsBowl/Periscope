@@ -66,7 +66,7 @@ onBeforeUnmount(() => {
 });
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .fade-leave-active,
 .fade-enter-active {
   transition: opacity 0.2s cubic-bezier(0.69, 0.33, 0.16, 0.97);

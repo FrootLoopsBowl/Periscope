@@ -11,6 +11,7 @@ public class GarneauTemplateDbContextInitializer
 {
     private const string MemberEmail = "member@gmail.com";
     private const string AdminEmail = "admin@gmail.com";
+    private const string entraineurEmail = "entraineur@gmail.com";
     private const string Password = "Qwerty123!";
 
     private readonly ILogger<GarneauTemplateDbContextInitializer> _logger;
@@ -49,6 +50,7 @@ public class GarneauTemplateDbContextInitializer
             await SeedRoles();
             await SeedAdmins();
             await SeedMembers();
+            await SeedEntraineurs();
         }
         catch (Exception ex)
         {
@@ -64,6 +66,42 @@ public class GarneauTemplateDbContextInitializer
 
         if (!_roleManager.RoleExistsAsync(Roles.MEMBER).Result)
             await _roleManager.CreateAsync(new Role { Name = Roles.MEMBER, NormalizedName = Roles.MEMBER.Normalize() });
+
+        if (!_roleManager.RoleExistsAsync(Roles.ENTRAINEUR).Result)
+            await _roleManager.CreateAsync(new Role { Name = Roles.ENTRAINEUR, NormalizedName = Roles.ENTRAINEUR.Normalize() });
+    }
+
+    private async Task SeedEntraineurs()
+    {
+        var user = await _userManager.FindByEmailAsync(entraineurEmail);
+        if (user == null)
+        {
+            user = BuildUser(entraineurEmail);
+            var result = await _userManager.CreateAsync(user, Password);
+
+            if (result.Succeeded)
+                await _userManager.AddToRoleAsync(user, Roles.ENTRAINEUR);
+            else
+                throw new Exception($"Could not seed/create {Roles.ENTRAINEUR} user.");
+        }
+
+        var existingEntraineur = _context.Entraineurs.IgnoreQueryFilters().FirstOrDefault(x => x.User.Id == user.Id);
+        if (existingEntraineur is { Deleted: null })
+            return;
+
+        if (existingEntraineur == null)
+        {
+            var entraineur = new Entraineur("Entraineur", "Entraine");
+            entraineur.SetUser(user);
+            _context.Entraineurs.Add(entraineur);
+            await _context.SaveChangesAsync();
+        }
+        else
+        {
+            existingEntraineur.Restore();
+            _context.Entraineurs.Update(existingEntraineur);
+            await _context.SaveChangesAsync();
+        }
     }
 
     private async Task SeedAdmins()

@@ -27,6 +27,12 @@
         </Content>
         <None Remove="appsettings.appveyor.json" />
     </ItemGroup>
+<ItemGroup>
+  <Content Update="appsettings.json">
+    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+  </Content>
+</ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\..\src\Infrastructure\Infrastructure.csproj" />
