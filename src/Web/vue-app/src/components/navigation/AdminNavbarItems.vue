@@ -6,6 +6,11 @@
       </RouterLink>
     </li>
     <li>
+      <RouterLink :to="{ name: 'admin.children.dashboard' }" class="navbar__navlink">
+        {{ t('routes.admin.children.dashboard.name') }}
+      </RouterLink>
+    </li>
+    <li>
       <Subnav :routeKey="'admin'"/>
     </li>
   </ul>
