@@ -196,6 +196,13 @@
           "invalidName": "Le nom est invalide.",
           "teamWithNameAlreadyExists": "Une équipe avec ce nom existe déjà."
         }
+      },
+      "delete": {
+        "confirmation": "Êtes-vous sûr de vouloir supprimer cette équipe ?",
+        "validation": {
+          "successMessage": "L'équipe a été supprimée avec succès.",
+          "failedMessage": "Une erreur est survenue lors de la suppression de l'équipe."
+        }
       }
     },
     "members": {

@@ -6,6 +6,7 @@ import {ITeamService} from "@/injection/interfaces"
 import {PaginatedResponse, SucceededOrNotResponse} from "@/types/responses"
 import {ICreateTeamRequest} from "@/types/requests"
 import {Team} from "@/types/entities"
+import {Guid} from "@/types"
 
 @injectable()
 export class TeamService extends ApiService implements ITeamService {
@@ -37,5 +38,15 @@ export class TeamService extends ApiService implements ITeamService {
         return error.response as AxiosResponse<PaginatedResponse<Team>>
       })
     return response.data as PaginatedResponse<Team>
+  }
+
+  public async deleteTeam(id: Guid): Promise<SucceededOrNotResponse> {
+    const response = await this
+      ._httpClient
+      .delete<any, AxiosResponse<any>>(`${import.meta.env.VITE_API_BASE_URL}/teams/${id}`)
+      .catch(function (error: AxiosError): AxiosResponse<any> {
+        return error.response as AxiosResponse<any>
+      })
+    return new SucceededOrNotResponse(response.status === 204)
   }
 }
