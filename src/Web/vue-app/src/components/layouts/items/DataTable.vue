@@ -14,7 +14,7 @@
       alternating
       buttons-pagination
       header-item-class-name="vue3-easy-data-table__header-item"
-      theme-color="#528965"
+      theme-color="#5e2028"
   >
     <template #item-status="item">
       <div class="tag">
