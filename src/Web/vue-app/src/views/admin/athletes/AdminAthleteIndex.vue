@@ -1,21 +1,36 @@
 <template>
-  <div class="content-grid content-grid--subpage content-grid--subpage-table">
-    <div class="content-grid__header">
-      <h1 class="back-link">{{ t('routes.admin.children.athletes.name') }}</h1>
-    </div>
-    <div class="content-grid__actions">
-      <BtnLink
+  <div class="content-grid">
+
+    <!-- En-tête -->
+    <div class="flex flex-col gap-3 pb-6 border-b-2 border-green-light">
+      <span class="text-xs font-montserrat uppercase tracking-widest text-green-dark">Administration</span>
+      <div class="flex items-center justify-between flex-wrap gap-4">
+        <div class="flex items-center gap-4">
+          <h1 class="text-4xl font-montserrat font-semibold text-grey-darker">
+            {{ t('routes.admin.children.athletes.name') }}
+          </h1>
+          <span
+            v-if="!athletesAreLoading"
+            class="inline-flex items-center justify-center px-3 py-1 rounded-full bg-green-lighter text-green-dark text-sm font-montserrat font-semibold border border-green-light"
+          >
+            {{ paginatedResponse.totalItems ?? pageAthletes.length }}
+          </span>
+        </div>
+        <BtnLink
           :name="t('routes.admin.children.athletes.add.name')"
           :path="{ path: t('routes.admin.children.athletes.add.fullPath') }"
-      />
+        />
+      </div>
     </div>
+
+    <!-- Tableau -->
     <DataTable
-        :headers="athleteHeaders"
-        :is-loading="athletesAreLoading"
-        :items="tableAthletes"
-        :total-items="paginatedResponse.totalItems"
-        @reload="loadAthletes"
+      :headers="athleteHeaders"
+      :is-loading="athletesAreLoading"
+      :items="tableAthletes"
+      @reload="loadAthletes"
     />
+
   </div>
 </template>
 

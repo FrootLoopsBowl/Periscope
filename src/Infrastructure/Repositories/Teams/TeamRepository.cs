@@ -39,4 +39,15 @@ public class TeamRepository : ITeamRepository
             .ToList();
         return new PaginatedList<Team>(items, total);
     }
+
+    public async Task<Team?> FindByIdAsync(Guid id)
+    {
+        return await _context.Teams.FindAsync(id);
+    }
+
+    public async Task DeleteAsync(Team team)
+    {
+        _context.Teams.Remove(team);
+        await _context.SaveChangesAsync();
+    }
 }

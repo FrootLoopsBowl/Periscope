@@ -43,7 +43,7 @@ const directChildRoutes = computed(() => {
   const children = routes.filter(r => r.path == t(`routes.${props.routeKey}.path`))[0].children;
 
   if (!props.exclude?.length) return children;
-  return children.filter(c => !props.exclude!.some(key => c.path === t(`routes.admin.children.${key}.path`)));
+  return children.filter(c => !props.exclude!.some(key => c.name === `admin.children.${key}`));
 })
 
 let isExpanded = ref<boolean>(true);
