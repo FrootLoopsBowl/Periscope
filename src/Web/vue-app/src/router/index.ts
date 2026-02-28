@@ -101,6 +101,7 @@ const router = createRouter({
       children: [
         {
           path: i18n.t("routes.admin.children.athletes.path"),
+          alias: getLocalizedRoutes("routes.admin.children.athletes.path"),
           name: "admin.children.athletes",
           component: Admin,
           children: [
@@ -111,6 +112,7 @@ const router = createRouter({
             },
             {
               path: i18n.t("routes.admin.children.athletes.add.path"),
+              alias: getLocalizedRoutes("routes.admin.children.athletes.add.path"),
               name: "admin.children.athletes.add",
               component: AdminAddAthleteForm,
             },
@@ -118,6 +120,7 @@ const router = createRouter({
         },
         {
           path: i18n.t("routes.admin.children.teams.path"),
+          alias: getLocalizedRoutes("routes.admin.children.teams.path"),
           name: "admin.children.teams",
           component: Admin,
           children: [
@@ -128,6 +131,7 @@ const router = createRouter({
             },
             {
               path: i18n.t("routes.admin.children.teams.add.path"),
+              alias: getLocalizedRoutes("routes.admin.children.teams.add.path"),
               name: "admin.children.teams.add",
               component: AdminAddTeamForm,
             },
@@ -135,6 +139,7 @@ const router = createRouter({
         },
         {
           path: i18n.t("routes.admin.children.members.path"),
+          alias: getLocalizedRoutes("routes.admin.children.members.path"),
           name: "admin.children.members",
           component: Admin,
           children: [
@@ -145,12 +150,13 @@ const router = createRouter({
             },
             {
               path: i18n.t("routes.admin.children.members.add.path"),
+              alias: getLocalizedRoutes("routes.admin.children.members.add.path"),
               name: "admin.children.members.add",
               component: AdminAddMemberForm,
             },
             {
               path: i18n.t("routes.admin.children.members.edit.path"),
-              alias: i18n.t("routes.admin.children.members.edit.path"),
+              alias: getLocalizedRoutes("routes.admin.children.members.edit.path"),
               name: "admin.children.members.edit",
               component: AdminEditMemberForm,
               props: true
