@@ -11,7 +11,7 @@
       </RouterLink>
     </li>
     <li>
-      <Subnav :routeKey="'admin'"/>
+      <Subnav :routeKey="'admin'" :exclude="['members']"/>
     </li>
   </ul>
 </template>
