@@ -10,6 +10,7 @@ import Account from "@/views/shared/Account.vue";
 
 import AthleteSubmission from "@/views/AthleteSubmission.vue";
 import Admin from "../views/admin/Admin.vue";
+import AdminDashboard from "@/views/admin/AdminDashboard.vue";
 import AdminAthleteIndex from "@/views/admin/athletes/AdminAthleteIndex.vue";
 import AdminAddAthleteForm from "@/views/admin/athletes/AdminAddAthleteForm.vue";
 import AdminTeamIndex from "@/views/admin/teams/AdminTeamIndex.vue";
@@ -157,6 +158,15 @@ const router = createRouter({
           ],
         }
       ]
+    },
+    {
+      path: i18n.t("routes.admin.children.dashboard.fullPath"),
+      name: "admin.children.dashboard",
+      component: AdminDashboard,
+      meta: {
+        requiredRole: Role.Admin,
+        title: "routes.admin.children.dashboard.name",
+      }
     },
     {
       path: i18n.t("routes.books.path"),

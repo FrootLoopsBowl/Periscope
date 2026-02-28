@@ -1,5 +1,8 @@
 <template>
   <div class="navbar">
+    <div class="navbar__brand">
+      <img class="navbar__logo" src="@/assets/logo.png" alt="Logo" />
+    </div>
     <template v-if="$windowWidth < 1225">
       <h2 class="navbar__title">{{ t("global.menu") }}</h2>
 

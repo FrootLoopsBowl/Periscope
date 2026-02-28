@@ -34,6 +34,11 @@
       "fullPath": "/administration",
       "name": "Administration",
       "children": {
+        "dashboard": {
+          "path": "/dashboard",
+          "fullPath": "/dashboard",
+          "name": "Dashboard"
+        },
         "athletes": {
           "path": "athletes",
           "fullPath": "/administration/athletes",
@@ -138,6 +143,26 @@
     "athleteForm": {
       "success": "Hello {firstName}, your physical effort form is working correctly!",
       "notFound": "This link is invalid or your access has been revoked."
+    },
+    "admin": {
+      "dashboard": {
+        "filters": {
+          "title": "Filters",
+          "teamLabel": "Teams",
+          "athleteLabel": "Athletes",
+          "selectPlaceholder": "Select...",
+          "noTeams": "No team available at the moment.",
+          "noAthletes": "No athlete available at the moment.",
+          "search": "Search",
+          "reset": "Reset"
+        },
+        "weeklyGraphsTitle": "Weekly tracking graphs",
+        "weeklyGraphsPlaceholder": "Graphs of weekly tracking will be displayed here.",
+        "prioritizedAthletesTitle": "Prioritized athletes",
+        "prioritizedAthletesPlaceholder": "Prioritized athletes list will be displayed here.",
+        "watchlistTitle": "Athletes to monitor",
+        "watchlistPlaceholder": "Athletes to monitor will be displayed here."
+      }
     },
     "athletes": {
       "create": {
