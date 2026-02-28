@@ -74,6 +74,7 @@ export interface IBookService {
 export interface ITeamService {
   createTeam(request: ICreateTeamRequest): Promise<SucceededOrNotResponse>
   getAll(pageIndex: number, pageSize: number): Promise<PaginatedResponse<Team>>
+  deleteTeam(id: Guid): Promise<SucceededOrNotResponse>
 }
 
 export interface IUserService {

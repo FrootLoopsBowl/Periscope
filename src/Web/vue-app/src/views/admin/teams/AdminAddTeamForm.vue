@@ -1,15 +1,31 @@
 <template>
-  <div class="content-grid content-grid--subpage">
-    <div class="content-grid__header">
-      <h1>{{ t('routes.admin.children.teams.add.name') }}</h1>
+  <div class="content-grid">
+
+    <!-- En-tête -->
+    <div class="flex flex-col gap-3 pb-6 border-b-2 border-green-light">
+      <span class="text-xs font-montserrat uppercase tracking-widest text-green-dark">Administration</span>
+      <div class="flex items-center justify-between flex-wrap gap-4">
+        <h1 class="text-4xl font-montserrat font-semibold text-grey-darker">
+          {{ t('routes.admin.children.teams.add.name') }}
+        </h1>
+        <BackLink />
+      </div>
     </div>
 
-    <BackLink />
+    <!-- Formulaire -->
+    <div class="bg-white rounded-xl border border-grey overflow-hidden" style="box-shadow: var(--shadow-bold)">
+      <div class="flex items-center gap-3 px-6 py-4 bg-green-lighter border-b border-green-light">
+        <span class="block w-1.5 h-7 rounded-full bg-green"></span>
+        <h2 class="font-montserrat font-semibold text-green-dark text-base">
+          {{ t('routes.admin.children.teams.add.name') }}
+        </h2>
+      </div>
+      <div class="p-6">
+        <Loader v-if="preventMultipleSubmit" />
+        <TeamForm @formSubmit="handleSubmit" />
+      </div>
+    </div>
 
-    <Card>
-      <Loader v-if="preventMultipleSubmit" />
-      <TeamForm @formSubmit="handleSubmit" />
-    </Card>
   </div>
 </template>
 
@@ -20,7 +36,6 @@ import {useTeamService} from "@/inversify.config"
 import {notifyError, notifySuccess} from "@/notify"
 import {ICreateTeamRequest} from "@/types/requests"
 import TeamForm from "@/components/teams/TeamForm.vue"
-import Card from "@/components/layouts/items/Card.vue"
 import BackLink from "@/components/layouts/items/BackLink.vue"
 import Loader from "@/components/layouts/items/Loader.vue"
 import {ref} from "vue"

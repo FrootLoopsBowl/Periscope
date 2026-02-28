@@ -9,7 +9,7 @@
         <h2>{{t('pages.account.loginInfos')}}</h2>
       </div>
 
-      <p>TODO: Add change password form</p>
+      <p></p>
     </div>
   </div>
 </template>

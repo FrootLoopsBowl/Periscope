@@ -1,15 +1,21 @@
 <template>
-  <form class="form" novalidate @submit.prevent="handleSubmit">
+  <form novalidate @submit.prevent="handleSubmit" class="flex flex-col gap-6">
     <FormRow>
-      <FormInput :ref="addFormInputRef"
-                 v-model="team.name"
-                 :label="t('global.name')"
-                 :rules="[required]"
-                 name="name"
-                 type="text"
-                 @validated="handleValidation"/>
+      <FormInput
+        :ref="addFormInputRef"
+        v-model="team.name"
+        :label="t('global.name')"
+        :rules="[required]"
+        name="name"
+        type="text"
+        @validated="handleValidation"
+      />
     </FormRow>
-    <button class="form__submit btn btn--fullscreen">{{ t('global.save') }}</button>
+    <div class="flex justify-end">
+      <button type="submit" class="btn btn--fullscreen">
+        {{ t('global.save') }}
+      </button>
+    </div>
   </form>
 </template>
 
