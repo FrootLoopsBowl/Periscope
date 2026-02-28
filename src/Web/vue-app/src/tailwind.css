@@ -1678,7 +1678,8 @@ form input[type="checkbox"] + label::before {
 .navbar__brand {
   display: flex;
   justify-content: center;
-  padding: 24px 0 8px;
+  align-items: center;
+  padding: 24px 0;
 }
 
 .navbar__logo {
@@ -1723,6 +1724,7 @@ form input[type="checkbox"] + label::before {
   font-family: var(--font-montserrat);
   font-size: 1rem;
   line-height: 1rem;
+  color: var(--color-white);
   width: 100%;
   padding: 12px 20px;
   border-radius: 4px;
@@ -1739,6 +1741,24 @@ form input[type="checkbox"] + label::before {
   color: var(--color-white);
   background-color: var(--color-green-medium);
   pointer-events: none;
+}
+
+.navbar__logout {
+  color: var(--color-green-medium);
+  background-color: var(--color-white);
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  font-weight: 700;
+  font-family: var(--font-montserrat);
+  cursor: pointer;
+  transition: opacity 0.2s var(--ease-snappy);
+}
+
+@media (hover: hover) {
+  .navbar__logout:hover {
+    opacity: 0.85;
+  }
 }
 
 .navbar__footer {
@@ -1783,6 +1803,7 @@ form input[type="checkbox"] + label::before {
   font-family: var(--font-montserrat);
   font-size: 1rem;
   line-height: 1rem;
+  color: var(--color-white);
   padding: 12px 20px;
   border-radius: 4px;
   transition: color 0.2s var(--ease-snappy);

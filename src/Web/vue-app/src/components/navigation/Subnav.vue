@@ -2,7 +2,7 @@
   <div v-if="routeKey" class="subnav" :class="{ 'subnav--expand': isExpanded }">
     <button class="subnav__title" @click="toggleExpansion">
       {{ t(`routes.${routeKey}.name`) }}
-      <IconChevron class="icon icon--white" :class="{'icon--rotate-180 icon--black' : !isExpanded}"/>
+      <IconChevron class="icon icon--white" :class="{'icon--rotate-180' : !isExpanded}"/>
     </button>
 
     <Transition name="expand">
@@ -32,6 +32,7 @@ import { getChildPath } from "@/router/helpers";
 // eslint-disable-next-line
 const props = defineProps<{
   routeKey: string
+  exclude?: string[]
 }>();
 
 const { t } = useI18n()
@@ -39,8 +40,10 @@ const router = useRouter();
 
 const directChildRoutes = computed(() => {
   const routes = router.getRoutes();
+  const children = routes.filter(r => r.path == t(`routes.${props.routeKey}.path`))[0].children;
 
-  return routes.filter(r => r.path == t(`routes.${props.routeKey}.path`))[0].children;
+  if (!props.exclude?.length) return children;
+  return children.filter(c => !props.exclude!.some(key => c.path === t(`routes.admin.children.${key}.path`)));
 })
 
 let isExpanded = ref<boolean>(true);
