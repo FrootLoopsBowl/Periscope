@@ -5,6 +5,20 @@ export type Rule = (value: string) => Status;
 export type RuleBoolean = (value: boolean) => Status;
 export type RuleArray = (value: any[]) => Status;
 
+export const mustBeInPast: Rule = (value: string): Status => {
+  const date = new Date(value);
+  date.setUTCMinutes(date.getTimezoneOffset());
+  date.setHours(0, 0, 0, 0);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const result = date < today;
+
+  return {
+    valid: result,
+    message: result ? undefined : i18n.t("validation.pastDate"),
+  };
+};
+
 export const isFutureDate: Rule = (value: string): Status => {
   const startDate = new Date(value);
   startDate.setUTCMinutes(startDate.getTimezoneOffset());

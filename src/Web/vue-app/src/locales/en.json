@@ -377,6 +377,8 @@
     "phoneNumber": "The phone number must respect format 555-555-5555.",
     "errorsInForm": "There are errors in the form.",
     "errorOccured": "An error occured.",
+    "futureDate": "The date must be in the future.",
+    "pastDate": "The date of birth must be in the past.",
     "book": {
       "add": {
         "success": "Book was successfully created.",

@@ -9,6 +9,7 @@
         :aria-invalid="!status.valid"
         :list="list"
         :min="type == 'number' ? '0' : ''"
+        :max="max ?? ''"
         :name="name"
         :placeholder="placeholder"
         :type="type"
@@ -44,6 +45,7 @@ const props = defineProps<{
   rules?: Rule[]
   tooltip?: string,
   list?: string
+  max?: string
 }>();
 
 // eslint-disable-next-line
