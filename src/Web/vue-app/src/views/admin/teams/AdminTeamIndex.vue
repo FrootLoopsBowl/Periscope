@@ -1,6 +1,15 @@
 <template>
   <div class="content-grid">
 
+    <!-- Modal de confirmation de suppression -->
+    <ConfirmModal
+      :show="showConfirmModal"
+      :title="t('pages.teams.delete.modal.title')"
+      :message="t('pages.teams.delete.modal.message')"
+      @confirm="onConfirmDelete"
+      @cancel="showConfirmModal = false"
+    />
+
     <!-- En-tête -->
     <div class="flex flex-col gap-3 pb-6 border-b-2 border-green-light">
       <span class="text-xs font-montserrat uppercase tracking-widest text-green-dark">Administration</span>
@@ -45,6 +54,7 @@ import {PaginatedResponse} from "@/types/responses"
 import DataTable from "@/components/layouts/items/DataTable.vue"
 import BtnLink from "@/components/layouts/items/BtnLink.vue"
 import Loader from "@/components/layouts/items/Loader.vue"
+import ConfirmModal from "@/components/layouts/items/ConfirmModal.vue"
 import {Tables} from "@/types/enums"
 import {notifyError, notifySuccess} from "@/notify"
 
@@ -55,6 +65,8 @@ const teamsAreLoading = ref(false)
 const preventMultipleSubmit = ref(false)
 const pageTeams = ref<Team[]>([])
 const paginatedResponse = ref<PaginatedResponse<Team>>({totalItems: 0})
+const showConfirmModal = ref(false)
+const pendingDeleteItem = ref<any>(null)
 
 const tableTeams = computed(() =>
   pageTeams.value.map((x: Team) => ({
@@ -81,17 +93,21 @@ async function loadTeams(pageIndex: number, pageSize: number) {
   teamsAreLoading.value = false
 }
 
-async function onDelete(item: any) {
+function onDelete(item: any) {
   if (preventMultipleSubmit.value) return
+  pendingDeleteItem.value = item
+  showConfirmModal.value = true
+}
 
-  const confirmed = confirm(t('pages.teams.delete.confirmation'))
-  if (!confirmed) return
+async function onConfirmDelete() {
+  showConfirmModal.value = false
+  if (!pendingDeleteItem.value) return
 
   preventMultipleSubmit.value = true
 
-  const response = await teamService.deleteTeam(item.id)
+  const response = await teamService.deleteTeam(pendingDeleteItem.value.id)
   if (response && response.succeeded) {
-    const index = pageTeams.value.findIndex(x => x.id === item.id)
+    const index = pageTeams.value.findIndex(x => x.id === pendingDeleteItem.value.id)
     if (index !== -1) pageTeams.value.splice(index, 1)
     if (paginatedResponse.value.totalItems)
       paginatedResponse.value.totalItems--
@@ -100,6 +116,7 @@ async function onDelete(item: any) {
     notifyError(t('pages.teams.delete.validation.failedMessage'))
   }
 
+  pendingDeleteItem.value = null
   preventMultipleSubmit.value = false
 }
 

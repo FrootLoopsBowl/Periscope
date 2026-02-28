@@ -199,6 +199,10 @@
       },
       "delete": {
         "confirmation": "Are you sure you want to delete this team?",
+        "modal": {
+          "title": "Delete team",
+          "message": "Are you sure you want to delete this team? This action cannot be undone."
+        },
         "validation": {
           "successMessage": "The team was successfully deleted.",
           "failedMessage": "An error occured during team deletion."

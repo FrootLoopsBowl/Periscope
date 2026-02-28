@@ -199,6 +199,10 @@
       },
       "delete": {
         "confirmation": "Êtes-vous sûr de vouloir supprimer cette équipe ?",
+        "modal": {
+          "title": "Supprimer l'équipe",
+          "message": "Êtes-vous sûr de vouloir supprimer cette équipe ? Cette action est irréversible."
+        },
         "validation": {
           "successMessage": "L'équipe a été supprimée avec succès.",
           "failedMessage": "Une erreur est survenue lors de la suppression de l'équipe."
