@@ -27,7 +27,8 @@
       <FormInput :ref="addFormInputRef"
                  v-model="athlete.dateOfBirth"
                  :label="t('global.dateOfBirth')"
-                 :rules="[required]"
+                 :max="today"
+                 :rules="[required, mustBeInPast]"
                  name="dateOfBirth"
                  type="date"
                  @validated="handleValidation"/>
@@ -41,8 +42,8 @@ import {useI18n} from "vue3-i18n"
 import {notifyError} from "@/notify"
 import {Status} from "@/validation"
 import {ICreateAthleteRequest} from "@/types/requests"
-import {ref} from "vue"
-import {mustMatchEmailFormat, required} from "@/validation/rules"
+import {computed, ref} from "vue"
+import {mustBeInPast, mustMatchEmailFormat, required} from "@/validation/rules"
 import FormRow from "@/components/forms/FormRow.vue"
 import FormInput from "@/components/forms/FormInput.vue"
 
@@ -54,6 +55,8 @@ const emit = defineEmits<{
 const {t} = useI18n()
 
 const athlete = ref<Partial<ICreateAthleteRequest>>({})
+
+const today = computed(() => new Date().toISOString().split('T')[0])
 
 const formInputs = ref<any[]>([])
 const inputValidationStatuses: any = {}
