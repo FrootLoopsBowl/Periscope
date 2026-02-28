@@ -56,16 +56,53 @@
       </div>
 
       <div class="admin-dashboard__actions">
-        <button type="button" class="btn">
+        <button type="button" class="btn" :disabled="isSearchDisabled" @click="handleSearch">
           {{ t("pages.admin.dashboard.filters.search") }}
         </button>
-        <button type="button" class="btn admin-dashboard__btn-reset">
+        <button type="button" class="btn admin-dashboard__btn-reset" @click="handleReset">
           {{ t("pages.admin.dashboard.filters.reset") }}
         </button>
       </div>
     </Card>
 
-    <div class="admin-dashboard__tiles">
+    <div v-if="displayedAthlete" class="admin-dashboard__athlete-page">
+      <Card :title="t('pages.admin.dashboard.athletePage.infosTitle')">
+        <div class="admin-dashboard__athlete-info">
+          <div class="admin-dashboard__athlete-row">
+            <span class="admin-dashboard__athlete-label">{{ t("global.fullName") }}</span>
+            <span class="admin-dashboard__athlete-value">
+              {{ displayValue(displayedAthleteFullName) }}
+            </span>
+          </div>
+          <div class="admin-dashboard__athlete-row">
+            <span class="admin-dashboard__athlete-label">{{ t("global.email") }}</span>
+            <span class="admin-dashboard__athlete-value">
+              {{ displayValue(displayedAthlete.email) }}
+            </span>
+          </div>
+          <div class="admin-dashboard__athlete-row">
+            <span class="admin-dashboard__athlete-label">{{ t("global.dateOfBirth") }}</span>
+            <span class="admin-dashboard__athlete-value">
+              {{ displayValue(formatDateOnly(displayedAthlete.dateOfBirth)) }}
+            </span>
+          </div>
+          <div class="admin-dashboard__athlete-row">
+            <span class="admin-dashboard__athlete-label">{{ t("pages.admin.dashboard.athletePage.createdAtLabel") }}</span>
+            <span class="admin-dashboard__athlete-value">
+              {{ displayValue(formatDateOnly(displayedAthlete.createdAt)) }}
+            </span>
+          </div>
+        </div>
+      </Card>
+
+      <Card :title="t('pages.admin.dashboard.athletePage.weeklyTitle')">
+        <p class="content-grid__text">
+          {{ t("pages.admin.dashboard.athletePage.weeklyPlaceholder") }}
+        </p>
+      </Card>
+    </div>
+
+    <div v-else class="admin-dashboard__tiles">
       <Card :title="t('pages.admin.dashboard.weeklyGraphsTitle')">
         <p class="content-grid__text">
           {{ t("pages.admin.dashboard.weeklyGraphsPlaceholder") }}
@@ -102,6 +139,7 @@ const athleteService = useAthleteService();
 
 const selectedTeamId = ref<string>("");
 const selectedAthleteId = ref<string>("");
+const displayedAthleteId = ref<string>("");
 
 const teams = ref<Team[]>([]);
 const athletes = ref<Athlete[]>([]);
@@ -120,10 +158,48 @@ const athleteOptions = computed<FormOption[]>(() =>
   })).filter((option) => option.name.length > 0 && option.label.length > 0)
 );
 
+const displayedAthlete = computed<Athlete | undefined>(() =>
+  athletes.value.find((athlete) => athlete.id === displayedAthleteId.value)
+);
+
+const displayedAthleteFullName = computed(() =>
+  `${displayedAthlete.value?.firstName ?? ""} ${displayedAthlete.value?.lastName ?? ""}`.trim()
+);
+
+const isSearchDisabled = computed(() => selectedAthleteId.value.length === 0);
+
 onMounted(async () => {
   teams.value = await loadAllTeams();
   athletes.value = await loadAllAthletes();
 });
+
+function handleSearch() {
+  displayedAthleteId.value = selectedAthleteId.value;
+}
+
+function handleReset() {
+  selectedTeamId.value = "";
+  selectedAthleteId.value = "";
+  displayedAthleteId.value = "";
+}
+
+function displayValue(value?: string | boolean) {
+  if (value === undefined || value === null || value === "") return t("global.undefined");
+  if (typeof value === "boolean") return value ? t("global.yes") : t("global.no");
+  return value;
+}
+
+function formatDateOnly(value?: string) {
+  if (!value) return "";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return value;
+
+  return new Intl.DateTimeFormat("fr-CA", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(date);
+}
 
 async function loadAllTeams(): Promise<Team[]> {
   const allTeams: Team[] = [];
