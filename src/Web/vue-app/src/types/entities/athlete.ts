@@ -7,4 +7,6 @@ export class Athlete {
   submissionToken?: string
   active?: boolean
   createdAt?: string
+  teamId?: string
+  teamName?: string
 }

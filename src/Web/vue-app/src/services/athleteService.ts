@@ -4,7 +4,7 @@ import {injectable} from "inversify"
 import {ApiService} from "@/services/apiService"
 import {IAthleteService} from "@/injection/interfaces"
 import {PaginatedResponse, SucceededOrNotResponse} from "@/types/responses"
-import {ICreateAthleteRequest} from "@/types/requests"
+import {IAssignTeamToAthleteRequest, ICreateAthleteRequest} from "@/types/requests"
 import {Athlete} from "@/types/entities"
 
 @injectable()
@@ -52,5 +52,43 @@ export class AthleteService extends ApiService implements IAthleteService {
       return response.data
     }
     return null
+  }
+
+  public async getAllNonPaginated(): Promise<Athlete[]> {
+    const response = await this
+      ._httpClient
+      .get<any, AxiosResponse<Athlete[]>>(
+        `${import.meta.env.VITE_API_BASE_URL}/athletes/all`)
+      .catch(function (error: AxiosError): AxiosResponse<any> {
+        return error.response as AxiosResponse<any>
+      })
+    return response.data as Athlete[]
+  }
+
+  public async getById(id: string): Promise<Athlete | null> {
+    const response = await this
+      ._httpClient
+      .get<any, AxiosResponse<Athlete>>(
+        `${import.meta.env.VITE_API_BASE_URL}/athletes/${id}`)
+      .catch(function (error: AxiosError): AxiosResponse<any> {
+        return error.response as AxiosResponse<any>
+      })
+    if (response.status === 200) {
+      return response.data
+    }
+    return null
+  }
+
+  public async assignTeam(athleteId: string, request: IAssignTeamToAthleteRequest): Promise<SucceededOrNotResponse> {
+    const response = await this
+      ._httpClient
+      .put<any, AxiosResponse<any>>(
+        `${import.meta.env.VITE_API_BASE_URL}/athletes/${athleteId}/team`,
+        request,
+        this.headersWithJsonContentType())
+      .catch(function (error: AxiosError): AxiosResponse<any> {
+        return error.response as AxiosResponse<any>
+      })
+    return new SucceededOrNotResponse(response.status === 204)
   }
 }

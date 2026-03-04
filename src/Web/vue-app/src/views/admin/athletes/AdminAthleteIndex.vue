@@ -37,6 +37,7 @@
 <script lang="ts" setup>
 import {useI18n} from "vue3-i18n"
 import {computed, onMounted, ref} from "vue"
+import {useRouter} from "vue-router"
 import {useAthleteService} from "@/inversify.config"
 import {Athlete} from "@/types/entities"
 import {PaginatedResponse} from "@/types/responses"
@@ -45,6 +46,7 @@ import BtnLink from "@/components/layouts/items/BtnLink.vue"
 import {Tables} from "@/types/enums"
 
 const {t} = useI18n()
+const router = useRouter()
 const athleteService = useAthleteService()
 
 const athletesAreLoading = ref(false)
@@ -57,7 +59,10 @@ const tableAthletes = computed(() =>
     firstName: x.firstName,
     lastName: x.lastName,
     email: x.email,
-    team: undefined,
+    team: x.teamName ?? t('global.undefined'),
+    actions: {
+      view: router.resolve({ name: 'admin.children.athletes.detail', params: { id: x.id } }).href,
+    },
   }))
 )
 
@@ -81,5 +86,6 @@ const athleteHeaders = computed(() => [
   {text: t("global.lastName"), value: 'lastName', width: 150},
   {text: t("global.email"), value: 'email', width: 200},
   {text: t("global.team"), value: 'team', width: 150},
+  {text: t("global.table.actions"), value: 'actions', width: 80},
 ])
 </script>

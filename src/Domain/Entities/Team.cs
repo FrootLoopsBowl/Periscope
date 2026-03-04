@@ -4,6 +4,7 @@ public class Team : Common.Entity
 {
     public string Name { get; private set; } = null!;
     public DateTime CreatedAt { get; private set; }
+    public ICollection<Athlete> Athletes { get; private set; } = new List<Athlete>();
 
     public Team() { }
 

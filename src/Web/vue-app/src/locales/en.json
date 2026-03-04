@@ -47,6 +47,11 @@
             "path": "add",
             "fullPath": "/administration/athletes/add",
             "name": "Add an athlete"
+          },
+          "detail": {
+            "path": ":id",
+            "fullPath": "/administration/athletes/:id",
+            "name": "Athlete profile"
           }
         },
         "teams": {
@@ -57,6 +62,11 @@
             "path": "add",
             "fullPath": "/administration/teams/add",
             "name": "Add a team"
+          },
+          "detail": {
+            "path": ":id",
+            "fullPath": "/administration/teams/:id",
+            "name": "Team profile"
           }
         },
         "members": {
@@ -186,6 +196,18 @@
           "invalidDateOfBirth": "The date of birth is invalid.",
           "athleteWithEmailAlreadyExists": "An athlete with this email already exists."
         }
+      },
+      "detail": {
+        "title": "Athlete profile",
+        "teamSection": "Team",
+        "noTeam": "No team",
+        "assignTeam": "Assign a team",
+        "removeTeam": "Remove from team",
+        "selectTeam": "Select a team...",
+        "validation": {
+          "successMessage": "The team was successfully assigned to the athlete.",
+          "failedMessage": "An error occured while assigning the team."
+        }
       }
     },
     "teams": {
@@ -195,6 +217,17 @@
           "failedMessage": "An error occured during team creation.",
           "invalidName": "The name is invalid.",
           "teamWithNameAlreadyExists": "A team with this name already exists."
+        }
+      },
+      "detail": {
+        "title": "Team profile",
+        "athletesSection": "Team athletes",
+        "assignAthletes": "Assign athletes",
+        "selectAthletes": "Select athletes...",
+        "noAthletes": "No athletes in this team",
+        "validation": {
+          "successMessage": "Athletes were successfully assigned to the team.",
+          "failedMessage": "An error occured while assigning athletes."
         }
       },
       "delete": {

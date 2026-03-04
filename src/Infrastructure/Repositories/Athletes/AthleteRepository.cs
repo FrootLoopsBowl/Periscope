@@ -35,16 +35,39 @@ public class AthleteRepository : IAthleteRepository
             .FirstOrDefaultAsync(x => x.SubmissionToken == token && x.Active);
     }
 
+    public async Task<Athlete?> FindByIdAsync(Guid id)
+    {
+        return await _context.Athletes
+            .Include(x => x.Team)
+            .FirstOrDefaultAsync(x => x.Id == id);
+    }
+
+    public async Task UpdateAsync(Athlete athlete)
+    {
+        _context.Athletes.Update(athlete);
+        await _context.SaveChangesAsync();
+    }
+
     public PaginatedList<Athlete> GetAllPaginated(int pageIndex, int pageSize)
     {
         var total = _context.Athletes.Count(x => x.Active);
         var items = _context.Athletes
             .AsNoTracking()
+            .Include(x => x.Team)
             .Where(x => x.Active)
             .OrderBy(x => x.LastName)
             .Skip((pageIndex - 1) * pageSize)
             .Take(pageSize)
             .ToList();
         return new PaginatedList<Athlete>(items, total);
+    }
+
+    public async Task<IEnumerable<Athlete>> GetAllAsync()
+    {
+        return await _context.Athletes
+            .AsNoTracking()
+            .Where(x => x.Active)
+            .OrderBy(x => x.LastName)
+            .ToListAsync();
     }
 }

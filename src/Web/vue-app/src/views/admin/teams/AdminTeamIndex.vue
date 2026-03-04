@@ -48,6 +48,7 @@
 <script lang="ts" setup>
 import {useI18n} from "vue3-i18n"
 import {computed, onMounted, ref} from "vue"
+import {useRouter} from "vue-router"
 import {useTeamService} from "@/inversify.config"
 import {Team} from "@/types/entities"
 import {PaginatedResponse} from "@/types/responses"
@@ -59,6 +60,7 @@ import {Tables} from "@/types/enums"
 import {notifyError, notifySuccess} from "@/notify"
 
 const {t} = useI18n()
+const router = useRouter()
 const teamService = useTeamService()
 
 const teamsAreLoading = ref(false)
@@ -73,6 +75,7 @@ const tableTeams = computed(() =>
     id: x.id,
     name: x.name,
     actions: {
+      view: router.resolve({ name: 'admin.children.teams.detail', params: { id: x.id } }).href,
       delete: true,
     },
   }))
