@@ -58,10 +58,12 @@ import Loader from "@/components/layouts/items/Loader.vue"
 import ConfirmModal from "@/components/layouts/items/ConfirmModal.vue"
 import {Tables} from "@/types/enums"
 import {notifyError, notifySuccess} from "@/notify"
+import {useTeamStore} from "@/stores/teamStore"
 
 const {t} = useI18n()
 const router = useRouter()
 const teamService = useTeamService()
+const teamStore = useTeamStore()
 
 const teamsAreLoading = ref(false)
 const preventMultipleSubmit = ref(false)
@@ -114,6 +116,7 @@ async function onConfirmDelete() {
     if (index !== -1) pageTeams.value.splice(index, 1)
     if (paginatedResponse.value.totalItems)
       paginatedResponse.value.totalItems--
+    teamStore.setTeams(teamStore.teams.filter(t => t.id !== pendingDeleteItem.value.id))
     notifySuccess(t('pages.teams.delete.validation.successMessage'))
   } else {
     notifyError(t('pages.teams.delete.validation.failedMessage'))

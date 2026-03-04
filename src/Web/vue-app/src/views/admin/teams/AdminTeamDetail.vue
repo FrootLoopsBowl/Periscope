@@ -1,6 +1,15 @@
 <template>
   <div class="content-grid">
 
+    <!-- Modal de confirmation de suppression -->
+    <ConfirmModal
+      :show="showConfirmModal"
+      :title="t('pages.teams.delete.modal.title')"
+      :message="t('pages.teams.delete.modal.message')"
+      @confirm="onConfirmDelete"
+      @cancel="showConfirmModal = false"
+    />
+
     <!-- En-tête -->
     <div class="flex flex-col gap-3 pb-6 border-b-2 border-green-light">
       <span class="text-xs font-montserrat uppercase tracking-widest text-green-dark">Administration</span>
@@ -8,7 +17,18 @@
         <h1 class="text-4xl font-montserrat font-semibold text-grey-darker">
           {{ team ? team.name : t('pages.teams.detail.title') }}
         </h1>
-        <BackLink />
+        <div class="flex items-center gap-3">
+          <button
+            v-if="team"
+            type="button"
+            :disabled="preventMultipleSubmit"
+            class="btn btn--red"
+            @click="showConfirmModal = true"
+          >
+            {{ t('pages.teams.delete.modal.title') }}
+          </button>
+          <BackLink />
+        </div>
       </div>
     </div>
 
@@ -128,21 +148,27 @@
 <script lang="ts" setup>
 import {useI18n} from "vue3-i18n"
 import {computed, onMounted, ref, watch} from "vue"
+import {useRouter} from "vue-router"
 import {useAthleteService, useTeamService} from "@/inversify.config"
 import {notifyError, notifySuccess} from "@/notify"
 import {Athlete, Team} from "@/types/entities"
 import BackLink from "@/components/layouts/items/BackLink.vue"
 import Loader from "@/components/layouts/items/Loader.vue"
+import ConfirmModal from "@/components/layouts/items/ConfirmModal.vue"
+import {useTeamStore} from "@/stores/teamStore"
 
 const {t} = useI18n()
+const router = useRouter()
 
 const props = defineProps<{ id: string }>()
 
 const athleteService = useAthleteService()
 const teamService = useTeamService()
+const teamStore = useTeamStore()
 
 const isLoading = ref(true)
 const preventMultipleSubmit = ref(false)
+const showConfirmModal = ref(false)
 const team = ref<Team | null>(null)
 const allAthletes = ref<Athlete[]>([])
 const selectedAthleteIds = ref<string[]>([])
@@ -212,5 +238,23 @@ async function handleRemoveAthlete(athleteId: string) {
   }
 
   preventMultipleSubmit.value = false
+}
+
+async function onConfirmDelete() {
+  showConfirmModal.value = false
+  if (!team.value?.id || preventMultipleSubmit.value) return
+
+  preventMultipleSubmit.value = true
+  const teamId = team.value.id
+
+  const response = await teamService.deleteTeam(teamId)
+  if (response.succeeded) {
+    teamStore.setTeams(teamStore.teams.filter(t => t.id !== teamId))
+    notifySuccess(t('pages.teams.delete.validation.successMessage'))
+    router.push({ name: 'admin.children.teams.index' })
+  } else {
+    notifyError(t('pages.teams.delete.validation.failedMessage'))
+    preventMultipleSubmit.value = false
+  }
 }
 </script>
