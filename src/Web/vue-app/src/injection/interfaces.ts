@@ -34,6 +34,7 @@ export interface IAthleteService {
   getAllNonPaginated(): Promise<Athlete[]>
   getById(id: string): Promise<Athlete | null>
   assignTeam(athleteId: string, request: IAssignTeamToAthleteRequest): Promise<SucceededOrNotResponse>
+  deleteAthlete(id: string): Promise<SucceededOrNotResponse>
 }
 
 

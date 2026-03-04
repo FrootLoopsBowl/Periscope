@@ -37,9 +37,18 @@
             <span
               v-for="athlete in team.athletes"
               :key="athlete.id"
-              class="inline-flex items-center px-3 py-1 rounded-full bg-green-lighter text-green-dark text-sm font-montserrat font-semibold border border-green-light"
+              class="inline-flex items-center gap-2 pl-3 pr-2 py-1 rounded-full bg-green-lighter text-green-dark text-sm font-montserrat font-semibold border border-green-light"
             >
               {{ athlete.firstName }} {{ athlete.lastName }}
+              <button
+                type="button"
+                :disabled="preventMultipleSubmit"
+                class="w-4 h-4 rounded-full bg-green-light hover:bg-red-200 text-green-dark hover:text-red-600 flex items-center justify-center transition-colors text-xs leading-none"
+                :title="t('pages.teams.detail.removeAthlete')"
+                @click="handleRemoveAthlete(athlete.id!)"
+              >
+                ×
+              </button>
             </span>
           </div>
         </div>
@@ -59,9 +68,16 @@
             <label class="text-xs font-montserrat uppercase tracking-widest text-grey-dark">
               {{ t('pages.teams.detail.selectAthletes') }}
             </label>
+            <!-- Barre de recherche -->
+            <input
+              v-model="athleteSearch"
+              type="text"
+              :placeholder="t('pages.teams.detail.searchAthletes')"
+              class="border border-grey rounded-lg px-4 py-2 font-montserrat text-grey-darker text-sm focus:outline-none focus:border-green"
+            />
             <div class="border border-grey rounded-lg max-h-64 overflow-y-auto">
               <label
-                v-for="athlete in allAthletes"
+                v-for="athlete in filteredAthletes"
                 :key="athlete.id"
                 class="flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-green-lighter transition-colors border-b border-grey last:border-b-0"
               >
@@ -76,15 +92,18 @@
                     {{ athlete.firstName }} {{ athlete.lastName }}
                   </span>
                   <span class="font-montserrat text-grey-dark text-xs">{{ athlete.email }}</span>
-                  <span v-if="athlete.teamId && athlete.teamId !== team?.id" class="font-montserrat text-xs text-orange-500 italic">
-                    {{ t('global.team') }}: {{ athlete.teamName }}
+                  <span v-if="athlete.teamId" class="inline-flex items-center gap-1 mt-1 px-2 py-0.5 rounded-full text-xs font-montserrat font-semibold text-white" style="background-color: var(--color-green-medium);">
+                    {{ athlete.teamName }}
                   </span>
                 </div>
               </label>
-              <p v-if="allAthletes.length === 0" class="px-4 py-3 font-montserrat text-grey-dark italic text-sm">
-                {{ t('pages.admin.dashboard.filters.noAthletes') }}
+              <p v-if="filteredAthletes.length === 0" class="px-4 py-3 font-montserrat text-grey-dark italic text-sm">
+                {{ athleteSearch ? t('pages.teams.detail.noSearchResults') : t('pages.admin.dashboard.filters.noAthletes') }}
               </p>
             </div>
+            <p class="text-xs font-montserrat text-grey-dark">
+              {{ selectedAthleteIds.length }} {{ t('pages.teams.detail.selected') }}
+            </p>
           </div>
 
           <div class="flex gap-3">
@@ -108,7 +127,7 @@
 
 <script lang="ts" setup>
 import {useI18n} from "vue3-i18n"
-import {onMounted, ref} from "vue"
+import {computed, onMounted, ref, watch} from "vue"
 import {useAthleteService, useTeamService} from "@/inversify.config"
 import {notifyError, notifySuccess} from "@/notify"
 import {Athlete, Team} from "@/types/entities"
@@ -127,11 +146,27 @@ const preventMultipleSubmit = ref(false)
 const team = ref<Team | null>(null)
 const allAthletes = ref<Athlete[]>([])
 const selectedAthleteIds = ref<string[]>([])
+const athleteSearch = ref('')
 
-onMounted(async () => {
+const filteredAthletes = computed(() => {
+  const q = athleteSearch.value.toLowerCase().trim()
+  if (!q) return allAthletes.value
+  return allAthletes.value.filter(a =>
+    `${a.firstName} ${a.lastName}`.toLowerCase().includes(q) ||
+    (a.email ?? '').toLowerCase().includes(q)
+  )
+})
+
+async function loadData() {
+  isLoading.value = true
+  athleteSearch.value = ''
   await Promise.all([loadTeam(), loadAthletes()])
   isLoading.value = false
-})
+}
+
+onMounted(loadData)
+
+watch(() => props.id, loadData)
 
 async function loadTeam() {
   team.value = await teamService.getById(props.id)
@@ -152,8 +187,26 @@ async function handleAssignAthletes() {
 
   const response = await teamService.assignAthletes(props.id, { athleteIds: selectedAthleteIds.value })
   if (response.succeeded) {
-    await loadTeam()
+    await Promise.all([loadTeam(), loadAthletes()])
     notifySuccess(t('pages.teams.detail.validation.successMessage'))
+  } else {
+    notifyError(t('pages.teams.detail.validation.failedMessage'))
+  }
+
+  preventMultipleSubmit.value = false
+}
+
+async function handleRemoveAthlete(athleteId: string) {
+  if (preventMultipleSubmit.value) return
+  preventMultipleSubmit.value = true
+
+  const response = await athleteService.assignTeam(athleteId, { teamId: null })
+  if (response.succeeded) {
+    if (team.value?.athletes) {
+      team.value.athletes = team.value.athletes.filter(a => a.id !== athleteId)
+    }
+    selectedAthleteIds.value = selectedAthleteIds.value.filter(id => id !== athleteId)
+    notifySuccess(t('pages.teams.detail.validation.removeSuccessMessage'))
   } else {
     notifyError(t('pages.teams.detail.validation.failedMessage'))
   }

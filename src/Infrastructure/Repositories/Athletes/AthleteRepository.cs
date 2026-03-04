@@ -66,8 +66,15 @@ public class AthleteRepository : IAthleteRepository
     {
         return await _context.Athletes
             .AsNoTracking()
+            .Include(x => x.Team)
             .Where(x => x.Active)
             .OrderBy(x => x.LastName)
             .ToListAsync();
+    }
+
+    public async Task DeleteAsync(Athlete athlete)
+    {
+        _context.Athletes.Remove(athlete);
+        await _context.SaveChangesAsync();
     }
 }

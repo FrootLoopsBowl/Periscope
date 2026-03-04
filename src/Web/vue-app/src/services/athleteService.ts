@@ -91,4 +91,15 @@ export class AthleteService extends ApiService implements IAthleteService {
       })
     return new SucceededOrNotResponse(response.status === 204)
   }
+
+  public async deleteAthlete(id: string): Promise<SucceededOrNotResponse> {
+    const response = await this
+      ._httpClient
+      .delete<any, AxiosResponse<any>>(
+        `${import.meta.env.VITE_API_BASE_URL}/athletes/${id}`)
+      .catch(function (error: AxiosError): AxiosResponse<any> {
+        return error.response as AxiosResponse<any>
+      })
+    return new SucceededOrNotResponse(response.status === 204)
+  }
 }

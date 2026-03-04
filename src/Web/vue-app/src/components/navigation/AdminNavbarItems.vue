@@ -11,7 +11,10 @@
       </RouterLink>
     </li>
     <li>
-      <Subnav :routeKey="'admin'" :exclude="['members']"/>
+      <Subnav :routeKey="'admin'" :exclude="['members', 'teams']"/>
+    </li>
+    <li>
+      <TeamNavList />
     </li>
   </ul>
 </template>
@@ -19,6 +22,7 @@
 <script lang="ts" setup>
 import { useI18n } from "vue3-i18n";
 import Subnav from "./Subnav.vue";
+import TeamNavList from "./TeamNavList.vue";
 
 const {t} = useI18n()
 </script>

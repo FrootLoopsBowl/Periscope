@@ -57,13 +57,24 @@
           <!-- Équipe actuelle -->
           <div>
             <p class="text-xs font-montserrat uppercase tracking-widest text-grey-dark mb-2">{{ t('global.team') }}</p>
-            <span
-              v-if="athlete.teamName"
-              class="inline-flex items-center px-3 py-1 rounded-full bg-green-lighter text-green-dark text-sm font-montserrat font-semibold border border-green-light"
-            >
-              {{ athlete.teamName }}
-            </span>
-            <span v-else class="font-montserrat text-grey-dark italic">{{ t('pages.athletes.detail.noTeam') }}</span>
+            <div class="flex items-center gap-3 flex-wrap">
+              <span
+                v-if="athlete.teamName"
+                class="inline-flex items-center px-3 py-1 rounded-full bg-green-lighter text-green-dark text-sm font-montserrat font-semibold border border-green-light"
+              >
+                {{ athlete.teamName }}
+              </span>
+              <span v-else class="font-montserrat text-grey-dark italic">{{ t('pages.athletes.detail.noTeam') }}</span>
+              <button
+                v-if="athlete.teamId"
+                type="button"
+                :disabled="preventMultipleSubmit"
+                class="btn btn--red"
+                @click="handleRemoveTeam"
+              >
+                {{ t('pages.athletes.detail.removeTeam') }}
+              </button>
+            </div>
           </div>
 
           <!-- Sélection de l'équipe -->
@@ -149,6 +160,25 @@ async function handleAssignTeam() {
       athlete.value.teamName = allTeams.value.find(t => t.id === selectedTeamId.value)?.name
     }
     notifySuccess(t('pages.athletes.detail.validation.successMessage'))
+  } else {
+    notifyError(t('pages.athletes.detail.validation.failedMessage'))
+  }
+
+  preventMultipleSubmit.value = false
+}
+
+async function handleRemoveTeam() {
+  if (preventMultipleSubmit.value) return
+  preventMultipleSubmit.value = true
+
+  const response = await athleteService.assignTeam(props.id, { teamId: null })
+  if (response.succeeded) {
+    if (athlete.value) {
+      athlete.value.teamId = undefined
+      athlete.value.teamName = undefined
+    }
+    selectedTeamId.value = null
+    notifySuccess(t('pages.athletes.detail.validation.removeSuccessMessage'))
   } else {
     notifyError(t('pages.athletes.detail.validation.failedMessage'))
   }

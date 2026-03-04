@@ -12,4 +12,5 @@ public interface IAthleteRepository
     Task UpdateAsync(Athlete athlete);
     PaginatedList<Athlete> GetAllPaginated(int pageIndex, int pageSize);
     Task<IEnumerable<Athlete>> GetAllAsync();
+    Task DeleteAsync(Athlete athlete);
 }
