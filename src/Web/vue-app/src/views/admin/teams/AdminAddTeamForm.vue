@@ -39,10 +39,12 @@ import TeamForm from "@/components/teams/TeamForm.vue"
 import BackLink from "@/components/layouts/items/BackLink.vue"
 import Loader from "@/components/layouts/items/Loader.vue"
 import {ref} from "vue"
+import {useTeamStore} from "@/stores/teamStore"
 
 const {t} = useI18n()
 const router = useRouter()
 const teamService = useTeamService()
+const teamStore = useTeamStore()
 
 const preventMultipleSubmit = ref<boolean>(false)
 
@@ -53,6 +55,8 @@ async function handleSubmit(team: ICreateTeamRequest) {
 
   const succeededOrNotResponse = await teamService.createTeam(team)
   if (succeededOrNotResponse.succeeded) {
+    const updatedTeams = await teamService.getAllNonPaginated()
+    teamStore.setTeams(updatedTeams)
     preventMultipleSubmit.value = false
     notifySuccess(t('pages.teams.create.validation.successMessage'))
     setTimeout(() => {

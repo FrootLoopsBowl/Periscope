@@ -13,8 +13,10 @@ import Admin from "../views/admin/Admin.vue";
 import AdminDashboard from "@/views/admin/AdminDashboard.vue";
 import AdminAthleteIndex from "@/views/admin/athletes/AdminAthleteIndex.vue";
 import AdminAddAthleteForm from "@/views/admin/athletes/AdminAddAthleteForm.vue";
+import AdminAthleteDetail from "@/views/admin/athletes/AdminAthleteDetail.vue";
 import AdminTeamIndex from "@/views/admin/teams/AdminTeamIndex.vue";
 import AdminAddTeamForm from "@/views/admin/teams/AdminAddTeamForm.vue";
+import AdminTeamDetail from "@/views/admin/teams/AdminTeamDetail.vue";
 import AdminMemberIndex from "@/views/admin/members/AdminMemberIndex.vue";
 import AdminAddMemberForm from "@/views/admin/members/AdminAddMemberForm.vue";
 import AdminEditMemberForm from "@/views/admin/members/AdminEditMemberForm.vue";
@@ -116,6 +118,13 @@ const router = createRouter({
               name: "admin.children.athletes.add",
               component: AdminAddAthleteForm,
             },
+            {
+              path: i18n.t("routes.admin.children.athletes.detail.path"),
+              alias: getLocalizedRoutes("routes.admin.children.athletes.detail.path"),
+              name: "admin.children.athletes.detail",
+              component: AdminAthleteDetail,
+              props: true,
+            },
           ],
         },
         {
@@ -134,6 +143,13 @@ const router = createRouter({
               alias: getLocalizedRoutes("routes.admin.children.teams.add.path"),
               name: "admin.children.teams.add",
               component: AdminAddTeamForm,
+            },
+            {
+              path: i18n.t("routes.admin.children.teams.detail.path"),
+              alias: getLocalizedRoutes("routes.admin.children.teams.detail.path"),
+              name: "admin.children.teams.detail",
+              component: AdminTeamDetail,
+              props: true,
             },
           ],
         },

@@ -1,5 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 import {
+  IAssignAthletesToTeamRequest,
+  IAssignTeamToAthleteRequest,
   ICreateAthleteRequest,
   ICreateBookRequest,
   ICreateTeamRequest,
@@ -29,6 +31,10 @@ export interface IAthleteService {
   createAthlete(request: ICreateAthleteRequest): Promise<SucceededOrNotResponse>
   getBySubmissionToken(token: string): Promise<{ firstName: string; lastName: string } | null>
   getAll(pageIndex: number, pageSize: number): Promise<PaginatedResponse<Athlete>>
+  getAllNonPaginated(): Promise<Athlete[]>
+  getById(id: string): Promise<Athlete | null>
+  assignTeam(athleteId: string, request: IAssignTeamToAthleteRequest): Promise<SucceededOrNotResponse>
+  deleteAthlete(id: string): Promise<SucceededOrNotResponse>
 }
 
 
@@ -74,6 +80,9 @@ export interface IBookService {
 export interface ITeamService {
   createTeam(request: ICreateTeamRequest): Promise<SucceededOrNotResponse>
   getAll(pageIndex: number, pageSize: number): Promise<PaginatedResponse<Team>>
+  getAllNonPaginated(): Promise<Team[]>
+  getById(id: string): Promise<Team | null>
+  assignAthletes(teamId: string, request: IAssignAthletesToTeamRequest): Promise<SucceededOrNotResponse>
   deleteTeam(id: Guid): Promise<SucceededOrNotResponse>
 }
 

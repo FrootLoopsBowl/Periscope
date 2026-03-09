@@ -10,4 +10,6 @@ public class AthleteResponse
     public Guid SubmissionToken { get; set; }
     public bool Active { get; set; }
     public DateTime CreatedAt { get; set; }
+    public Guid? TeamId { get; set; }
+    public string? TeamName { get; set; }
 }

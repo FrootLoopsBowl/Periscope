@@ -40,9 +40,24 @@ public class TeamRepository : ITeamRepository
         return new PaginatedList<Team>(items, total);
     }
 
+    public async Task<IEnumerable<Team>> GetAllAsync()
+    {
+        return await _context.Teams
+            .AsNoTracking()
+            .OrderBy(x => x.Name)
+            .ToListAsync();
+    }
+
     public async Task<Team?> FindByIdAsync(Guid id)
     {
         return await _context.Teams.FindAsync(id);
+    }
+
+    public async Task<Team?> FindByIdWithAthletesAsync(Guid id)
+    {
+        return await _context.Teams
+            .Include(x => x.Athletes)
+            .FirstOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task DeleteAsync(Team team)

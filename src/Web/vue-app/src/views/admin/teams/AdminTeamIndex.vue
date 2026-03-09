@@ -48,6 +48,7 @@
 <script lang="ts" setup>
 import {useI18n} from "vue3-i18n"
 import {computed, onMounted, ref} from "vue"
+import {useRouter} from "vue-router"
 import {useTeamService} from "@/inversify.config"
 import {Team} from "@/types/entities"
 import {PaginatedResponse} from "@/types/responses"
@@ -57,9 +58,12 @@ import Loader from "@/components/layouts/items/Loader.vue"
 import ConfirmModal from "@/components/layouts/items/ConfirmModal.vue"
 import {Tables} from "@/types/enums"
 import {notifyError, notifySuccess} from "@/notify"
+import {useTeamStore} from "@/stores/teamStore"
 
 const {t} = useI18n()
+const router = useRouter()
 const teamService = useTeamService()
+const teamStore = useTeamStore()
 
 const teamsAreLoading = ref(false)
 const preventMultipleSubmit = ref(false)
@@ -73,6 +77,7 @@ const tableTeams = computed(() =>
     id: x.id,
     name: x.name,
     actions: {
+      view: router.resolve({ name: 'admin.children.teams.detail', params: { id: x.id } }).href,
       delete: true,
     },
   }))
@@ -111,6 +116,7 @@ async function onConfirmDelete() {
     if (index !== -1) pageTeams.value.splice(index, 1)
     if (paginatedResponse.value.totalItems)
       paginatedResponse.value.totalItems--
+    teamStore.setTeams(teamStore.teams.filter(t => t.id !== pendingDeleteItem.value.id))
     notifySuccess(t('pages.teams.delete.validation.successMessage'))
   } else {
     notifyError(t('pages.teams.delete.validation.failedMessage'))

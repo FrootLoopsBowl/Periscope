@@ -1679,7 +1679,7 @@ form input[type="checkbox"] + label::before {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 24px 0;
+  padding: 8px 0;
 }
 
 .navbar__logo {
@@ -1773,13 +1773,20 @@ form input[type="checkbox"] + label::before {
 @media (min-width: 1225px) {
   .navbar {
     position: sticky;
-    padding-top: 120px;
-    top: calc(78px + 24px);
+    top: 0;
+    height: 100vh;
+    padding-top: 16px;
+    justify-content: flex-start;
   }
 
   .navbar__content {
+    flex: 1;
     overflow: auto;
-    max-height: calc(100vh - (78px + 24px));
+  }
+
+  .navbar__footer {
+    margin-top: auto;
+    flex-shrink: 0;
   }
 
   .navbar__nav {
