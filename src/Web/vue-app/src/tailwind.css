@@ -468,8 +468,9 @@
 
 .vue3-easy-data-table__actions {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 12px;
+  align-items: center;
 }
 
 .vue3-easy-data-table__actions .vue3-easy-data-table__action::after {
@@ -480,25 +481,38 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 4px;
+  padding: 10px;
   border-radius: 4px;
-  background-color: var(--color-green);
-  transition: background-color 0.2s var(--ease-snappy);
+  background-color: var(--color-white);
+  border: 1px solid var(--color-green);
+  transition: background-color 0.2s var(--ease-snappy), border-color 0.2s var(--ease-snappy);
+  flex-shrink: 0;
+}
+
+.vue3-easy-data-table__action .icon * {
+  transition: fill 0.2s var(--ease-snappy);
 }
 
 @media (hover: hover) {
   .vue3-easy-data-table__action:hover {
-    background-color: var(--color-green-medium);
+    background-color: var(--color-green);
+    border-color: var(--color-green);
+  }
+
+  .vue3-easy-data-table__action:hover .icon * {
+    fill: var(--color-white);
   }
 }
 
 .vue3-easy-data-table__action.red-bg {
-  background-color: rgba(255, 96, 96, 0.8);
+  background-color: var(--color-white);
+  border-color: var(--color-green);
 }
 
 @media (hover: hover) {
   .vue3-easy-data-table__action.red-bg:hover {
-    background-color: var(--color-red);
+    background-color: var(--color-green);
+    border-color: var(--color-green);
   }
 }
 

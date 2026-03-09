@@ -29,7 +29,7 @@
             :to="item.actions.view"
             class="vue3-easy-data-table__action"
         >
-          <IconView class="icon icon--black"/>
+          <IconView class="icon icon--green"/>
         </router-link>
         <router-link
             v-if="item.actions.edit"
@@ -37,7 +37,7 @@
             :to="item.actions.edit"
             class="vue3-easy-data-table__action"
         >
-          <IconEdit class="icon icon--black"/>
+          <IconEdit class="icon icon--green"/>
         </router-link>
         <button
             v-if="item.actions.resend && item.id"
@@ -46,16 +46,16 @@
             type="button"
             @click="handleResend(item)"
         >
-          <IconMail class="icon icon--black"/>
+          <IconMail class="icon icon--green"/>
         </button>
         <button
             v-if="item.actions.delete && item.id"
             v-tippy="t(`global.actions.delete`)"
-            class="vue3-easy-data-table__action red-bg"
+            class="vue3-easy-data-table__action"
             type="button"
             @click="handleDelete(item)"
         >
-          <IconDelete class="icon icon--black"/>
+          <IconDelete class="icon icon--green"/>
         </button>
       </p>
     </template>

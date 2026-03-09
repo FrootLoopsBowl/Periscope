@@ -13,7 +13,7 @@
             <span class="athlete-page__accent"></span>
             <div>
               <h2 class="athlete-page__panel-title">{{ athlete.firstName }} {{ athlete.lastName }}</h2>
-              <p class="athlete-page__panel-text">Votre espace athlète est maintenant accessible depuis ce lien.</p>
+              <p class="athlete-page__panel-text">Votre espace personnel est maintenant accessible depuis ce lien.</p>
             </div>
           </div>
         </section>
@@ -22,7 +22,6 @@
           <div class="athlete-page__panel-head">
             <span class="athlete-page__accent"></span>
             <div>
-              <h2 class="athlete-page__panel-title">{{ t('routes.athletePage.name') }}</h2>
               <p class="athlete-page__error">{{ t('pages.athletePage.notFound') }}</p>
             </div>
           </div>
@@ -92,34 +91,7 @@ onMounted(async () => {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
-}
-
-.athlete-page__header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding-bottom: 1.5rem;
-  border-bottom: 2px solid var(--color-green-light);
-}
-
-.athlete-page__eyebrow {
-  margin-bottom: 0.5rem;
-  color: var(--color-green-dark);
-  font-family: var(--font-montserrat);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-}
-
-.athlete-page__title {
-  color: var(--color-grey-darker);
-  font-family: var(--font-montserrat);
-  font-size: 2rem;
-  line-height: 1.1;
-  font-weight: 700;
+  gap: 1.5rem;
 }
 
 .athlete-page__panel {
