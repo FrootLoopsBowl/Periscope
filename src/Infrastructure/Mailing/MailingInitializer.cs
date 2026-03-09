@@ -11,8 +11,8 @@ public static class MailingInitializer
         IConfiguration configuration)
     {
         services.Configure<MailingSettings>(configuration.GetSection("Mailing"));
-        services.Configure<BrevoSettings>(configuration.GetSection("Brevo"));
+        services.Configure<GmailSettings>(configuration.GetSection("Gmail"));
 
-        services.AddTransient<IEmailSender, BrevoSmtpSender>();
+        services.AddTransient<IEmailSender, GmailSmtpSender>();
     }
 }

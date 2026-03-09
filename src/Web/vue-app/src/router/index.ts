@@ -89,7 +89,8 @@ const router = createRouter({
       name: "athletePage",
       component: AthletePage,
       meta: {
-        title: "routes.athletePage.name"
+        title: "routes.athletePage.name",
+        publicLayout: true
       }
     },
     {

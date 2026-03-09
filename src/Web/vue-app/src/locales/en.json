@@ -219,8 +219,6 @@
           "successMessage": "The athlete was successfully deleted.",
           "failedMessage": "An error occured while deleting the athlete."
         }
-      }
-    },
       },
       "resend": {
         "validation": {

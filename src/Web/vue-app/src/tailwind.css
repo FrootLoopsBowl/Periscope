@@ -1,7 +1,6 @@
 @import "tailwindcss";
 
-/* Scan all Vue/TS files for Tailwind classes */
-@source "./**/*.{vue,ts,js}";
+/* Let Tailwind auto-detect sources to avoid parser crashes on Windows. */
 
 /*
  * Custom theme mapping project SCSS colors to Tailwind utilities.

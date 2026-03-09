@@ -10,7 +10,6 @@ public interface IAthleteRepository
     Task<Athlete?> FindByEmailAsync(string email);
     Task<Athlete?> FindByIdAsync(Guid id);
     Task<Athlete?> FindBySubmissionTokenAsync(Guid token);
-    Task<Athlete?> FindByIdAsync(Guid id);
     Task UpdateAsync(Athlete athlete);
     PaginatedList<Athlete> GetAllPaginated(int pageIndex, int pageSize);
     Task<IEnumerable<Athlete>> GetAllAsync();

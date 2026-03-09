@@ -219,8 +219,6 @@
           "successMessage": "L'athlète a été supprimé avec succès.",
           "failedMessage": "Une erreur est survenue lors de la suppression de l'athlète."
         }
-      }
-    },
       },
       "resend": {
         "validation": {

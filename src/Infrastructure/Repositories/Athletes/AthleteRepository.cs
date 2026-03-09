@@ -35,13 +35,6 @@ public class AthleteRepository : IAthleteRepository
             .FirstOrDefaultAsync(x => x.Email == email);
     }
 
-    public async Task<Athlete?> FindByIdAsync(Guid id)
-    {
-        return await _context.Athletes
-            .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == id && x.Active);
-    }
-
     public async Task<Athlete?> FindBySubmissionTokenAsync(Guid token)
     {
         return await _context.Athletes
@@ -53,7 +46,7 @@ public class AthleteRepository : IAthleteRepository
     {
         return await _context.Athletes
             .Include(x => x.Team)
-            .FirstOrDefaultAsync(x => x.Id == id);
+            .FirstOrDefaultAsync(x => x.Id == id && x.Active);
     }
 
     public async Task UpdateAsync(Athlete athlete)
