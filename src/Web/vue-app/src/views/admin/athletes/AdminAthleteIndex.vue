@@ -10,7 +10,7 @@
       @cancel="showConfirmModal = false"
     />
 
-    <!-- En-tÃªte -->
+    <!-- En-tête -->
     <div class="flex flex-col gap-3 pb-6 border-b-2 border-green-light">
       <span class="text-xs font-montserrat uppercase tracking-widest text-green-dark">Administration</span>
       <div class="flex items-center justify-between flex-wrap gap-4">
@@ -32,16 +32,15 @@
       </div>
     </div>
 
-    <!-- Tableau -->
     <Loader v-if="preventMultipleSubmit" />
     <DataTable
       :headers="athleteHeaders"
       :is-loading="athletesAreLoading"
       :items="tableAthletes"
       @delete="onDelete"
+      @resend="onResendLink"
       @reload="loadAthletes"
     />
-
   </div>
 </template>
 
@@ -56,6 +55,7 @@ import DataTable from "@/components/layouts/items/DataTable.vue"
 import BtnLink from "@/components/layouts/items/BtnLink.vue"
 import Loader from "@/components/layouts/items/Loader.vue"
 import ConfirmModal from "@/components/layouts/items/ConfirmModal.vue"
+import Loader from "@/components/layouts/items/Loader.vue"
 import {Tables} from "@/types/enums"
 import {notifyError, notifySuccess} from "@/notify"
 
@@ -123,6 +123,29 @@ async function onConfirmDelete() {
   }
 
   pendingDeleteItem.value = null
+  preventMultipleSubmit.value = false
+}
+
+async function onResendLink(item: any) {
+  if (preventMultipleSubmit.value) return
+
+  preventMultipleSubmit.value = true
+
+  const athletePageRelativeUrl = t("routes.athletePage.path").replace("/:token", "")
+  const response = await athleteService.resendAccessLink(item.id, athletePageRelativeUrl)
+
+  if (response && response.succeeded) {
+    notifySuccess(t('pages.athletes.resend.validation.successMessage'))
+    preventMultipleSubmit.value = false
+    return
+  }
+
+  const errorMessages = response.getErrorMessages('pages.athletes.resend.validation')
+  if (errorMessages.length === 0)
+    notifyError(t('pages.athletes.resend.validation.failedMessage'))
+  else
+    notifyError(errorMessages[0])
+
   preventMultipleSubmit.value = false
 }
 

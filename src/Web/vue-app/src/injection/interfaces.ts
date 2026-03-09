@@ -29,6 +29,7 @@ export interface IAdministratorService {
 
 export interface IAthleteService {
   createAthlete(request: ICreateAthleteRequest): Promise<SucceededOrNotResponse>
+  resendAccessLink(athleteId: string, athletePageRelativeUrl: string): Promise<SucceededOrNotResponse>
   getBySubmissionToken(token: string): Promise<{ firstName: string; lastName: string } | null>
   getAll(pageIndex: number, pageSize: number): Promise<PaginatedResponse<Athlete>>
   getAllNonPaginated(): Promise<Athlete[]>

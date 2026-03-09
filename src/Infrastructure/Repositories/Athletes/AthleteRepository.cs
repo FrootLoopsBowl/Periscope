@@ -28,6 +28,20 @@ public class AthleteRepository : IAthleteRepository
             .AnyAsync(x => x.Email == email);
     }
 
+    public async Task<Athlete?> FindByEmailAsync(string email)
+    {
+        return await _context.Athletes
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Email == email);
+    }
+
+    public async Task<Athlete?> FindByIdAsync(Guid id)
+    {
+        return await _context.Athletes
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Id == id && x.Active);
+    }
+
     public async Task<Athlete?> FindBySubmissionTokenAsync(Guid token)
     {
         return await _context.Athletes

@@ -8,11 +8,13 @@ public class CreateAthleteRequest : ISanitizable
     public string LastName { get; set; } = null!;
     public string Email { get; set; } = null!;
     public DateTime DateOfBirth { get; set; }
+    public string AthletePageRelativeUrl { get; set; } = null!;
 
     public void Sanitize()
     {
         FirstName = FirstName.Trim();
         LastName = LastName.Trim();
         Email = Email.Trim();
+        AthletePageRelativeUrl = AthletePageRelativeUrl.Trim();
     }
 }

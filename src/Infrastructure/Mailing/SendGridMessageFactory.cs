@@ -1,7 +1,5 @@
 ﻿using Application.Services.Notifications.Models;
 using AutoMapper;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using SendGrid.Helpers.Mail;
 
@@ -9,14 +7,12 @@ namespace Infrastructure.Mailing;
 
 public class SendGridMessageFactory : ISendGridMessageFactory
 {
-    private readonly IWebHostEnvironment _webHostEnvironment;
     private readonly MailingSettings _mailingSettings;
     private readonly IMapper _mapper;
 
-    public SendGridMessageFactory(IWebHostEnvironment webHostEnvironment, IOptions<MailingSettings> mailingSettings, IMapper mapper)
+    public SendGridMessageFactory(IOptions<MailingSettings> mailingSettings, IMapper mapper)
     {
         _mapper = mapper;
-        _webHostEnvironment = webHostEnvironment;
         _mailingSettings = mailingSettings.Value;
     }
 
@@ -33,10 +29,7 @@ public class SendGridMessageFactory : ISendGridMessageFactory
 
         msg.SetTemplateData(model.TemplateData());
 
-        if (_webHostEnvironment.IsProduction())
-            msg.AddTo(model.Destination);
-        else if (_webHostEnvironment.IsDevelopment())
-            msg.AddTo(_mailingSettings.ToAddressForDevelopment);
+        msg.AddTo(model.Destination);
 
         return msg;
     }

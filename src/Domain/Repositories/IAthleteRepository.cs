@@ -7,6 +7,8 @@ public interface IAthleteRepository
 {
     Task CreateAsync(Athlete athlete);
     Task<bool> ExistsByEmailAsync(string email);
+    Task<Athlete?> FindByEmailAsync(string email);
+    Task<Athlete?> FindByIdAsync(Guid id);
     Task<Athlete?> FindBySubmissionTokenAsync(Guid token);
     Task<Athlete?> FindByIdAsync(Guid id);
     Task UpdateAsync(Athlete athlete);

@@ -40,6 +40,15 @@
           <IconEdit class="icon icon--black"/>
         </router-link>
         <button
+            v-if="item.actions.resend && item.id"
+            v-tippy="t(`global.actions.resend`)"
+            class="vue3-easy-data-table__action"
+            type="button"
+            @click="handleResend(item)"
+        >
+          <IconMail class="icon icon--black"/>
+        </button>
+        <button
             v-if="item.actions.delete && item.id"
             v-tippy="t(`global.actions.delete`)"
             class="vue3-easy-data-table__action red-bg"
@@ -60,6 +69,7 @@ import {useI18n} from "vue3-i18n"
 import IconEdit from "@/assets/icons/icon__edit.svg"
 import IconDelete from "@/assets/icons/icon__delete.svg"
 import IconView from "@/assets/icons/icon__view.svg"
+import IconMail from "@/assets/icons/icon__mail.svg"
 
 const {t} = useI18n()
 
@@ -76,9 +86,14 @@ defineProps<{
 // eslint-disable-next-line
 const emit = defineEmits<{
   (event: "delete", item: any): void
+  (event: "resend", item: any): void
 }>()
 
 function handleDelete(item: any) {
   emit("delete", item)
+}
+
+function handleResend(item: any) {
+  emit("resend", item)
 }
 </script>
