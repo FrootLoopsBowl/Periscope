@@ -47,4 +47,26 @@ public class AthleteRepository : IAthleteRepository
             .ToList();
         return new PaginatedList<Athlete>(items, total);
     }
+
+    public async Task<Athlete?> FindByIdAsync(Guid id)
+    {
+        return await _context.Athletes
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Id == id && x.Active);
+    }
+
+    public async Task UpdateAsync(Athlete athlete)
+    {
+        _context.Athletes.Update(athlete);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<IEnumerable<Athlete>> GetInjuredAsync()
+    {
+        return await _context.Athletes
+            .AsNoTracking()
+            .Where(x => x.Active && x.IsInjured)
+            .OrderBy(x => x.LastName)
+            .ToListAsync();
+    }
 }

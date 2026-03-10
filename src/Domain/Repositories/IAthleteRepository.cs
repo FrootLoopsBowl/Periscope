@@ -9,4 +9,7 @@ public interface IAthleteRepository
     Task<bool> ExistsByEmailAsync(string email);
     Task<Athlete?> FindBySubmissionTokenAsync(Guid token);
     PaginatedList<Athlete> GetAllPaginated(int pageIndex, int pageSize);
+    Task<Athlete?> FindByIdAsync(Guid id);
+    Task UpdateAsync(Athlete athlete);
+    Task<IEnumerable<Athlete>> GetInjuredAsync();
 }
