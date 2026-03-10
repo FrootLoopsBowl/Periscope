@@ -9,6 +9,9 @@ public class Athlete : Common.Entity
     public Guid SubmissionToken { get; private set; }
     public bool Active { get; private set; }
     public DateTime CreatedAt { get; private set; }
+    public bool IsInjured { get; private set; }
+
+    public void SetIsInjured(bool isInjured) => IsInjured = isInjured;
 
     public Athlete() { }
 
