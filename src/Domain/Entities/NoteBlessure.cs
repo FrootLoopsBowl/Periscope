@@ -11,6 +11,11 @@ public class NoteBlessure : Common.Entity
 
     public NoteBlessure(Guid athleteId, string contenu)
     {
+        if (athleteId == Guid.Empty)
+            throw new ArgumentException("AthleteId cannot be empty.", nameof(athleteId));
+        if (string.IsNullOrWhiteSpace(contenu))
+            throw new ArgumentException("Contenu cannot be empty.", nameof(contenu));
+
         AthleteId = athleteId;
         Contenu = contenu;
         CreatedAt = DateTime.UtcNow;

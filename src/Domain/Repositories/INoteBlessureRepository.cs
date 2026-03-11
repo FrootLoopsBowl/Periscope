@@ -5,5 +5,5 @@ namespace Domain.Repositories;
 public interface INoteBlessureRepository
 {
     Task CreateAsync(NoteBlessure note);
-    Task<IEnumerable<NoteBlessure>> GetByAthleteIdAsync(Guid athleteId);
+    Task<IReadOnlyList<NoteBlessure>> GetByAthleteIdAsync(Guid athleteId);
 }

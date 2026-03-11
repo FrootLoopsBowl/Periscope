@@ -11,5 +11,5 @@ public interface IAthleteRepository
     PaginatedList<Athlete> GetAllPaginated(int pageIndex, int pageSize);
     Task<Athlete?> FindByIdAsync(Guid id);
     Task UpdateAsync(Athlete athlete);
-    Task<IEnumerable<Athlete>> GetInjuredAsync();
+    Task<IReadOnlyList<Athlete>> GetInjuredAsync();
 }

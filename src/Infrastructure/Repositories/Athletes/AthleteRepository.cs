@@ -51,7 +51,6 @@ public class AthleteRepository : IAthleteRepository
     public async Task<Athlete?> FindByIdAsync(Guid id)
     {
         return await _context.Athletes
-            .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Id == id && x.Active);
     }
 
@@ -61,7 +60,7 @@ public class AthleteRepository : IAthleteRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<Athlete>> GetInjuredAsync()
+    public async Task<IReadOnlyList<Athlete>> GetInjuredAsync()
     {
         return await _context.Athletes
             .AsNoTracking()

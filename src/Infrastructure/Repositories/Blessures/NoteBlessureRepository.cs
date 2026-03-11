@@ -20,7 +20,7 @@ public class NoteBlessureRepository : INoteBlessureRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<NoteBlessure>> GetByAthleteIdAsync(Guid athleteId)
+    public async Task<IReadOnlyList<NoteBlessure>> GetByAthleteIdAsync(Guid athleteId)
     {
         return await _context.NotesBlessure
             .AsNoTracking()
