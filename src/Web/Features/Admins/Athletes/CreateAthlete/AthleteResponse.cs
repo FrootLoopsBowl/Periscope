@@ -10,4 +10,5 @@ public class AthleteResponse
     public Guid SubmissionToken { get; set; }
     public bool Active { get; set; }
     public DateTime CreatedAt { get; set; }
+    public bool IsInjured { get; set; }
 }
