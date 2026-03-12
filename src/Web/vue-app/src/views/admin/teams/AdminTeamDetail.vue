@@ -209,6 +209,8 @@ const filteredAthletes = computed(() => {
 
 async function loadData() {
   isLoading.value = true
+  isEditingName.value = false
+  editingName.value = ''
   athleteSearch.value = ''
   await Promise.all([loadTeam(), loadAthletes()])
   isLoading.value = false
