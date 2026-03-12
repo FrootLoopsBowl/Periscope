@@ -4,3 +4,7 @@ export interface IUpdateAthleteRequest {
     email: string
     dateOfBirth: string
 }
+
+export interface IUpdateTeamRequest {
+    name: string
+}

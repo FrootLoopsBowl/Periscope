@@ -5,7 +5,6 @@ import {
   ICreateAthleteRequest,
   ICreateBookRequest,
   ICreateTeamRequest,
-  IUpdateTeamRequest,
   IEditBookRequest,
   IForgotPasswordRequest,
   ILoginRequest,
@@ -15,7 +14,7 @@ import {
 import {PaginatedResponse, SucceededOrNotResponse} from "@/types/responses"
 import {Administrator, Athlete, Book, Member, Team, User} from "@/types/entities"
 import {Guid} from "@/types";
-import { IUpdateAthleteRequest } from "../types/requests/updateAthleteRequest";
+import { IUpdateAthleteRequest, IUpdateTeamRequest } from "../types/requests/updateAthleteRequest";
 
 export interface IApiService {
   headersWithJsonContentType(): any

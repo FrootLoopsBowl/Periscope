@@ -71,8 +71,4 @@
 	  <_ContentIncludedByDefault Remove="Views\Layouts\_VueAppLayout.cshtml" />
 	  <_ContentIncludedByDefault Remove="Views\Intranet\Index.cshtml" />
 	</ItemGroup>
-
-	<ItemGroup>
-	  <Compile Include="vue-app\src\types\requests\updateTeamRequest.ts" />
-	</ItemGroup>
 </Project>
