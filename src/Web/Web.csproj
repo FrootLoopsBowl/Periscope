@@ -54,6 +54,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Folder Include="Features\Admins\Athletes\UpdateAthlete\" />
 		<Folder Include="wwwroot\assets" />
 		<Folder Include="wwwroot\css" />
 		<Folder Include="wwwroot\icons" />

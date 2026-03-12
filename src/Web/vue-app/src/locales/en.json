@@ -52,6 +52,11 @@
             "path": ":id",
             "fullPath": "/administration/athletes/:id",
             "name": "Athlete profile"
+          },
+          "edit": {
+            "path": ":id/edit",
+            "fullPath": "/administration/athletes/:id/edit",
+            "name": "Edit an athlete"
           }
         },
         "teams": {
@@ -218,6 +223,19 @@
         "validation": {
           "successMessage": "The athlete was successfully deleted.",
           "failedMessage": "An error occured while deleting the athlete."
+        }
+      },
+      "edit": {
+        "title": "Edit an athlete",
+        "validation": {
+          "successMessage": "The athlete was successfully updated.",
+          "failedMessage": "An error occured during athlete update.",
+          "invalidFirstName": "The first name is invalid.",
+          "invalidLastName": "The last name is invalid.",
+          "invalidEmail": "The email is invalid.",
+          "invalidEmailFormat": "The email format is invalid.",
+          "invalidDateOfBirth": "The date of birth is invalid.",
+          "athleteWithEmailAlreadyExists": "An athlete with this email already exists."
         }
       }
     },
