@@ -274,6 +274,13 @@
           "successMessage": "The team was successfully deleted.",
           "failedMessage": "An error occured during team deletion."
         }
+      },
+      "edit": {
+        "validation": {
+          "successMessage": "The team name was successfully updated.",
+          "failedMessage": "An error occured during team update.",
+          "teamWithNameAlreadyExists": "A team with this name already exists."
+        }
       }
     },
     "members": {

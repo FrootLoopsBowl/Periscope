@@ -5,6 +5,7 @@ import {
   ICreateAthleteRequest,
   ICreateBookRequest,
   ICreateTeamRequest,
+  IUpdateTeamRequest,
   IEditBookRequest,
   IForgotPasswordRequest,
   ILoginRequest,
@@ -86,6 +87,7 @@ export interface ITeamService {
   getById(id: string): Promise<Team | null>
   assignAthletes(teamId: string, request: IAssignAthletesToTeamRequest): Promise<SucceededOrNotResponse>
   deleteTeam(id: Guid): Promise<SucceededOrNotResponse>
+  updateTeam(id: string, request: IUpdateTeamRequest): Promise<SucceededOrNotResponse>
 }
 
 export interface IUserService {
