@@ -25,9 +25,9 @@
       "fullPath": "/mon-compte",
       "name": "Mon compte"
     },
-    "athleteForm": {
-      "path": "/athlete-form/:token",
-      "name": "Formulaire athlète"
+    "athletePage": {
+      "path": "/page-athlete/:token",
+      "name": "Page athlète"
     },
     "admin": {
       "path": "/administration",
@@ -158,8 +158,7 @@
         "errorOccured": "Une erreur est survenue lors de la réinitialisation du mot de passe."
       }
     },
-    "athleteForm": {
-      "success": "Bonjour {firstName}, votre formulaire d'effort physique fonctionne correctement !",
+    "athletePage": {
       "notFound": "Ce lien est invalide ou votre accès a été révoqué."
     },
     "admin": {
@@ -199,6 +198,7 @@
           "invalidEmail": "Le courriel est invalide.",
           "invalidEmailFormat": "Le format du courriel est invalide.",
           "invalidDateOfBirth": "La date de naissance est invalide.",
+          "invalidAthletePageRelativeUrl": "L'URL de la page athlète est invalide.",
           "athleteWithEmailAlreadyExists": "Un athlète avec ce courriel existe déjà."
         }
       },
@@ -223,6 +223,15 @@
         "validation": {
           "successMessage": "L'athlète a été supprimé avec succès.",
           "failedMessage": "Une erreur est survenue lors de la suppression de l'athlète."
+        }
+      },
+      "resend": {
+        "validation": {
+          "successMessage": "Le lien d'accès a été renvoyé.",
+          "failedMessage": "Une erreur est survenue lors du renvoi du lien d'accès.",
+          "athleteNotFound": "L'athlète est introuvable.",
+          "invalidAthleteId": "L'identifiant de l'athlète est invalide.",
+          "invalidAthletePageRelativeUrl": "L'URL de la page athlète est invalide."
         }
       },
       "edit": {
@@ -437,6 +446,7 @@
       "view": "Voir",
       "download": "Télécharger",
       "update": "Modifier",
+      "resend": "Renvoyer le lien",
       "delete": "Supprimer"
     }
   },

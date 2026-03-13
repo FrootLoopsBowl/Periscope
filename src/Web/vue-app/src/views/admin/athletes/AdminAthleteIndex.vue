@@ -32,16 +32,15 @@
       </div>
     </div>
 
-    <!-- Tableau -->
     <Loader v-if="preventMultipleSubmit" />
     <DataTable
       :headers="athleteHeaders"
       :is-loading="athletesAreLoading"
       :items="tableAthletes"
       @delete="onDelete"
+      @resend="onResendLink"
       @reload="loadAthletes"
     />
-
   </div>
 </template>
 
@@ -79,6 +78,7 @@ const tableAthletes = computed(() =>
     team: x.teamName ?? t('global.undefined'),
     actions: {
       view: router.resolve({ name: 'admin.children.athletes.detail', params: { id: x.id } }).href,
+      resend: true,
       edit: router.resolve({ name: 'admin.children.athletes.edit', params: { id: x.id } }).href,
       delete: true,
     },
@@ -124,6 +124,29 @@ async function onConfirmDelete() {
   }
 
   pendingDeleteItem.value = null
+  preventMultipleSubmit.value = false
+}
+
+async function onResendLink(item: any) {
+  if (preventMultipleSubmit.value) return
+
+  preventMultipleSubmit.value = true
+
+  const athletePageRelativeUrl = t("routes.athletePage.path").replace("/:token", "")
+  const response = await athleteService.resendAccessLink(item.id, athletePageRelativeUrl)
+
+  if (response && response.succeeded) {
+    notifySuccess(t('pages.athletes.resend.validation.successMessage'))
+    preventMultipleSubmit.value = false
+    return
+  }
+
+  const errorMessages = response.getErrorMessages('pages.athletes.resend.validation')
+  if (errorMessages.length === 0)
+    notifyError(t('pages.athletes.resend.validation.failedMessage'))
+  else
+    notifyError(errorMessages[0])
+
   preventMultipleSubmit.value = false
 }
 

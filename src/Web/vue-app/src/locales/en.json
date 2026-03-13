@@ -25,9 +25,9 @@
       "fullPath": "/my-account",
       "name": "My account"
     },
-    "athleteForm": {
-      "path": "/athlete-form/:token",
-      "name": "Athlete form"
+    "athletePage": {
+      "path": "/page-athlete/:token",
+      "name": "Athlete page"
     },
     "admin": {
       "path": "/administration",
@@ -158,8 +158,7 @@
         "errorOccured": "An error occured during password reset."
       }
     },
-    "athleteForm": {
-      "success": "Hello {firstName}, your physical effort form is working correctly!",
+    "athletePage": {
       "notFound": "This link is invalid or your access has been revoked."
     },
     "admin": {
@@ -199,6 +198,7 @@
           "invalidEmail": "The email is invalid.",
           "invalidEmailFormat": "The email format is invalid.",
           "invalidDateOfBirth": "The date of birth is invalid.",
+          "invalidAthletePageRelativeUrl": "The athlete page URL is invalid.",
           "athleteWithEmailAlreadyExists": "An athlete with this email already exists."
         }
       },
@@ -223,6 +223,15 @@
         "validation": {
           "successMessage": "The athlete was successfully deleted.",
           "failedMessage": "An error occured while deleting the athlete."
+        }
+      },
+      "resend": {
+        "validation": {
+          "successMessage": "The access link has been resent.",
+          "failedMessage": "An error occured while resending the access link.",
+          "athleteNotFound": "The athlete could not be found.",
+          "invalidAthleteId": "The athlete id is invalid.",
+          "invalidAthletePageRelativeUrl": "The athlete page URL is invalid."
         }
       },
       "edit": {
@@ -438,6 +447,7 @@
       "view": "View",
       "download": "Download",
       "update": "Edit",
+      "resend": "Resend link",
       "delete": "Delete"
     }
   },

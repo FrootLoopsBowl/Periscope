@@ -1,8 +1,6 @@
 ﻿using Application.Services.Notifications.Models;
 using Infrastructure.Mailing;
 using Infrastructure.Mailing.Mapping;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Tests.Common.Mapping;
 
@@ -15,13 +13,10 @@ public class SendGridMessageFactoryTests
     private const string AnyLocale = "fr";
     private const string AnyName = "Garneau Template";
 
-    private readonly Mock<IWebHostEnvironment> _webHostEnvironment;
-
     private readonly SendGridMessageFactory _sendGridMessageFactory;
 
     public SendGridMessageFactoryTests()
     {
-        _webHostEnvironment = new Mock<IWebHostEnvironment>();
         var mailingSettings = new MailingSettings
         {
             FromAddress = AnyEmail,
@@ -33,14 +28,13 @@ public class SendGridMessageFactoryTests
 
         var mapper = new MapperBuilder().WithProfile<MailingMappingProfile>().Build();
         _sendGridMessageFactory =
-            new SendGridMessageFactory(_webHostEnvironment.Object, mailingSettingsOptions.Object, mapper);
+            new SendGridMessageFactory(mailingSettingsOptions.Object, mapper);
     }
 
     [Fact]
     public void WhenCreateFromModel_ThenReturnSendGridMessage()
     {
         // Arrange
-        _webHostEnvironment.Setup(x => x.EnvironmentName).Returns(Environments.Staging);
         var model = new ForgotPasswordNotificationModel(AnyEmail, AnyLocale, AnyLink);
 
         // Act
@@ -87,5 +81,20 @@ public class SendGridMessageFactoryTests
 
         // Assert
         msg.TemplateId.ShouldBe(model.TemplateId());
+    }
+
+    [Fact]
+    public void WhenCreateFromModel_ThenUseModelDestinationAsRecipient()
+    {
+        // Arrange
+        var model = new ForgotPasswordNotificationModel(AnyEmail, AnyLocale, AnyLink);
+
+        // Act
+        var msg = _sendGridMessageFactory.CreateFromModel(model);
+
+        // Assert
+        msg.Personalizations.Count.ShouldBe(1);
+        msg.Personalizations[0].Tos.Count.ShouldBe(1);
+        msg.Personalizations[0].Tos[0].Email.ShouldBe(AnyEmail);
     }
 }

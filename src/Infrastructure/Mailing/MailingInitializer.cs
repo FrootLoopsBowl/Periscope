@@ -1,7 +1,6 @@
-﻿using Application.Interfaces.Mailing;
+using Application.Interfaces.Mailing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using SendGrid.Extensions.DependencyInjection;
 
 namespace Infrastructure.Mailing;
 
@@ -11,12 +10,9 @@ public static class MailingInitializer
         IServiceCollection services,
         IConfiguration configuration)
     {
-        services.AddSendGrid(options => options.ApiKey = configuration["SendGrid:ApiKey"]);
-        
         services.Configure<MailingSettings>(configuration.GetSection("Mailing"));
-        services.Configure<SendGridSettings>(configuration.GetSection("SendGrid"));
+        services.Configure<GmailSettings>(configuration.GetSection("Gmail"));
 
-        services.AddScoped<ISendGridMessageFactory, SendGridMessageFactory>();
-        services.AddTransient<IEmailSender, SendGridSender>();
+        services.AddTransient<IEmailSender, GmailSmtpSender>();
     }
 }
