@@ -1,0 +1,54 @@
+using Application.Interfaces.Services.Notifications;
+using Application.Settings;
+using Domain.Common;
+using Domain.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Options;
+using Web.Features.Common;
+
+namespace Web.Features.Admins.Athletes.ResendAccessLink;
+
+public class ResendAccessLinkEndpoint : EndpointWithSanitizedRequest<ResendAccessLinkRequest, SucceededOrNotResponse>
+{
+    private readonly string _baseUrl;
+    private readonly IAthleteRepository _athleteRepository;
+    private readonly INotificationService _notificationService;
+
+    public ResendAccessLinkEndpoint(
+        IAthleteRepository athleteRepository,
+        INotificationService notificationService,
+        IOptions<ApplicationSettings> applicationSettings)
+    {
+        _athleteRepository = athleteRepository;
+        _notificationService = notificationService;
+        _baseUrl = applicationSettings.Value.BaseUrl;
+    }
+
+    public override void Configure()
+    {
+        DontCatchExceptions();
+        Post("athletes/{id}/resend-access-link");
+        Roles(Domain.Constants.User.Roles.ADMINISTRATOR);
+        AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
+    }
+
+    public override async Task HandleAsync(ResendAccessLinkRequest req, CancellationToken ct)
+    {
+        var athlete = await _athleteRepository.FindByIdAsync(req.Id);
+        if (athlete is null)
+        {
+            HttpContext.Response.StatusCode = StatusCodes.Status404NotFound;
+            await HttpContext.Response.WriteAsJsonAsync(new SucceededOrNotResponse(false, [
+                new Error("AthleteNotFound", "Athlete could not be found.")
+            ]), ct);
+            return;
+        }
+
+        var baseUrl = _baseUrl.TrimEnd('/');
+        var relativePath = req.AthletePageRelativeUrl.TrimEnd('/');
+        var athleteLink = $"{baseUrl}{relativePath}/{athlete.SubmissionToken}";
+
+        var response = await _notificationService.SendAthleteAccessNotification(athlete.Email, athleteLink);
+        await Send.OkAsync(new SucceededOrNotResponse(response.Succeeded, response.Errors), ct);
+    }
+}

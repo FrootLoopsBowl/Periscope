@@ -20,7 +20,30 @@ export class AthleteService extends ApiService implements IAthleteService {
         return error.response as AxiosResponse<any>
       })
 
-    if (response.status === 201) {
+    if (response.status === 200 || response.status === 201) {
+      return new SucceededOrNotResponse(true)
+    }
+
+    const errorResponse = response.data as SucceededOrNotResponse
+    return new SucceededOrNotResponse(false, errorResponse?.errors)
+  }
+
+  public async resendAccessLink(athleteId: string, athletePageRelativeUrl: string): Promise<SucceededOrNotResponse> {
+    const response = await this
+      ._httpClient
+      .post<any, AxiosResponse<any>>(
+        `${import.meta.env.VITE_API_BASE_URL}/athletes/${athleteId}/resend-access-link`,
+        {athletePageRelativeUrl},
+        this.headersWithJsonContentType())
+      .catch(function (error: AxiosError): AxiosResponse<any> {
+        return error.response as AxiosResponse<any>
+      })
+
+    if (response.status === 200) {
+      const responseData = response.data as SucceededOrNotResponse
+      if (responseData?.succeeded === false)
+        return new SucceededOrNotResponse(false, responseData.errors)
+
       return new SucceededOrNotResponse(true)
     }
 

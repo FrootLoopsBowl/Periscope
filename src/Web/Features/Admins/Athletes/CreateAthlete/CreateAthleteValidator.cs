@@ -32,5 +32,14 @@ public class CreateAthleteValidator : Validator<CreateAthleteRequest>
             .NotEmpty()
             .WithErrorCode("InvalidDateOfBirth")
             .WithMessage("Date of birth should not be empty.");
+
+        RuleFor(x => x.AthletePageRelativeUrl)
+            .NotNull()
+            .NotEmpty()
+            .WithErrorCode("InvalidAthletePageRelativeUrl")
+            .WithMessage("Athlete page relative URL should not be empty.")
+            .Must(url => url.StartsWith('/'))
+            .WithErrorCode("InvalidAthletePageRelativeUrl")
+            .WithMessage("Athlete page relative URL format is invalid.");
     }
 }

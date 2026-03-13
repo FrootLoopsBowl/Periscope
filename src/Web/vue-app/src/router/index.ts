@@ -8,7 +8,7 @@ import ForgotPassword from "@/views/ForgotPassword.vue";
 import ResetPassword from "@/views/ResetPassword.vue";
 import Account from "@/views/shared/Account.vue";
 
-import AthleteSubmission from "@/views/AthleteSubmission.vue";
+import AthletePage from "@/views/PageAthlete.vue";
 import Admin from "../views/admin/Admin.vue";
 import AdminDashboard from "@/views/admin/AdminDashboard.vue";
 import AdminAthleteIndex from "@/views/admin/athletes/AdminAthleteIndex.vue";
@@ -85,11 +85,12 @@ const router = createRouter({
     },
     {
       // Route publique — pas de requiredRole, le guard laisse passer sans authentification
-      path: i18n.t("routes.athleteForm.path"),
-      name: "athleteForm",
-      component: AthleteSubmission,
+      path: i18n.t("routes.athletePage.path"),
+      name: "athletePage",
+      component: AthletePage,
       meta: {
-        title: "routes.athleteForm.name"
+        title: "routes.athletePage.name",
+        publicLayout: true
       }
     },
     {
