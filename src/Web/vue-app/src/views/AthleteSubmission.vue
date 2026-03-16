@@ -6,15 +6,15 @@
       <div v-if="athlete">
         <h2 class="athlete-submission__title">{{ t('pages.athleteForm.title').replace('{firstName}', athlete.firstName) }}</h2>
 
-        <form class="form" novalidate @submit.prevent="handleSubmit">
+        <form class="form athlete-submission__form" novalidate @submit.prevent="handleSubmit">
           <div class="form__row">
             <label for="effort">{{ t('athleteForm.effort') }}</label>
-            <input id="effort" type="number" v-model.number="effort" min="1" max="10" required />
+            <input id="effort" class="form__input" type="number" v-model.number="effort" min="1" max="10" @input="onEffortInput" required />
           </div>
 
           <div class="form__row">
             <label for="duration">{{ t('athleteForm.duration') }}</label>
-            <input id="duration" type="number" v-model.number="duration" min="1" required />
+            <input id="duration" class="form__input" type="number" v-model.number="duration" min="1" @input="onDurationInput" required />
           </div>
 
           <div class="form__actions">
@@ -53,6 +53,27 @@ const submitting = ref(false)
 const submitSuccess = ref(false)
 const submitError = ref<string | null>(null)
 
+function onEffortInput(e: Event) {
+  const value = Number((e.target as HTMLInputElement).value)
+  if (Number.isNaN(value)) {
+    effort.value = null
+    return
+  }
+  if (value > 10) effort.value = 10
+  else if (value < 1) effort.value = 1
+  else effort.value = value
+}
+
+function onDurationInput(e: Event) {
+  const value = Number((e.target as HTMLInputElement).value)
+  if (Number.isNaN(value)) {
+    duration.value = null
+    return
+  }
+  if (value < 1) duration.value = 1
+  else duration.value = value
+}
+
 onMounted(async () => {
   const token = route.params.token as string
   athlete.value = await athleteService.getBySubmissionToken(token)
@@ -83,3 +104,30 @@ async function handleSubmit() {
   submitting.value = false
 }
 </script>
+
+<style scoped>
+.athlete-submission__form .form__row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.athlete-submission__form .form__row label {
+  display: block;
+  width: 100%;
+  text-align: left;
+  font-weight: 600;
+}
+
+.athlete-submission__form .form__input {
+  width: 100%;
+  max-width: 14rem;
+  box-sizing: border-box;
+  text-align: left;
+}
+
+.athlete-submission__message {
+  margin-top: 1rem;
+}
+</style>

@@ -156,6 +156,11 @@
     "athletePage": {
       "notFound": "Ce lien est invalide ou votre accès a été révoqué."
     },
+    "athleteForm": {
+      "title": "Bonjour {firstName}, votre espace personnel",
+      "thanks": "Merci! Vos informations ont été reçues.",
+      "submitError": "Une erreur est survenue lors de l'envoi de votre réponse."
+    },
     "admin": {
       "dashboard": {
         "filters": {
@@ -325,6 +330,14 @@
         }
       }
     }
+  },
+  "athleteForm": {
+    "effort": "Effort (1-10)",
+    "duration": "Durée (minutes)",
+    "submit": "Envoyer"
+  },
+  "validation": {
+    "errorsInForm": "Veuillez corriger les erreurs du formulaire."
   },
   "products": {
     "form": {

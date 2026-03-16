@@ -8,14 +8,9 @@
     <main class="athlete-page__content">
       <Loader v-if="isLoading" />
       <div v-else class="athlete-page__shell">
+        <!-- When athlete is found, display the submission form immediately -->
         <section v-if="athlete" class="athlete-page__panel">
-          <div class="athlete-page__panel-head">
-            <span class="athlete-page__accent"></span>
-            <div>
-              <h2 class="athlete-page__panel-title">{{ athlete.firstName }} {{ athlete.lastName }}</h2>
-              <p class="athlete-page__panel-text">Votre espace personnel est maintenant accessible depuis ce lien.</p>
-            </div>
-          </div>
+          <AthleteSubmission />
         </section>
 
         <section v-else class="athlete-page__panel athlete-page__panel--error">
@@ -37,6 +32,7 @@ import {useRoute} from "vue-router"
 import {useI18n} from "vue3-i18n"
 import {useAthleteService} from "@/inversify.config"
 import Loader from "@/components/layouts/items/Loader.vue"
+import AthleteSubmission from "@/views/AthleteSubmission.vue"
 
 const {t} = useI18n()
 const route = useRoute()
