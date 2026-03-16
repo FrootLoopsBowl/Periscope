@@ -14,6 +14,8 @@ export class ApiService implements IApiService {
 
   constructor(@inject(TYPES.AxiosInstance) httpClient: AxiosInstance) {
     this._httpClient = httpClient;
+    // allow sending cookies for cross-site requests (frontend on different origin)
+    this._httpClient.defaults.withCredentials = true;
     /*
         Attaching the accessToken to the request header. The access token is stored in cookies by LoginEndpoint or TwoFactorEndpoint
         AccessToken and RefreshToken rotation is handled in by RefreshTokenEndpoint
@@ -75,7 +77,8 @@ export class ApiService implements IApiService {
     try {
       return await axios
           .get(
-              `${import.meta.env.VITE_API_BASE_URL}/authentication/refresh-token`
+              `${import.meta.env.VITE_API_BASE_URL}/authentication/refresh-token`,
+              { withCredentials: true }
           )
           .then((response: AxiosResponse<SucceededOrNotResponse>) => {
             if (!response.data) return;
