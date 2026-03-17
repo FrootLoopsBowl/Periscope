@@ -25,9 +25,9 @@
       "fullPath": "/mon-compte",
       "name": "Mon compte"
     },
-    "athleteForm": {
-      "path": "/athlete-form/:token",
-      "name": "Formulaire athlète"
+    "athletePage": {
+      "path": "/page-athlete/:token",
+      "name": "Page athlète"
     },
     "admin": {
       "path": "/administration",
@@ -47,6 +47,11 @@
             "path": "ajouter",
             "fullPath": "/administration/athletes/ajouter",
             "name": "Ajouter un athlète"
+          },
+          "detail": {
+            "path": ":id",
+            "fullPath": "/administration/athletes/:id",
+            "name": "Profil de l'athlète"
           }
         },
         "teams": {
@@ -57,6 +62,11 @@
             "path": "ajouter",
             "fullPath": "/administration/equipes/ajouter",
             "name": "Ajouter une équipe"
+          },
+          "detail": {
+            "path": ":id",
+            "fullPath": "/administration/equipes/:id",
+            "name": "Profil de l'équipe"
           }
         },
         "members": {
@@ -143,8 +153,7 @@
         "errorOccured": "Une erreur est survenue lors de la réinitialisation du mot de passe."
       }
     },
-    "athleteForm": {
-      "success": "Bonjour {firstName}, votre formulaire d'effort physique fonctionne correctement !",
+    "athletePage": {
       "notFound": "Ce lien est invalide ou votre accès a été révoqué."
     },
     "admin": {
@@ -192,7 +201,40 @@
           "invalidEmail": "Le courriel est invalide.",
           "invalidEmailFormat": "Le format du courriel est invalide.",
           "invalidDateOfBirth": "La date de naissance est invalide.",
+          "invalidAthletePageRelativeUrl": "L'URL de la page athlète est invalide.",
           "athleteWithEmailAlreadyExists": "Un athlète avec ce courriel existe déjà."
+        }
+      },
+      "detail": {
+        "title": "Profil de l'athlète",
+        "teamSection": "Équipe",
+        "noTeam": "Aucune équipe",
+        "assignTeam": "Attitrer une équipe",
+        "removeTeam": "Retirer de l'équipe",
+        "selectTeam": "Sélectionner une équipe...",
+        "validation": {
+          "successMessage": "L'équipe a été attitré à l'athlète avec succès.",
+          "removeSuccessMessage": "L'athlète a été retiré de l'équipe avec succès.",
+          "failedMessage": "Une erreur est survenue lors de l'attribution de l'équipe."
+        }
+      },
+      "delete": {
+        "modal": {
+          "title": "Supprimer l'athlète",
+          "message": "Êtes-vous sûr de vouloir supprimer cet athlète ? Cette action est irréversible."
+        },
+        "validation": {
+          "successMessage": "L'athlète a été supprimé avec succès.",
+          "failedMessage": "Une erreur est survenue lors de la suppression de l'athlète."
+        }
+      },
+      "resend": {
+        "validation": {
+          "successMessage": "Le lien d'accès a été renvoyé.",
+          "failedMessage": "Une erreur est survenue lors du renvoi du lien d'accès.",
+          "athleteNotFound": "L'athlète est introuvable.",
+          "invalidAthleteId": "L'identifiant de l'athlète est invalide.",
+          "invalidAthletePageRelativeUrl": "L'URL de la page athlète est invalide."
         }
       }
     },
@@ -203,6 +245,22 @@
           "failedMessage": "Une erreur est survenue lors de la création de l'équipe.",
           "invalidName": "Le nom est invalide.",
           "teamWithNameAlreadyExists": "Une équipe avec ce nom existe déjà."
+        }
+      },
+      "detail": {
+        "title": "Profil de l'équipe",
+        "athletesSection": "Athlètes de l'équipe",
+        "assignAthletes": "Attitrer des athlètes",
+        "selectAthletes": "Sélectionner des athlètes...",
+        "noAthletes": "Aucun athlète dans cette équipe",
+        "removeAthlete": "Retirer de l'équipe",
+        "searchAthletes": "Rechercher par prénom, nom ou courriel...",
+        "noSearchResults": "Aucun athlète ne correspond à la recherche.",
+        "selected": "athlète(s) sélectionné(s)",
+        "validation": {
+          "successMessage": "Les athlètes ont été attitré à l'équipe avec succès.",
+          "removeSuccessMessage": "L'athlète a été retiré de l'équipe avec succès.",
+          "failedMessage": "Une erreur est survenue lors de l'attribution des athlètes."
         }
       },
       "delete": {
@@ -371,6 +429,7 @@
       "view": "Voir",
       "download": "Télécharger",
       "update": "Modifier",
+      "resend": "Renvoyer le lien",
       "delete": "Supprimer"
     }
   },

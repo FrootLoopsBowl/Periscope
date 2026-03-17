@@ -3,4 +3,5 @@ export interface ICreateAthleteRequest {
   lastName: string
   email: string
   dateOfBirth: string
+  athletePageRelativeUrl: string
 }

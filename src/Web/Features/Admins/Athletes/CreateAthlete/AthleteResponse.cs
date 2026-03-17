@@ -11,4 +11,6 @@ public class AthleteResponse
     public bool Active { get; set; }
     public DateTime CreatedAt { get; set; }
     public bool IsInjured { get; set; }
+    public Guid? TeamId { get; set; }
+    public string? TeamName { get; set; }
 }

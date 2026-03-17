@@ -15,4 +15,6 @@ export class NoteBlessure {
   athleteId?: string
   contenu?: string
   createdAt?: string
+  teamId?: string
+  teamName?: string
 }

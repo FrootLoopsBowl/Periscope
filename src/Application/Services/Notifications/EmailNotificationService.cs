@@ -37,4 +37,14 @@ public class EmailNotificationService : INotificationService
 
         return await _emailSender.SendAsync(model);
     }
+
+    public async Task<SucceededOrNotResponse> SendAthleteAccessNotification(string email, string link)
+    {
+        var model = new AthleteAccessNotificationModel(
+            email,
+            EMAIL_DEFAULT_CULTURE,
+            link);
+
+        return await _emailSender.SendAsync(model);
+    }
 }

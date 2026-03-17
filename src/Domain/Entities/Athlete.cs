@@ -10,6 +10,8 @@ public class Athlete : Common.Entity
     public bool Active { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public bool IsInjured { get; private set; }
+    public Guid? TeamId { get; private set; }
+    public Team? Team { get; private set; }
 
     public void SetIsInjured(bool isInjured) => IsInjured = isInjured;
 
@@ -38,4 +40,7 @@ public class Athlete : Common.Entity
 
     public void Activate() => Active = true;
     public void Deactivate() => Active = false;
+
+    public void AssignTeam(Guid teamId) => TeamId = teamId;
+    public void RemoveTeam() => TeamId = null;
 }

@@ -25,7 +25,7 @@ public class GetAthleteByIdEndpoint : Endpoint<GetAthleteByIdRequest, AthleteRes
     public override async Task HandleAsync(GetAthleteByIdRequest req, CancellationToken ct)
     {
         var athlete = await _athleteRepository.FindByIdAsync(req.Id);
-        if (athlete == null)
+        if (athlete is null)
         {
             await Send.NotFoundAsync(ct);
             return;
@@ -41,7 +41,9 @@ public class GetAthleteByIdEndpoint : Endpoint<GetAthleteByIdRequest, AthleteRes
             SubmissionToken = athlete.SubmissionToken,
             Active = athlete.Active,
             CreatedAt = athlete.CreatedAt,
-            IsInjured = athlete.IsInjured
+            IsInjured = athlete.IsInjured,
+            TeamId = athlete.TeamId,
+            TeamName = athlete.Team?.Name
         };
 
         await Send.OkAsync(response, cancellation: ct);
