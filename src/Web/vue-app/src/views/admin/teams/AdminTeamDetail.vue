@@ -59,7 +59,10 @@
               :key="athlete.id"
               class="inline-flex items-center gap-2 pl-3 pr-2 py-1 rounded-full bg-green-lighter text-green-dark text-sm font-montserrat font-semibold border border-green-light"
             >
-              {{ athlete.firstName }} {{ athlete.lastName }}
+              <RouterLink
+                :to="{ name: 'admin.children.athletes.detail', params: { id: athlete.id } }"
+                class="hover:underline"
+              >{{ athlete.firstName }} {{ athlete.lastName }}</RouterLink>
               <button
                 type="button"
                 :disabled="preventMultipleSubmit"
@@ -70,6 +73,37 @@
                 ×
               </button>
             </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section athlètes blessés -->
+      <div class="bg-white rounded-xl border border-grey overflow-hidden" style="box-shadow: var(--shadow-bold)">
+        <div class="flex items-center gap-3 px-6 py-4 bg-green-lighter border-b border-green-light">
+          <span class="block w-1.5 h-7 rounded-full bg-green"></span>
+          <h2 class="font-montserrat font-semibold text-green-dark text-base">
+            {{ t('pages.admin.dashboard.injuredAthletesTitle') }}
+          </h2>
+          <span
+            v-if="injuredTeamAthletes.length > 0"
+            class="inline-flex items-center justify-center px-3 py-1 rounded-full bg-green-lighter text-green-dark text-sm font-montserrat font-semibold border border-green-light"
+          >
+            {{ injuredTeamAthletes.length }}
+          </span>
+        </div>
+        <div class="p-6">
+          <p v-if="injuredTeamAthletes.length === 0" class="font-montserrat text-grey-dark italic">
+            {{ t('pages.admin.dashboard.injuredAthletesEmpty') }}
+          </p>
+          <div v-else class="flex flex-wrap gap-2">
+            <RouterLink
+              v-for="athlete in injuredTeamAthletes"
+              :key="athlete.id"
+              :to="{ name: 'admin.children.athletes.detail', params: { id: athlete.id } }"
+              class="inline-flex items-center px-3 py-1 rounded-full bg-green-lighter text-green-dark text-sm font-montserrat font-semibold border border-green-light hover:bg-green-light transition-colors"
+            >
+              {{ athlete.firstName }} {{ athlete.lastName }}
+            </RouterLink>
           </div>
         </div>
       </div>
@@ -173,6 +207,10 @@ const team = ref<Team | null>(null)
 const allAthletes = ref<Athlete[]>([])
 const selectedAthleteIds = ref<string[]>([])
 const athleteSearch = ref('')
+
+const injuredTeamAthletes = computed(() =>
+  (team.value?.athletes ?? []).filter(a => a.isInjured)
+)
 
 const filteredAthletes = computed(() => {
   const q = athleteSearch.value.toLowerCase().trim()

@@ -137,7 +137,17 @@
       <Card :title="t('pages.admin.dashboard.injuredAthletesTitle')">
         <ul v-if="injuredAthletes.length > 0" class="admin-dashboard__notes-list">
           <li v-for="athlete in injuredAthletes" :key="athlete.id" class="admin-dashboard__note-item">
-            <span class="admin-dashboard__note-contenu">{{ athlete.firstName }} {{ athlete.lastName }}</span>
+            <RouterLink
+              class="admin-dashboard__note-contenu"
+              :to="{ name: 'admin.children.athletes.detail', params: { id: athlete.id } }"
+            >{{ athlete.firstName }} {{ athlete.lastName }}</RouterLink>
+            <button
+              type="button"
+              class="btn btn--link"
+              @click="handleMarkAsRecovered(athlete.id!)"
+            >
+              {{ t("pages.admin.dashboard.markAsRecovered") }}
+            </button>
           </li>
         </ul>
         <p v-else class="content-grid__text">
@@ -239,6 +249,13 @@ function handleReset() {
   selectedTeamId.value = "";
   selectedAthleteId.value = "";
   displayedAthleteId.value = "";
+}
+
+async function handleMarkAsRecovered(athleteId: string) {
+  const result = await athleteService.toggleInjured(athleteId, false);
+  if (result.succeeded) {
+    injuredAthletes.value = injuredAthletes.value.filter((a) => a.id !== athleteId);
+  }
 }
 
 async function handleAddNote() {

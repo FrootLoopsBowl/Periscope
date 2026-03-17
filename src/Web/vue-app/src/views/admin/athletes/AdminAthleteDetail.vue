@@ -106,6 +106,46 @@
         </div>
       </div>
 
+      <!-- Section notes de blessure -->
+      <div class="bg-white rounded-xl border border-grey overflow-hidden" style="box-shadow: var(--shadow-bold)">
+        <div class="flex items-center gap-3 px-6 py-4 bg-green-lighter border-b border-green-light">
+          <span class="block w-1.5 h-7 rounded-full bg-green"></span>
+          <h2 class="font-montserrat font-semibold text-green-dark text-base">
+            {{ t('pages.admin.dashboard.athletePage.injuryNotesTitle') }}
+          </h2>
+        </div>
+        <div class="p-6 flex flex-col gap-4">
+          <div class="flex flex-col gap-2">
+            <textarea
+              class="border border-grey rounded-lg px-4 py-2 font-montserrat text-grey-darker focus:outline-none focus:border-green"
+              v-model="newNoteContenu"
+              :placeholder="t('pages.admin.dashboard.athletePage.injuryNotesPlaceholder')"
+              rows="3"
+            ></textarea>
+            <div class="flex items-center gap-3">
+              <button
+                type="button"
+                class="btn"
+                :disabled="isNoteButtonDisabled"
+                @click="handleAddNote"
+              >
+                {{ t('pages.admin.dashboard.athletePage.injuryNotesSubmit') }}
+              </button>
+              <p v-if="noteSubmitMessage" class="font-montserrat text-sm text-grey-darker">{{ noteSubmitMessage }}</p>
+            </div>
+          </div>
+          <ul v-if="injuryNotes.length > 0" class="flex flex-col gap-2">
+            <li v-for="note in injuryNotes" :key="note.id" class="flex flex-col gap-1 border-b border-grey pb-2">
+              <span class="text-xs font-montserrat text-grey-dark">{{ formatDate(note.createdAt) }}</span>
+              <span class="font-montserrat text-grey-darker">{{ note.contenu }}</span>
+            </li>
+          </ul>
+          <p v-else class="font-montserrat text-grey-dark italic">
+            {{ t('pages.admin.dashboard.athletePage.injuryNotesEmpty') }}
+          </p>
+        </div>
+      </div>
+
     </template>
 
   </div>
@@ -113,10 +153,10 @@
 
 <script lang="ts" setup>
 import {useI18n} from "vue3-i18n"
-import {onMounted, ref} from "vue"
+import {computed, onMounted, ref} from "vue"
 import {useAthleteService, useTeamService} from "@/inversify.config"
 import {notifyError, notifySuccess} from "@/notify"
-import {Athlete, Team} from "@/types/entities"
+import {Athlete, NoteBlessure, Team} from "@/types/entities"
 import BackLink from "@/components/layouts/items/BackLink.vue"
 import Loader from "@/components/layouts/items/Loader.vue"
 
@@ -132,9 +172,15 @@ const preventMultipleSubmit = ref(false)
 const athlete = ref<Athlete | null>(null)
 const allTeams = ref<Team[]>([])
 const selectedTeamId = ref<string | null>(null)
+const injuryNotes = ref<NoteBlessure[]>([])
+const newNoteContenu = ref<string>("")
+const isSubmittingNote = ref<boolean>(false)
+const noteSubmitMessage = ref<string>("")
+
+const isNoteButtonDisabled = computed(() => newNoteContenu.value.trim().length === 0 || isSubmittingNote.value)
 
 onMounted(async () => {
-  await Promise.all([loadAthlete(), loadTeams()])
+  await Promise.all([loadAthlete(), loadTeams(), loadNotes()])
   isLoading.value = false
 })
 
@@ -184,6 +230,25 @@ async function handleRemoveTeam() {
   }
 
   preventMultipleSubmit.value = false
+}
+
+async function loadNotes() {
+  injuryNotes.value = await athleteService.getNotesBlessure(props.id)
+}
+
+async function handleAddNote() {
+  if (newNoteContenu.value.trim().length === 0) return
+  isSubmittingNote.value = true
+  noteSubmitMessage.value = ""
+  const result = await athleteService.createNoteBlessure(props.id, newNoteContenu.value.trim())
+  if (result.succeeded) {
+    newNoteContenu.value = ""
+    noteSubmitMessage.value = t('pages.admin.dashboard.athletePage.injuryNotesSubmitSuccess')
+    injuryNotes.value = await athleteService.getNotesBlessure(props.id)
+  } else {
+    noteSubmitMessage.value = t('pages.admin.dashboard.athletePage.injuryNotesSubmitError')
+  }
+  isSubmittingNote.value = false
 }
 
 function formatDate(dateStr?: string): string {

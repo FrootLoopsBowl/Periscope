@@ -240,7 +240,7 @@ router.beforeEach(async (to, from) => {
   // Handle root path redirect
   if (to.path === "/") {
     if (userStore.user.email)
-      return { name: "account" };
+      return { name: "admin.children.dashboard" };
     return { name: "login" };
   }
 

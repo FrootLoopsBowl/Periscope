@@ -35,6 +35,9 @@ public class CreateNoteBlessureEndpoint : EndpointWithSanitizedRequest<CreateNot
             return;
         }
 
+        athlete.SetIsInjured(true);
+        await _athleteRepository.UpdateAsync(athlete);
+
         var note = new NoteBlessure(athlete.Id, req.Contenu);
         await _noteBlessureRepository.CreateAsync(note);
 

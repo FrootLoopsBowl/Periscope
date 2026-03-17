@@ -42,7 +42,8 @@ public class GetTeamByIdEndpoint : Endpoint<GetTeamByIdRequest, TeamDetailRespon
                     Id = a.Id,
                     FirstName = a.FirstName,
                     LastName = a.LastName,
-                    Email = a.Email
+                    Email = a.Email,
+                    IsInjured = a.IsInjured
                 })
                 .ToList()
         };

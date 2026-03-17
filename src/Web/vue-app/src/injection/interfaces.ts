@@ -33,6 +33,7 @@ export interface IAthleteService {
   getBySubmissionToken(token: string): Promise<{ firstName: string; lastName: string } | null>
   getAll(pageIndex: number, pageSize: number): Promise<PaginatedResponse<Athlete>>
   getInjured(): Promise<Athlete[]>
+  toggleInjured(athleteId: string, isInjured: boolean): Promise<SucceededOrNotResponse>
   createNoteBlessure(athleteId: string, contenu: string): Promise<SucceededOrNotResponse>
   getNotesBlessure(athleteId: string): Promise<NoteBlessure[]>
   getAllNonPaginated(): Promise<Athlete[]>

@@ -188,7 +188,10 @@
         "watchlistTitle": "Athletes to monitor",
         "watchlistPlaceholder": "Athletes to monitor will be displayed here.",
         "injuredAthletesTitle": "Injured athletes",
-        "injuredAthletesEmpty": "No injured athletes at the moment."
+        "injuredAthletesEmpty": "No injured athletes at the moment.",
+        "markAsRecovered": "Mark as recovered",
+        "markAsRecoveredSuccess": "The athlete has been marked as recovered.",
+        "markAsRecoveredError": "An error occurred while updating the athlete's injury status."
       }
     },
     "athletes": {

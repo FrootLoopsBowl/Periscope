@@ -14,4 +14,5 @@ public class AthleteInTeamResponse
     public string FirstName { get; set; } = null!;
     public string LastName { get; set; } = null!;
     public string Email { get; set; } = null!;
+    public bool IsInjured { get; set; }
 }
