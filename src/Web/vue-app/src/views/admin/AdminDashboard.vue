@@ -143,10 +143,11 @@
             >{{ athlete.firstName }} {{ athlete.lastName }}</RouterLink>
             <button
               type="button"
-              class="btn btn--link"
+              class="btn btn--square"
+              :title="t('pages.admin.dashboard.markAsRecovered')"
               @click="handleMarkAsRecovered(athlete.id!)"
             >
-              {{ t("pages.admin.dashboard.markAsRecovered") }}
+              <IconBandage :size="16" />
             </button>
           </li>
         </ul>
@@ -183,6 +184,7 @@ import { useAthleteService, useTeamService } from "@/inversify.config";
 import Card from "@/components/layouts/items/Card.vue";
 import { FormOption } from "@/types/formOption";
 import { Athlete, NoteBlessure, Team } from "@/types/entities";
+import IconBandage from 'vue-material-design-icons/Bandage.vue';
 
 const { t } = useI18n();
 

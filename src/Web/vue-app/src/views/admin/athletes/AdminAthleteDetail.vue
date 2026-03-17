@@ -116,10 +116,11 @@
           <button
             v-if="athlete.isInjured"
             type="button"
-            class="btn btn--link ml-auto"
+            class="btn btn--square ml-auto"
+            :title="t('pages.admin.dashboard.markAsRecovered')"
             @click="handleMarkAsRecovered"
           >
-            {{ t('pages.admin.dashboard.markAsRecovered') }}
+            <IconBandage :size="16" />
           </button>
         </div>
         <div class="p-6 flex flex-col gap-4">
@@ -165,6 +166,7 @@ import {computed, onMounted, ref} from "vue"
 import {useAthleteService, useTeamService} from "@/inversify.config"
 import {notifyError, notifySuccess} from "@/notify"
 import {Athlete, NoteBlessure, Team} from "@/types/entities"
+import IconBandage from 'vue-material-design-icons/Bandage.vue'
 import BackLink from "@/components/layouts/items/BackLink.vue"
 import Loader from "@/components/layouts/items/Loader.vue"
 

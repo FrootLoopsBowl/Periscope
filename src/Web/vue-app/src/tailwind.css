@@ -1525,6 +1525,7 @@ form input[type="checkbox"] + label::before {
 
 .btn--square {
   padding: 4px;
+  justify-content: center;
 }
 
 .btn--square .icon {
@@ -2631,6 +2632,8 @@ form input[type="checkbox"] + label::before {
   display: flex;
   gap: 12px;
   padding: 10px 12px;
+  justify-content: space-between;
+  align-items: center;
   background-color: var(--color-grey-lighter);
   border-radius: 6px;
   border-left: 3px solid var(--color-green);

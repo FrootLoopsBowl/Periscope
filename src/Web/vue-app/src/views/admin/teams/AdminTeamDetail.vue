@@ -17,18 +17,7 @@
         <h1 class="text-4xl font-montserrat font-semibold text-grey-darker">
           {{ team ? team.name : t('pages.teams.detail.title') }}
         </h1>
-        <div class="flex items-center gap-3">
-          <button
-            v-if="team"
-            type="button"
-            :disabled="preventMultipleSubmit"
-            class="btn btn--red"
-            @click="showConfirmModal = true"
-          >
-            {{ t('pages.teams.delete.modal.title') }}
-          </button>
-          <BackLink />
-        </div>
+        <BackLink />
       </div>
     </div>
 
@@ -95,25 +84,26 @@
           <p v-if="injuredTeamAthletes.length === 0" class="font-montserrat text-grey-dark italic">
             {{ t('pages.admin.dashboard.injuredAthletesEmpty') }}
           </p>
-          <div v-else class="flex flex-wrap gap-2">
-            <span
+          <ul v-else class="flex flex-col divide-y divide-grey">
+            <li
               v-for="athlete in injuredTeamAthletes"
               :key="athlete.id"
-              class="inline-flex items-center gap-2 pl-3 pr-2 py-1 rounded-full bg-green-lighter text-green-dark text-sm font-montserrat font-semibold border border-green-light"
+              class="flex items-center justify-between gap-3 py-2 px-1"
             >
               <RouterLink
                 :to="{ name: 'admin.children.athletes.detail', params: { id: athlete.id } }"
-                class="hover:underline"
+                class="font-montserrat text-sm font-semibold text-green-dark hover:underline"
               >{{ athlete.firstName }} {{ athlete.lastName }}</RouterLink>
               <button
                 type="button"
-                class="btn btn--link text-xs"
+                class="btn btn--square"
+                :title="t('pages.admin.dashboard.markAsRecovered')"
                 @click="handleMarkAsRecovered(athlete.id!)"
               >
-                {{ t('pages.admin.dashboard.markAsRecovered') }}
+                <IconBandage :size="16" />
               </button>
-            </span>
-          </div>
+            </li>
+          </ul>
         </div>
       </div>
 
@@ -183,6 +173,29 @@
         </div>
       </div>
 
+      <!-- Zone dangereuse -->
+      <div class="bg-white rounded-xl border border-red-300 overflow-hidden" style="box-shadow: var(--shadow-bold)">
+        <div class="flex items-center gap-3 px-6 py-4 bg-red-50 border-b border-red-300">
+          <span class="block w-1.5 h-7 rounded-full bg-red-400"></span>
+          <h2 class="font-montserrat font-semibold text-red-600 text-base">
+            {{ t('pages.teams.delete.modal.title') }}
+          </h2>
+        </div>
+        <div class="p-6 flex items-center justify-between gap-4">
+          <p class="font-montserrat text-sm text-grey-dark">
+            {{ t('pages.teams.delete.modal.message') }}
+          </p>
+          <button
+            type="button"
+            :disabled="preventMultipleSubmit"
+            class="btn btn--red flex-shrink-0"
+            @click="showConfirmModal = true"
+          >
+            {{ t('pages.teams.delete.modal.title') }}
+          </button>
+        </div>
+      </div>
+
     </template>
 
   </div>
@@ -195,6 +208,7 @@ import {useRouter} from "vue-router"
 import {useAthleteService, useTeamService} from "@/inversify.config"
 import {notifyError, notifySuccess} from "@/notify"
 import {Athlete, Team} from "@/types/entities"
+import IconBandage from 'vue-material-design-icons/Bandage.vue'
 import BackLink from "@/components/layouts/items/BackLink.vue"
 import Loader from "@/components/layouts/items/Loader.vue"
 import ConfirmModal from "@/components/layouts/items/ConfirmModal.vue"
