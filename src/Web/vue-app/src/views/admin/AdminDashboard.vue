@@ -95,6 +95,37 @@
         </div>
       </Card>
 
+      <Card :title="t('pages.admin.dashboard.athletePage.injuryNotesTitle')">
+        <div class="admin-dashboard__injury-notes">
+          <div class="admin-dashboard__injury-form">
+            <textarea
+              class="admin-dashboard__injury-textarea"
+              v-model="newNoteContenu"
+              :placeholder="t('pages.admin.dashboard.athletePage.injuryNotesPlaceholder')"
+              rows="3"
+            ></textarea>
+            <button
+              type="button"
+              class="btn"
+              :disabled="isNoteButtonDisabled"
+              @click="handleAddNote"
+            >
+              {{ t("pages.admin.dashboard.athletePage.injuryNotesSubmit") }}
+            </button>
+            <p v-if="noteSubmitMessage" class="admin-dashboard__note-message">{{ noteSubmitMessage }}</p>
+          </div>
+          <ul v-if="injuryNotes.length > 0" class="admin-dashboard__notes-list">
+            <li v-for="note in injuryNotes" :key="note.id" class="admin-dashboard__note-item">
+              <span class="admin-dashboard__note-date">{{ formatDateOnly(note.createdAt) }}</span>
+              <span class="admin-dashboard__note-contenu">{{ note.contenu }}</span>
+            </li>
+          </ul>
+          <p v-else class="content-grid__text">
+            {{ t("pages.admin.dashboard.athletePage.injuryNotesEmpty") }}
+          </p>
+        </div>
+      </Card>
+
       <Card :title="t('pages.admin.dashboard.athletePage.weeklyTitle')">
         <p class="content-grid__text">
           {{ t("pages.admin.dashboard.athletePage.weeklyPlaceholder") }}
@@ -103,6 +134,17 @@
     </div>
 
     <div v-else class="admin-dashboard__tiles">
+      <Card :title="t('pages.admin.dashboard.injuredAthletesTitle')">
+        <ul v-if="injuredAthletes.length > 0" class="admin-dashboard__notes-list">
+          <li v-for="athlete in injuredAthletes" :key="athlete.id" class="admin-dashboard__note-item">
+            <span class="admin-dashboard__note-contenu">{{ athlete.firstName }} {{ athlete.lastName }}</span>
+          </li>
+        </ul>
+        <p v-else class="content-grid__text">
+          {{ t("pages.admin.dashboard.injuredAthletesEmpty") }}
+        </p>
+      </Card>
+
       <Card :title="t('pages.admin.dashboard.weeklyGraphsTitle')">
         <p class="content-grid__text">
           {{ t("pages.admin.dashboard.weeklyGraphsPlaceholder") }}
@@ -125,12 +167,12 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { useI18n } from "vue3-i18n";
 import { useAthleteService, useTeamService } from "@/inversify.config";
 import Card from "@/components/layouts/items/Card.vue";
 import { FormOption } from "@/types/formOption";
-import { Athlete, Team } from "@/types/entities";
+import { Athlete, NoteBlessure, Team } from "@/types/entities";
 
 const { t } = useI18n();
 
@@ -143,6 +185,11 @@ const displayedAthleteId = ref<string>("");
 
 const teams = ref<Team[]>([]);
 const athletes = ref<Athlete[]>([]);
+const injuredAthletes = ref<Athlete[]>([]);
+const injuryNotes = ref<NoteBlessure[]>([]);
+const newNoteContenu = ref<string>("");
+const isSubmittingNote = ref<boolean>(false);
+const noteSubmitMessage = ref<string>("");
 
 const teamOptions = computed<FormOption[]>(() =>
   teams.value.map((team) => ({
@@ -167,10 +214,21 @@ const displayedAthleteFullName = computed(() =>
 );
 
 const isSearchDisabled = computed(() => selectedAthleteId.value.length === 0);
+const isNoteButtonDisabled = computed(() => newNoteContenu.value.trim().length === 0 || isSubmittingNote.value);
 
 onMounted(async () => {
   teams.value = await loadAllTeams();
   athletes.value = await loadAllAthletes();
+  injuredAthletes.value = await athleteService.getInjured();
+});
+
+watch(displayedAthleteId, async (newId) => {
+  injuryNotes.value = [];
+  newNoteContenu.value = "";
+  noteSubmitMessage.value = "";
+  if (newId) {
+    injuryNotes.value = await athleteService.getNotesBlessure(newId);
+  }
 });
 
 function handleSearch() {
@@ -181,6 +239,21 @@ function handleReset() {
   selectedTeamId.value = "";
   selectedAthleteId.value = "";
   displayedAthleteId.value = "";
+}
+
+async function handleAddNote() {
+  if (!displayedAthleteId.value || newNoteContenu.value.trim().length === 0) return;
+  isSubmittingNote.value = true;
+  noteSubmitMessage.value = "";
+  const result = await athleteService.createNoteBlessure(displayedAthleteId.value, newNoteContenu.value.trim());
+  if (result.succeeded) {
+    newNoteContenu.value = "";
+    noteSubmitMessage.value = t("pages.admin.dashboard.athletePage.injuryNotesSubmitSuccess");
+    injuryNotes.value = await athleteService.getNotesBlessure(displayedAthleteId.value);
+  } else {
+    noteSubmitMessage.value = t("pages.admin.dashboard.athletePage.injuryNotesSubmitError");
+  }
+  isSubmittingNote.value = false;
 }
 
 function displayValue(value?: string | boolean) {

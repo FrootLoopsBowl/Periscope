@@ -164,14 +164,22 @@
           "weeklyTitle": "Weekly tracking",
           "weeklyPlaceholder": "The athlete's weekly tracking will be displayed here.",
           "activeLabel": "Status",
-          "createdAtLabel": "Created on"
+          "createdAtLabel": "Created on",
+          "injuryNotesTitle": "Injury notes",
+          "injuryNotesPlaceholder": "E.g.: Right ankle sprain during match",
+          "injuryNotesSubmit": "Add note",
+          "injuryNotesSubmitSuccess": "Note added successfully.",
+          "injuryNotesSubmitError": "An error occurred while adding the note.",
+          "injuryNotesEmpty": "No injury notes for this athlete."
         },
         "weeklyGraphsTitle": "Weekly tracking graphs",
         "weeklyGraphsPlaceholder": "Graphs of weekly tracking will be displayed here.",
         "prioritizedAthletesTitle": "Prioritized athletes",
         "prioritizedAthletesPlaceholder": "Prioritized athletes list will be displayed here.",
         "watchlistTitle": "Athletes to monitor",
-        "watchlistPlaceholder": "Athletes to monitor will be displayed here."
+        "watchlistPlaceholder": "Athletes to monitor will be displayed here.",
+        "injuredAthletesTitle": "Injured athletes",
+        "injuredAthletesEmpty": "No injured athletes at the moment."
       }
     },
     "athletes": {

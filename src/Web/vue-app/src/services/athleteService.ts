@@ -5,7 +5,7 @@ import {ApiService} from "@/services/apiService"
 import {IAthleteService} from "@/injection/interfaces"
 import {PaginatedResponse, SucceededOrNotResponse} from "@/types/responses"
 import {ICreateAthleteRequest} from "@/types/requests"
-import {Athlete} from "@/types/entities"
+import {Athlete, NoteBlessure} from "@/types/entities"
 
 @injectable()
 export class AthleteService extends ApiService implements IAthleteService {
@@ -37,6 +37,46 @@ export class AthleteService extends ApiService implements IAthleteService {
         return error.response as AxiosResponse<PaginatedResponse<Athlete>>
       })
     return response.data as PaginatedResponse<Athlete>
+  }
+
+  public async getInjured(): Promise<Athlete[]> {
+    const response = await this
+      ._httpClient
+      .get<any, AxiosResponse<Athlete[]>>(
+        `${import.meta.env.VITE_API_BASE_URL}/athletes/injured`)
+      .catch(function (error: AxiosError): AxiosResponse<Athlete[]> {
+        return error.response as AxiosResponse<Athlete[]>
+      })
+    return response.data ?? []
+  }
+
+  public async createNoteBlessure(athleteId: string, contenu: string): Promise<SucceededOrNotResponse> {
+    const response = await this
+      ._httpClient
+      .post<any, AxiosResponse<any>>(
+        `${import.meta.env.VITE_API_BASE_URL}/athletes/${athleteId}/notes-blessure`,
+        { contenu },
+        this.headersWithJsonContentType())
+      .catch(function (error: AxiosError): AxiosResponse<any> {
+        return error.response as AxiosResponse<any>
+      })
+
+    if (response.status === 201) {
+      return new SucceededOrNotResponse(true)
+    }
+    const errorResponse = response.data as SucceededOrNotResponse
+    return new SucceededOrNotResponse(false, errorResponse?.errors)
+  }
+
+  public async getNotesBlessure(athleteId: string): Promise<NoteBlessure[]> {
+    const response = await this
+      ._httpClient
+      .get<any, AxiosResponse<NoteBlessure[]>>(
+        `${import.meta.env.VITE_API_BASE_URL}/athletes/${athleteId}/notes-blessure`)
+      .catch(function (error: AxiosError): AxiosResponse<NoteBlessure[]> {
+        return error.response as AxiosResponse<NoteBlessure[]>
+      })
+    return response.data ?? []
   }
 
   public async getBySubmissionToken(token: string): Promise<{ firstName: string; lastName: string } | null> {

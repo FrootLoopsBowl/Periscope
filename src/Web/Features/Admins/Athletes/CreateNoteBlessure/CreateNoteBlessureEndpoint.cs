@@ -39,5 +39,6 @@ public class CreateNoteBlessureEndpoint : EndpointWithSanitizedRequest<CreateNot
         await _noteBlessureRepository.CreateAsync(note);
 
         HttpContext.Response.StatusCode = StatusCodes.Status201Created;
+        await HttpContext.Response.WriteAsJsonAsync(new { }, ct);
     }
 }
