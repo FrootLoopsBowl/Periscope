@@ -86,5 +86,24 @@ export class TeamService extends ApiService implements ITeamService {
         return error.response as AxiosResponse<any>
       })
     return new SucceededOrNotResponse(response.status === 204)
-  }
+    }
+
+    public async updateTeam(id: string, request: IUpdateTeamRequest): Promise<SucceededOrNotResponse> {
+        const response = await this
+            ._httpClient
+            .put<any, AxiosResponse<any>>(
+                `${import.meta.env.VITE_API_BASE_URL}/teams/${id}`,
+                request,
+                this.headersWithJsonContentType())
+            .catch(function (error: AxiosError): AxiosResponse<any> {
+                return error.response as AxiosResponse<any>
+            })
+
+        if (response.status === 204) {
+            return new SucceededOrNotResponse(true)
+        }
+
+        const errorResponse = response.data as SucceededOrNotResponse
+        return new SucceededOrNotResponse(false, errorResponse?.errors)
+    }
 }

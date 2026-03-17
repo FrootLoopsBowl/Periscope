@@ -14,9 +14,31 @@
     <div class="flex flex-col gap-3 pb-6 border-b-2 border-green-light">
       <span class="text-xs font-montserrat uppercase tracking-widest text-green-dark">Administration</span>
       <div class="flex items-center justify-between flex-wrap gap-4">
-        <h1 class="text-4xl font-montserrat font-semibold text-grey-darker">
-          {{ team ? team.name : t('pages.teams.detail.title') }}
-        </h1>
+          <div class="flex items-center gap-3">
+              <template v-if="!isEditingName">
+                  <h1 class="text-4xl font-montserrat font-semibold text-grey-darker">
+                      {{ team ? team.name : t('pages.teams.detail.title') }}
+                  </h1>
+                  <button v-if="team"
+                          type="button"
+                          class="text-grey-dark hover:text-green transition-colors"
+                          @click="startEditName">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15.232 5.232l3.536 3.536M9 13l6.586-6.586a2 2 0 012.828 2.828L11.828 15.828a2 2 0 01-1.414.586H9v-1.414a2 2 0 01.586-1.414z" />
+                      </svg>
+                  </button>
+              </template>
+              <template v-else>
+                  <input v-model="editingName"
+                         type="text"
+                         class="border border-grey rounded-lg px-3 py-2 font-montserrat text-grey-darker text-2xl focus:outline-none focus:border-green" />
+                  <button type="button" class="btn btn--primary" :disabled="preventMultipleSubmit" @click="handleSaveName">
+                      {{ t('global.save') }}
+                  </button>
+                  <button type="button" class="btn" @click="isEditingName = false">✕</button>
+              </template>
+          </div>
         <div class="flex items-center gap-3">
           <button
             v-if="team"
@@ -159,6 +181,8 @@ import {useTeamStore} from "@/stores/teamStore"
 
 const {t} = useI18n()
 const router = useRouter()
+const isEditingName = ref(false)
+const editingName = ref('')
 
 const props = defineProps<{ id: string }>()
 
@@ -185,6 +209,8 @@ const filteredAthletes = computed(() => {
 
 async function loadData() {
   isLoading.value = true
+  isEditingName.value = false
+  editingName.value = ''
   athleteSearch.value = ''
   await Promise.all([loadTeam(), loadAthletes()])
   isLoading.value = false
@@ -257,4 +283,29 @@ async function onConfirmDelete() {
     preventMultipleSubmit.value = false
   }
 }
+function startEditName() {
+    editingName.value = team.value?.name ?? ''
+    isEditingName.value = true
+}
+async function handleSaveName() {
+    if (!editingName.value.trim() || preventMultipleSubmit.value) return
+        preventMultipleSubmit.value = true
+        const response = await teamService.updateTeam(props.id, { name: editingName.value.trim() })
+        if (response.succeeded) {
+            if (team.value) team.value.name = editingName.value.trim()
+            if (team.value) {
+                team.value.name = editingName.value.trim()
+                const updatedTeams = teamStore.teams.map(t =>
+                    t.id === props.id ? { ...t, name: editingName.value.trim() } : t
+                )
+                teamStore.setTeams(updatedTeams)
+                isEditingName.value = false
+                notifySuccess(t('pages.teams.edit.validation.successMessage'))
+            }
+        } else {
+            const errorMessages = response.getErrorMessages('pages.teams.edit.validation')
+            notifyError(errorMessages.length > 0 ? errorMessages[0] : t('pages.teams.edit.validation.failedMessage'))
+        }
+        preventMultipleSubmit.value = false
+    }
 </script>

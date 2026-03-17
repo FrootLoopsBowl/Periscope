@@ -6,6 +6,7 @@ import {IAthleteService} from "@/injection/interfaces"
 import {PaginatedResponse, SucceededOrNotResponse} from "@/types/responses"
 import {IAssignTeamToAthleteRequest, ICreateAthleteRequest} from "@/types/requests"
 import {Athlete} from "@/types/entities"
+import { IUpdateAthleteRequest } from "../types/requests/updateAthleteRequest"
 
 @injectable()
 export class AthleteService extends ApiService implements IAthleteService {
@@ -125,4 +126,22 @@ export class AthleteService extends ApiService implements IAthleteService {
       })
     return new SucceededOrNotResponse(response.status === 204)
   }
+    public async updateAthlete(id: string, request: IUpdateAthleteRequest): Promise<SucceededOrNotResponse> {
+        const response = await this
+            ._httpClient
+            .put<any, AxiosResponse<any>>(
+                `${import.meta.env.VITE_API_BASE_URL}/athletes/${id}`,
+                request,
+                this.headersWithJsonContentType())
+            .catch(function (error: AxiosError): AxiosResponse<any> {
+                return error.response as AxiosResponse<any>
+            })
+
+        if (response.status === 204) {
+            return new SucceededOrNotResponse(true)
+        }
+
+        const errorResponse = response.data as SucceededOrNotResponse
+        return new SucceededOrNotResponse(false, errorResponse?.errors)
+    }
 }

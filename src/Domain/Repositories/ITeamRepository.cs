@@ -12,4 +12,6 @@ public interface ITeamRepository
     Task<Team?> FindByIdAsync(Guid id);
     Task<Team?> FindByIdWithAthletesAsync(Guid id);
     Task DeleteAsync(Team team);
+
+    Task UpdateAsync(Team team);
 }

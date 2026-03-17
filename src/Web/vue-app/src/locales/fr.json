@@ -52,6 +52,11 @@
             "path": ":id",
             "fullPath": "/administration/athletes/:id",
             "name": "Profil de l'athlète"
+          },
+          "edit": {
+            "path": ":id/modifier",
+            "fullPath": "/administration/athletes/:id/modifier",
+            "name": "Modifier un athlète"
           }
         },
         "teams": {
@@ -228,6 +233,19 @@
           "invalidAthleteId": "L'identifiant de l'athlète est invalide.",
           "invalidAthletePageRelativeUrl": "L'URL de la page athlète est invalide."
         }
+      },
+      "edit": {
+        "title": "Modifier un athlète",
+        "validation": {
+          "successMessage": "L'athlète a été modifié avec succès.",
+          "failedMessage": "Une erreur est survenue lors de la modification de l'athlète.",
+          "invalidFirstName": "Le prénom est invalide.",
+          "invalidLastName": "Le nom est invalide.",
+          "invalidEmail": "Le courriel est invalide.",
+          "invalidEmailFormat": "Le format du courriel est invalide.",
+          "invalidDateOfBirth": "La date de naissance est invalide.",
+          "athleteWithEmailAlreadyExists": "Un athlète avec ce courriel existe déjà."
+        }
       }
     },
     "teams": {
@@ -264,6 +282,13 @@
         "validation": {
           "successMessage": "L'équipe a été supprimée avec succès.",
           "failedMessage": "Une erreur est survenue lors de la suppression de l'équipe."
+        }
+      },
+      "edit": {
+        "validation": {
+          "successMessage": "Le nom de l'équipe a été modifié avec succès.",
+          "failedMessage": "Une erreur est survenue lors de la modification de l'équipe.",
+          "teamWithNameAlreadyExists": "Une équipe avec ce nom existe déjà."
         }
       }
     },
