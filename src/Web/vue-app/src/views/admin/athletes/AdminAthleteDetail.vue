@@ -113,6 +113,14 @@
           <h2 class="font-montserrat font-semibold text-green-dark text-base">
             {{ t('pages.admin.dashboard.athletePage.injuryNotesTitle') }}
           </h2>
+          <button
+            v-if="athlete.isInjured"
+            type="button"
+            class="btn btn--link ml-auto"
+            @click="handleMarkAsRecovered"
+          >
+            {{ t('pages.admin.dashboard.markAsRecovered') }}
+          </button>
         </div>
         <div class="p-6 flex flex-col gap-4">
           <div class="flex flex-col gap-2">
@@ -230,6 +238,16 @@ async function handleRemoveTeam() {
   }
 
   preventMultipleSubmit.value = false
+}
+
+async function handleMarkAsRecovered() {
+  const result = await athleteService.toggleInjured(props.id, false)
+  if (result.succeeded && athlete.value) {
+    athlete.value.isInjured = false
+    notifySuccess(t('pages.admin.dashboard.markAsRecoveredSuccess'))
+  } else {
+    notifyError(t('pages.admin.dashboard.markAsRecoveredError'))
+  }
 }
 
 async function loadNotes() {

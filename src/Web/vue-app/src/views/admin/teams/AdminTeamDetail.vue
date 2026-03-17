@@ -96,14 +96,23 @@
             {{ t('pages.admin.dashboard.injuredAthletesEmpty') }}
           </p>
           <div v-else class="flex flex-wrap gap-2">
-            <RouterLink
+            <span
               v-for="athlete in injuredTeamAthletes"
               :key="athlete.id"
-              :to="{ name: 'admin.children.athletes.detail', params: { id: athlete.id } }"
-              class="inline-flex items-center px-3 py-1 rounded-full bg-green-lighter text-green-dark text-sm font-montserrat font-semibold border border-green-light hover:bg-green-light transition-colors"
+              class="inline-flex items-center gap-2 pl-3 pr-2 py-1 rounded-full bg-green-lighter text-green-dark text-sm font-montserrat font-semibold border border-green-light"
             >
-              {{ athlete.firstName }} {{ athlete.lastName }}
-            </RouterLink>
+              <RouterLink
+                :to="{ name: 'admin.children.athletes.detail', params: { id: athlete.id } }"
+                class="hover:underline"
+              >{{ athlete.firstName }} {{ athlete.lastName }}</RouterLink>
+              <button
+                type="button"
+                class="btn btn--link text-xs"
+                @click="handleMarkAsRecovered(athlete.id!)"
+              >
+                {{ t('pages.admin.dashboard.markAsRecovered') }}
+              </button>
+            </span>
           </div>
         </div>
       </div>
@@ -276,6 +285,17 @@ async function handleRemoveAthlete(athleteId: string) {
   }
 
   preventMultipleSubmit.value = false
+}
+
+async function handleMarkAsRecovered(athleteId: string) {
+  const result = await athleteService.toggleInjured(athleteId, false)
+  if (result.succeeded && team.value?.athletes) {
+    const athlete = team.value.athletes.find(a => a.id === athleteId)
+    if (athlete) athlete.isInjured = false
+    notifySuccess(t('pages.admin.dashboard.markAsRecoveredSuccess'))
+  } else {
+    notifyError(t('pages.admin.dashboard.markAsRecoveredError'))
+  }
 }
 
 async function onConfirmDelete() {
