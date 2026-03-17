@@ -20,6 +20,7 @@ import AdminTeamDetail from "@/views/admin/teams/AdminTeamDetail.vue";
 import AdminMemberIndex from "@/views/admin/members/AdminMemberIndex.vue";
 import AdminAddMemberForm from "@/views/admin/members/AdminAddMemberForm.vue";
 import AdminEditMemberForm from "@/views/admin/members/AdminEditMemberForm.vue";
+import AdminEditAthleteForm from "@/views/admin/athletes/AdminEditAthleteForm.vue";
 
 import Books from "../views/member/Books.vue";
 import BookIndex from "@/views/member/BookIndex.vue";
@@ -151,6 +152,13 @@ const router = createRouter({
               name: "admin.children.teams.detail",
               component: AdminTeamDetail,
               props: true,
+            },
+            {
+                path: i18n.t("routes.admin.children.athletes.edit.path"),
+                alias: getLocalizedRoutes("routes.admin.children.athletes.edit.path"),
+                name: "admin.children.athletes.edit",
+                component: AdminEditAthleteForm,
+                props: true,
             },
           ],
         },

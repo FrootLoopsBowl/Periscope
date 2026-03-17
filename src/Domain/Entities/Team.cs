@@ -13,4 +13,6 @@ public class Team : Common.Entity
         Name = name;
         CreatedAt = DateTime.UtcNow;
     }
+
+    public void SetName(string name) => Name = name;
 }

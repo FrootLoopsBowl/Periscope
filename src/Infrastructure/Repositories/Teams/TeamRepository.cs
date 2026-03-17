@@ -65,4 +65,9 @@ public class TeamRepository : ITeamRepository
         _context.Teams.Remove(team);
         await _context.SaveChangesAsync();
     }
+
+    public async Task UpdateAsync(Team team)
+    {
+        await _context.SaveChangesAsync();
+    }
 }

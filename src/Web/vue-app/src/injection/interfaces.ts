@@ -14,6 +14,7 @@ import {
 import {PaginatedResponse, SucceededOrNotResponse} from "@/types/responses"
 import {Administrator, Athlete, NoteBlessure, Book, Member, Team, User} from "@/types/entities"
 import {Guid} from "@/types";
+import { IUpdateAthleteRequest, IUpdateTeamRequest } from "../types/requests/updateAthleteRequest";
 
 export interface IApiService {
   headersWithJsonContentType(): any
@@ -40,6 +41,7 @@ export interface IAthleteService {
   getById(id: string): Promise<Athlete | null>
   assignTeam(athleteId: string, request: IAssignTeamToAthleteRequest): Promise<SucceededOrNotResponse>
   deleteAthlete(id: string): Promise<SucceededOrNotResponse>
+  updateAthlete(id: string, request: IUpdateAthleteRequest): Promise<SucceededOrNotResponse>
 }
 
 
@@ -89,6 +91,7 @@ export interface ITeamService {
   getById(id: string): Promise<Team | null>
   assignAthletes(teamId: string, request: IAssignAthletesToTeamRequest): Promise<SucceededOrNotResponse>
   deleteTeam(id: Guid): Promise<SucceededOrNotResponse>
+  updateTeam(id: string, request: IUpdateTeamRequest): Promise<SucceededOrNotResponse>
 }
 
 export interface IUserService {

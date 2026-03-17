@@ -79,6 +79,7 @@ const tableAthletes = computed(() =>
     actions: {
       view: router.resolve({ name: 'admin.children.athletes.detail', params: { id: x.id } }).href,
       resend: true,
+      edit: router.resolve({ name: 'admin.children.athletes.edit', params: { id: x.id } }).href,
       delete: true,
     },
   }))
