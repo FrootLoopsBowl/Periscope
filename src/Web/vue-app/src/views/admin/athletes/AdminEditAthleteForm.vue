@@ -1,5 +1,6 @@
 <template>
     <div class="content-grid">
+        <!-- En-tête -->
         <div class="flex flex-col gap-3 pb-6 border-b-2 border-green-light">
             <span class="text-xs font-montserrat uppercase tracking-widest text-green-dark">Administration</span>
             <div class="flex items-center justify-between flex-wrap gap-4">
@@ -10,11 +11,22 @@
             </div>
         </div>
 
-        <Loader v-if="isLoading" />
+        <!-- Formulaire -->
+        <div class="bg-white rounded-xl border border-grey overflow-hidden" style="box-shadow: var(--shadow-bold)">
+            <div class="flex items-center gap-3 px-6 py-4 bg-green-lighter border-b border-green-light">
+                <span class="block w-1.5 h-7 rounded-full bg-green"></span>
+                <h2 class="font-montserrat font-semibold text-green-dark text-base">
+                    {{ t('pages.athletes.edit.title') }}
+                </h2>
+            </div>
+            <div class="p-6">
+                <Loader v-if="isLoading" />
+                <AthleteEditForm v-if="!isLoading && athlete"
+                                 :initial-athlete="athlete"
+                                 @form-submit="handleSubmit" />
+            </div>
+        </div>
 
-        <AthleteEditForm v-if="!isLoading && athlete"
-                         :initial-athlete="athlete"
-                         @form-submit="handleSubmit" />
     </div>
 </template>
 
