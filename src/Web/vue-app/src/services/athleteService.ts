@@ -77,12 +77,12 @@ export class AthleteService extends ApiService implements IAthleteService {
     return null
   }
 
-  public async submitSubmission(token: string, effort: number, durationMinutes: number): Promise<SucceededOrNotResponse> {
+  public async submitSubmission(token: string, effort: number, durationMinutes: number, pleasure?: number): Promise<SucceededOrNotResponse> {
     const response = await this
       ._httpClient
       .post<any, AxiosResponse<any>>(
         `${import.meta.env.VITE_API_BASE_URL}/athletes/submission`,
-        { token, effort, durationMinutes },
+        { token, effort, durationMinutes, pleasure },
         this.headersWithJsonContentType())
       .catch(function (error: AxiosError): AxiosResponse<any> {
         return error.response as AxiosResponse<any>
