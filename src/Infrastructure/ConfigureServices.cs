@@ -14,6 +14,7 @@ using Infrastructure.Repositories.Authentication;
 using Infrastructure.Repositories.Books;
 using Infrastructure.Repositories.Teams;
 using Infrastructure.Repositories.Members;
+using Infrastructure.Repositories.Blessures;
 using Infrastructure.Repositories.Entraineurs;
 using Infrastructure.Repositories.Users;
 using Infrastructure.Services;
@@ -75,6 +76,7 @@ public static class ConfigureServices
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+        services.AddScoped<INoteBlessureRepository, NoteBlessureRepository>();
 
         services.AddScoped<IFileStorageApiConsumer, AzureBlobApiConsumer>();
         services.AddScoped<IAzureApiHttpClient, AzureApiHttpClient>();

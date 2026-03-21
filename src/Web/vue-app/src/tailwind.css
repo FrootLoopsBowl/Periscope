@@ -1525,6 +1525,7 @@ form input[type="checkbox"] + label::before {
 
 .btn--square {
   padding: 4px;
+  justify-content: center;
 }
 
 .btn--square .icon {
@@ -2583,6 +2584,71 @@ form input[type="checkbox"] + label::before {
 .admin-dashboard__athlete-row:last-child {
   border-bottom: none;
   padding-bottom: 0;
+}
+
+.admin-dashboard__injury-notes {
+  display: grid;
+  gap: 20px;
+}
+
+.admin-dashboard__injury-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.admin-dashboard__injury-textarea {
+  width: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  padding: 12px 14px;
+  background-color: var(--color-white);
+  font-size: 0.9375rem;
+  font-family: inherit;
+  resize: none;
+  transition: border-color 0.2s var(--ease-snappy), box-shadow 0.2s var(--ease-snappy);
+}
+
+.admin-dashboard__injury-textarea:focus {
+  outline: none;
+  border-color: var(--color-green);
+  box-shadow: 0 0 0 3px rgba(138, 46, 59, 0.12);
+}
+
+.admin-dashboard__note-message {
+  font-size: 0.875rem;
+  color: var(--color-grey-medium);
+}
+
+.admin-dashboard__notes-list {
+  display: grid;
+  gap: 10px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.admin-dashboard__note-item {
+  display: flex;
+  gap: 12px;
+  padding: 10px 12px;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--color-grey-lighter);
+  border-radius: 6px;
+  border-left: 3px solid var(--color-green);
+}
+
+.admin-dashboard__note-date {
+  color: var(--color-grey-medium);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.admin-dashboard__note-contenu {
+  font-size: 0.9375rem;
+  color: var(--color-grey-dark);
 }
 
 .admin-dashboard__athlete-label {

@@ -69,6 +69,15 @@ public class AthleteRepository : IAthleteRepository
         return new PaginatedList<Athlete>(items, total);
     }
 
+    public async Task<IReadOnlyList<Athlete>> GetInjuredAsync()
+    {
+        return await _context.Athletes
+            .AsNoTracking()
+            .Where(x => x.Active && x.IsInjured)
+            .OrderBy(x => x.LastName)
+            .ToListAsync();
+    }
+
     public async Task<IEnumerable<Athlete>> GetAllAsync()
     {
         return await _context.Athletes

@@ -187,14 +187,25 @@
           "weeklyTitle": "Suivi hebdomadaire",
           "weeklyPlaceholder": "Le suivi hebdomadaire de l'athlète sera affiché ici.",
           "activeLabel": "Statut",
-          "createdAtLabel": "Créé le"
+          "createdAtLabel": "Créé le",
+          "injuryNotesTitle": "Notes de blessure",
+          "injuryNotesPlaceholder": "Ex. : Entorse cheville droite match",
+          "injuryNotesSubmit": "Ajouter la note",
+          "injuryNotesSubmitSuccess": "Note ajoutée avec succès.",
+          "injuryNotesSubmitError": "Une erreur est survenue lors de l'ajout de la note.",
+          "injuryNotesEmpty": "Aucune note de blessure pour cet athlète."
         },
         "weeklyGraphsTitle": "Graph de suivi hebdomadaires",
         "weeklyGraphsPlaceholder": "Les graph de suivi hebdomadaires seront affichés ici.",
         "prioritizedAthletesTitle": "Athlètes priorisés",
         "prioritizedAthletesPlaceholder": "La liste des athlètes priorisés sera affichée ici.",
         "watchlistTitle": "Athlètes à surveiller",
-        "watchlistPlaceholder": "La liste des athlètes à surveiller sera affichée ici."
+        "watchlistPlaceholder": "La liste des athlètes à surveiller sera affichée ici.",
+        "injuredAthletesTitle": "Athlètes blessés",
+        "injuredAthletesEmpty": "Aucun athlète blessé pour le moment.",
+        "markAsRecovered": "Marquer comme rétabli",
+        "markAsRecoveredSuccess": "L'athlète a été marqué comme rétabli.",
+        "markAsRecoveredError": "Une erreur est survenue lors de la mise à jour du statut de l'athlète."
       }
     },
     "athletes": {

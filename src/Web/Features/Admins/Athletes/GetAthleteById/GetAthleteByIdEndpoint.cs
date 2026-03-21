@@ -41,6 +41,7 @@ public class GetAthleteByIdEndpoint : Endpoint<GetAthleteByIdRequest, AthleteRes
             SubmissionToken = athlete.SubmissionToken,
             Active = athlete.Active,
             CreatedAt = athlete.CreatedAt,
+            IsInjured = athlete.IsInjured,
             TeamId = athlete.TeamId,
             TeamName = athlete.Team?.Name
         };

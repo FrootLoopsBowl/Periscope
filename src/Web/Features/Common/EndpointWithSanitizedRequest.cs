@@ -9,3 +9,11 @@ public class EndpointWithSanitizedRequest<TRequest, TResponse> : Endpoint<TReque
         req.Sanitize();
     }
 }
+
+public class EndpointWithSanitizedRequest<TRequest> : Endpoint<TRequest> where TRequest : ISanitizable, new()
+{
+    public override void OnBeforeValidate(TRequest req)
+    {
+        req.Sanitize();
+    }
+}

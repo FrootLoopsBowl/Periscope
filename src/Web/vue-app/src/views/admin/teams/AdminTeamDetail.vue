@@ -14,43 +14,24 @@
     <div class="flex flex-col gap-3 pb-6 border-b-2 border-green-light">
       <span class="text-xs font-montserrat uppercase tracking-widest text-green-dark">Administration</span>
       <div class="flex items-center justify-between flex-wrap gap-4">
-          <div class="flex items-center gap-3">
-              <template v-if="!isEditingName">
-                  <h1 class="text-4xl font-montserrat font-semibold text-grey-darker">
-                      {{ team ? team.name : t('pages.teams.detail.title') }}
-                  </h1>
-                  <button v-if="team"
-                          type="button"
-                          class="text-grey-dark hover:text-green transition-colors"
-                          @click="startEditName">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M15.232 5.232l3.536 3.536M9 13l6.586-6.586a2 2 0 012.828 2.828L11.828 15.828a2 2 0 01-1.414.586H9v-1.414a2 2 0 01.586-1.414z" />
-                      </svg>
-                  </button>
-              </template>
-              <template v-else>
-                  <input v-model="editingName"
-                         type="text"
-                         class="border border-grey rounded-lg px-3 py-2 font-montserrat text-grey-darker text-2xl focus:outline-none focus:border-green" />
-                  <button type="button" class="btn btn--primary" :disabled="preventMultipleSubmit" @click="handleSaveName">
-                      {{ t('global.save') }}
-                  </button>
-                  <button type="button" class="btn" @click="isEditingName = false">✕</button>
-              </template>
-          </div>
         <div class="flex items-center gap-3">
-          <button
-            v-if="team"
-            type="button"
-            :disabled="preventMultipleSubmit"
-            class="btn btn--red"
-            @click="showConfirmModal = true"
-          >
-            {{ t('pages.teams.delete.modal.title') }}
-          </button>
-          <BackLink />
+          <template v-if="!isEditingName">
+            <h1 class="text-4xl font-montserrat font-semibold text-grey-darker">
+              {{ team ? team.name : t('pages.teams.detail.title') }}
+            </h1>
+            <button v-if="team" type="button" class="text-grey-dark hover:text-green transition-colors" @click="startEditName">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536M9 13l6.586-6.586a2 2 0 012.828 2.828L11.828 15.828a2 2 0 01-1.414.586H9v-1.414a2 2 0 01.586-1.414z" />
+              </svg>
+            </button>
+          </template>
+          <template v-else>
+            <input v-model="editingName" type="text" class="border border-grey rounded-lg px-3 py-2 font-montserrat text-grey-darker text-2xl focus:outline-none focus:border-green" />
+            <button type="button" class="btn btn--primary" :disabled="preventMultipleSubmit" @click="handleSaveName">{{ t('global.save') }}</button>
+            <button type="button" class="btn" @click="isEditingName = false">✕</button>
+          </template>
         </div>
+        <BackLink />
       </div>
     </div>
 
@@ -81,7 +62,10 @@
               :key="athlete.id"
               class="inline-flex items-center gap-2 pl-3 pr-2 py-1 rounded-full bg-green-lighter text-green-dark text-sm font-montserrat font-semibold border border-green-light"
             >
-              {{ athlete.firstName }} {{ athlete.lastName }}
+              <RouterLink
+                :to="{ name: 'admin.children.athletes.detail', params: { id: athlete.id } }"
+                class="hover:underline"
+              >{{ athlete.firstName }} {{ athlete.lastName }}</RouterLink>
               <button
                 type="button"
                 :disabled="preventMultipleSubmit"
@@ -93,6 +77,47 @@
               </button>
             </span>
           </div>
+        </div>
+      </div>
+
+      <!-- Section athlètes blessés -->
+      <div class="bg-white rounded-xl border border-grey overflow-hidden" style="box-shadow: var(--shadow-bold)">
+        <div class="flex items-center gap-3 px-6 py-4 bg-green-lighter border-b border-green-light">
+          <span class="block w-1.5 h-7 rounded-full bg-green"></span>
+          <h2 class="font-montserrat font-semibold text-green-dark text-base">
+            {{ t('pages.admin.dashboard.injuredAthletesTitle') }}
+          </h2>
+          <span
+            v-if="injuredTeamAthletes.length > 0"
+            class="inline-flex items-center justify-center px-3 py-1 rounded-full bg-green-lighter text-green-dark text-sm font-montserrat font-semibold border border-green-light"
+          >
+            {{ injuredTeamAthletes.length }}
+          </span>
+        </div>
+        <div class="p-6">
+          <p v-if="injuredTeamAthletes.length === 0" class="font-montserrat text-grey-dark italic">
+            {{ t('pages.admin.dashboard.injuredAthletesEmpty') }}
+          </p>
+          <ul v-else class="flex flex-col divide-y divide-grey">
+            <li
+              v-for="athlete in injuredTeamAthletes"
+              :key="athlete.id"
+              class="flex items-center justify-between gap-3 py-2 px-1"
+            >
+              <RouterLink
+                :to="{ name: 'admin.children.athletes.detail', params: { id: athlete.id } }"
+                class="font-montserrat text-sm font-semibold text-green-dark hover:underline"
+              >{{ athlete.firstName }} {{ athlete.lastName }}</RouterLink>
+              <button
+                type="button"
+                class="btn btn--square"
+                :title="t('pages.admin.dashboard.markAsRecovered')"
+                @click="handleMarkAsRecovered(athlete.id!)"
+              >
+                <IconBandage :size="16" />
+              </button>
+            </li>
+          </ul>
         </div>
       </div>
 
@@ -162,6 +187,29 @@
         </div>
       </div>
 
+      <!-- Zone dangereuse -->
+      <div class="bg-white rounded-xl border border-red-300 overflow-hidden" style="box-shadow: var(--shadow-bold)">
+        <div class="flex items-center gap-3 px-6 py-4 bg-red-50 border-b border-red-300">
+          <span class="block w-1.5 h-7 rounded-full bg-red-400"></span>
+          <h2 class="font-montserrat font-semibold text-red-600 text-base">
+            {{ t('pages.teams.delete.modal.title') }}
+          </h2>
+        </div>
+        <div class="p-6 flex items-center justify-between gap-4">
+          <p class="font-montserrat text-sm text-grey-dark">
+            {{ t('pages.teams.delete.modal.message') }}
+          </p>
+          <button
+            type="button"
+            :disabled="preventMultipleSubmit"
+            class="btn btn--red flex-shrink-0"
+            @click="showConfirmModal = true"
+          >
+            {{ t('pages.teams.delete.modal.title') }}
+          </button>
+        </div>
+      </div>
+
     </template>
 
   </div>
@@ -174,6 +222,7 @@ import {useRouter} from "vue-router"
 import {useAthleteService, useTeamService} from "@/inversify.config"
 import {notifyError, notifySuccess} from "@/notify"
 import {Athlete, Team} from "@/types/entities"
+import IconBandage from 'vue-material-design-icons/Bandage.vue'
 import BackLink from "@/components/layouts/items/BackLink.vue"
 import Loader from "@/components/layouts/items/Loader.vue"
 import ConfirmModal from "@/components/layouts/items/ConfirmModal.vue"
@@ -197,6 +246,10 @@ const team = ref<Team | null>(null)
 const allAthletes = ref<Athlete[]>([])
 const selectedAthleteIds = ref<string[]>([])
 const athleteSearch = ref('')
+
+const injuredTeamAthletes = computed(() =>
+  (team.value?.athletes ?? []).filter(a => a.isInjured)
+)
 
 const filteredAthletes = computed(() => {
   const q = athleteSearch.value.toLowerCase().trim()
@@ -264,6 +317,17 @@ async function handleRemoveAthlete(athleteId: string) {
   }
 
   preventMultipleSubmit.value = false
+}
+
+async function handleMarkAsRecovered(athleteId: string) {
+  const result = await athleteService.toggleInjured(athleteId, false)
+  if (result.succeeded && team.value?.athletes) {
+    const athlete = team.value.athletes.find(a => a.id === athleteId)
+    if (athlete) athlete.isInjured = false
+    notifySuccess(t('pages.admin.dashboard.markAsRecoveredSuccess'))
+  } else {
+    notifyError(t('pages.admin.dashboard.markAsRecoveredError'))
+  }
 }
 
 async function onConfirmDelete() {

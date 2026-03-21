@@ -12,6 +12,7 @@ public interface IAthleteRepository
     Task<Athlete?> FindBySubmissionTokenAsync(Guid token);
     Task UpdateAsync(Athlete athlete);
     PaginatedList<Athlete> GetAllPaginated(int pageIndex, int pageSize);
+    Task<IReadOnlyList<Athlete>> GetInjuredAsync();
     Task<IEnumerable<Athlete>> GetAllAsync();
     Task DeleteAsync(Athlete athlete);
 }
