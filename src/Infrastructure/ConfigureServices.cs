@@ -9,6 +9,7 @@ using Infrastructure.ExternalApis.Azure.Http;
 using Infrastructure.Mailing;
 using Infrastructure.Repositories.Admins;
 using Infrastructure.Repositories.Athletes;
+using Infrastructure.Repositories.AthleteEfforts;
 using Infrastructure.Repositories.Authentication;
 using Infrastructure.Repositories.Books;
 using Infrastructure.Repositories.Teams;
@@ -67,6 +68,7 @@ public static class ConfigureServices
 
         services.AddScoped<IAdministratorRepository, AdministratorRepository>();
         services.AddScoped<IAthleteRepository, AthleteRepository>();
+        services.AddScoped<IAthleteEffortRepository, AthleteEffortRepository>();
         services.AddScoped<ITeamRepository, TeamRepository>();
         services.AddScoped<IBookRepository, BookRepository>();
         services.AddScoped<IMemberRepository, MemberRepository>();

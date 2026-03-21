@@ -30,7 +30,8 @@ public static class CookieHelper
             Secure = secure,
             HttpOnly = httpOnly,
             IsEssential = true,
-            SameSite = SameSiteMode.Strict
+            // Allow cross-site requests when Secure is enabled (SameSite=None required for cross-site)
+            SameSite = secure ? SameSiteMode.None : SameSiteMode.Lax
         };
 
         if (!string.IsNullOrWhiteSpace(domain))
