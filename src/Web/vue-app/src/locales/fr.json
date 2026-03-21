@@ -161,6 +161,15 @@
     "athletePage": {
       "notFound": "Ce lien est invalide ou votre accès a été révoqué."
     },
+    "athleteForm": {
+      "title": "Bonjour {firstName}",
+      "thanks": "Merci! Vos informations ont été reçues.",
+      "submitError": "Une erreur est survenue lors de l'envoi de votre réponse.",
+      "descriptions": {
+        "pleasure": "Échelle perception du plaisir:\n1 - Je n'ai pas terminé l'entraînement en raison de mon humeur.\n2 - J'ai pensé à plusieurs reprises d'arrêter l'entraînement.\n3 - J'ai pensé une fois à arrêter l'entraînement.\n4 - J'ai fait l'entraînement par obligation.\n5 - L'entraînement n'a pas été plaisant.\n6 - L'entraînement n'a pas été marquant.\n7 - L'entraînement a été plaisant.\n8 - J'ai aimé l'entraînement.\n9 - J'ai adoré l'entraînement.\n10 - J'aurais voulu continuer l'entraînement, j'étais déçu qu'il se termine.",
+        "effort": "Échelle perception de l'effort:\n1-3 \nJe : suis assis.\n    Je peux : tout faire.\n4 \nJe : trottine.\n    Je peux : parler sans arrêt.\n5 \nJe : fais un jogging lent.\n    Je peux : tenir une conversation.\n6 \nJe : fais un jogging régulier.\n    Je peux : dire \"Je vais bien, je vais très bien, je peux communiquer\" sans reprendre mon souffle.\n7 \nJe : fais un effort intense.\n    Je peux : répondre par une phrase courte.\n8 \nJe : fais un effort très intense.\n    Je peux : dire un mot.\n9 \nJe : fais un sprint.\n    Je peux : rien dire.\n10 \nJe : fais un effort maximal en compétition.\n    Je peux : rien dire et si je continue à ce rythme je vais vomir."
+      }
+    },
     "admin": {
       "dashboard": {
         "filters": {
@@ -350,6 +359,16 @@
         }
       }
     }
+  },
+  "athleteForm": {
+    "effort": "Effort (1-10)",
+    "pleasure": "Indice de plaisir (1-10)",
+    "duration": "Durée (minutes)",
+    "selectPlaceholder": "Sélectionner...",
+    "submit": "Envoyer"
+  },
+  "validation": {
+    "errorsInForm": "Veuillez corriger les erreurs du formulaire."
   },
   "products": {
     "form": {
