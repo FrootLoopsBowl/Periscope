@@ -13,6 +13,7 @@
   "dependencies": {
     "@kyvg/vue3-notification": "^3.4.0",
     "@vueup/vue-quill": "^1.2.0",
+    "apexcharts": "^5.10.4",
     "axios": "^1.7.0",
     "inversify": "^6.2.0",
     "jspdf": "^2.5.2",
@@ -29,6 +30,7 @@
     "vue-router": "^4.5.0",
     "vue-tippy": "^6.6.0",
     "vue-window-size": "^2.0.0",
+    "vue3-apexcharts": "^1.11.1",
     "vue3-easy-data-table": "^1.5.47",
     "vue3-i18n": "^1.1.5"
   },

@@ -53,4 +53,19 @@ export class AthleteService extends ApiService implements IAthleteService {
     }
     return null
   }
+
+  public async getById(id: string): Promise<Athlete | null> {
+    const response = await this
+      ._httpClient
+      .get<any, AxiosResponse<Athlete>>(
+        `${import.meta.env.VITE_API_BASE_URL}/athletes/${id}`)
+      .catch(function (error: AxiosError): AxiosResponse<any> {
+        return error.response as AxiosResponse<any>
+      })
+
+    if (response.status === 200) {
+      return response.data
+    }
+    return null
+  }
 }

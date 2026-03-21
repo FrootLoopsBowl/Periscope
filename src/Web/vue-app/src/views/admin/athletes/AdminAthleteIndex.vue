@@ -43,9 +43,11 @@ import {PaginatedResponse} from "@/types/responses"
 import DataTable from "@/components/layouts/items/DataTable.vue"
 import BtnLink from "@/components/layouts/items/BtnLink.vue"
 import {Tables} from "@/types/enums"
+import {useRouter} from "vue-router"
 
 const {t} = useI18n()
 const athleteService = useAthleteService()
+const router = useRouter()
 
 const athletesAreLoading = ref(false)
 const pageAthletes = ref<Athlete[]>([])
@@ -58,6 +60,9 @@ const tableAthletes = computed(() =>
     lastName: x.lastName,
     email: x.email,
     team: undefined,
+    actions: {
+      view: { name: 'athleteStats', params: { id: x.id } }
+    }
   }))
 )
 
@@ -81,5 +86,6 @@ const athleteHeaders = computed(() => [
   {text: t("global.lastName"), value: 'lastName', width: 150},
   {text: t("global.email"), value: 'email', width: 200},
   {text: t("global.team"), value: 'team', width: 150},
+  {text: t("global.actions.actions"), value: 'actions', width: 100},
 ])
 </script>

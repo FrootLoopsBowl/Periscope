@@ -9,6 +9,7 @@ import ResetPassword from "@/views/ResetPassword.vue";
 import Account from "@/views/shared/Account.vue";
 
 import AthleteSubmission from "@/views/AthleteSubmission.vue";
+import AthleteStats from "@/views/AthleteStats.vue";
 import Admin from "../views/admin/Admin.vue";
 import AdminDashboard from "@/views/admin/AdminDashboard.vue";
 import AdminAthleteIndex from "@/views/admin/athletes/AdminAthleteIndex.vue";
@@ -88,6 +89,15 @@ const router = createRouter({
       component: AthleteSubmission,
       meta: {
         title: "routes.athleteForm.name"
+      }
+    },
+    {
+      // Route publique — pas de requiredRole, le guard laisse passer sans authentification
+      path: '/athlete/:id/stats',
+      name: "athleteStats",
+      component: AthleteStats,
+      meta: {
+        title: "Statistiques de l'athlète"
       }
     },
     {
