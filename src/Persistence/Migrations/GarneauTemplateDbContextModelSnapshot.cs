@@ -147,6 +147,9 @@ namespace Persistence.Migrations
                     b.Property<int>("Effort")
                         .HasColumnType("int");
 
+                    b.Property<int?>("Pleasure")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AthleteId");

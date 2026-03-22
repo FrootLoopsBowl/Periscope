@@ -127,8 +127,67 @@
       </Card>
 
       <Card :title="t('pages.admin.dashboard.athletePage.weeklyTitle')">
-        <p class="content-grid__text">
-          {{ t("pages.admin.dashboard.athletePage.weeklyPlaceholder") }}
+        <!-- Date Filters -->
+        <div class="admin-dashboard__date-filters">
+          <div class="admin-dashboard__filter-group">
+            <label class="admin-dashboard__filter-label">{{ t('pages.admin.dashboard.athletePage.efforts.startDate') }}</label>
+            <input 
+              type="date"
+              v-model="startDateFilter"
+              class="admin-dashboard__filter-input"
+              :placeholder="t('pages.admin.dashboard.athletePage.efforts.startDatePlaceholder')"
+            />
+          </div>
+          <div class="admin-dashboard__filter-group">
+            <label class="admin-dashboard__filter-label">{{ t('pages.admin.dashboard.athletePage.efforts.endDate') }}</label>
+            <input 
+              type="date"
+              v-model="endDateFilter"
+              class="admin-dashboard__filter-input"
+              :placeholder="t('pages.admin.dashboard.athletePage.efforts.endDatePlaceholder')"
+            />
+          </div>
+        </div>
+        
+        <!-- Chart -->
+        <div v-if="effortChartData" class="admin-dashboard__chart-container">
+          <LineChart 
+            :chart-data="effortChartData" 
+            :options="chartOptions"
+            class="admin-dashboard__chart"
+          />
+        </div>
+        
+        <!-- Table -->
+        <div v-if="athleteEfforts.length > 0" class="admin-dashboard__efforts-table">
+          <table class="admin-dashboard__table">
+            <thead>
+              <tr>
+                <th>{{ t('pages.admin.dashboard.athletePage.efforts.date') }}</th>
+                <th>{{ t('pages.admin.dashboard.athletePage.efforts.effort') }}</th>
+                <th>{{ t('pages.admin.dashboard.athletePage.efforts.pleasure') }}</th>
+                <th>{{ t('pages.admin.dashboard.athletePage.efforts.duration') }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="effort in athleteEfforts" :key="effort.id">
+                <td>{{ formatDateOnly(effort.createdAt) }}</td>
+                <td>{{ effort.effort }}</td>
+                <td>
+                  <span v-if="effort.pleasure !== undefined && effort.pleasure !== null">
+                    {{ effort.pleasure }}
+                  </span>
+                  <span v-else class="text-grey-dark italic">
+                    {{ t('pages.admin.dashboard.athletePage.efforts.noPleasureData') }}
+                  </span>
+                </td>
+                <td>{{ effort.durationMinutes }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p v-else class="content-grid__text">
+          {{ t("pages.admin.dashboard.athletePage.efforts.empty") }}
         </p>
       </Card>
     </div>
@@ -182,8 +241,9 @@ import { computed, onMounted, ref, watch } from "vue";
 import { useI18n } from "vue3-i18n";
 import { useAthleteService, useTeamService } from "@/inversify.config";
 import Card from "@/components/layouts/items/Card.vue";
+import LineChart from "@/components/charts/LineChart.vue";
 import { FormOption } from "@/types/formOption";
-import { Athlete, NoteBlessure, Team } from "@/types/entities";
+import { Athlete, AthleteEffort, NoteBlessure, Team } from "@/types/entities";
 import IconBandage from 'vue-material-design-icons/Bandage.vue';
 
 const { t } = useI18n();
@@ -199,6 +259,10 @@ const teams = ref<Team[]>([]);
 const athletes = ref<Athlete[]>([]);
 const injuredAthletes = ref<Athlete[]>([]);
 const injuryNotes = ref<NoteBlessure[]>([]);
+const athleteEfforts = ref<AthleteEffort[]>([]);
+const effortChartData = ref<any>(null);
+const startDateFilter = ref<string>("");
+const endDateFilter = ref<string>("");
 const newNoteContenu = ref<string>("");
 const isSubmittingNote = ref<boolean>(false);
 const noteSubmitMessage = ref<string>("");
@@ -234,12 +298,52 @@ onMounted(async () => {
   injuredAthletes.value = await athleteService.getInjured();
 });
 
-watch(displayedAthleteId, async (newId) => {
+watch([displayedAthleteId, startDateFilter, endDateFilter], async ([newId, newStartDate, newEndDate]) => {
   injuryNotes.value = [];
+  athleteEfforts.value = [];
+  effortChartData.value = null;
   newNoteContenu.value = "";
   noteSubmitMessage.value = "";
   if (newId) {
     injuryNotes.value = await athleteService.getNotesBlessure(newId);
+    const effortsResponse = await athleteService.getAthleteEfforts(newId, 1, 10, newStartDate, newEndDate);
+    athleteEfforts.value = effortsResponse.items;
+    
+    // Debug: Log the efforts data to check if pleasure field is present
+    console.log('Efforts loaded:', effortsResponse.items);
+    
+    // Generate chart data
+    if (effortsResponse.items && effortsResponse.items.length > 0) {
+      effortChartData.value = {
+        labels: effortsResponse.items.map(e => formatDateOnly(e.createdAt)),
+        datasets: [
+          {
+            label: t('pages.admin.dashboard.athletePage.efforts.effort'),
+            data: effortsResponse.items.map(e => e.effort),
+            borderColor: '#42b983',
+            backgroundColor: 'rgba(66, 185, 131, 0.1)',
+            tension: 0.1,
+            yAxisID: 'y'
+          },
+          {
+            label: t('pages.admin.dashboard.athletePage.efforts.pleasure'),
+            data: effortsResponse.items.map(e => e.pleasure !== undefined && e.pleasure !== null ? e.pleasure : 0),
+            borderColor: '#4dabf7',
+            backgroundColor: 'rgba(77, 171, 247, 0.1)',
+            tension: 0.1,
+            yAxisID: 'y'
+          },
+          {
+            label: t('pages.admin.dashboard.athletePage.efforts.duration'),
+            data: effortsResponse.items.map(e => e.durationMinutes),
+            borderColor: '#ff6b6b',
+            backgroundColor: 'rgba(255, 107, 107, 0.1)',
+            tension: 0.1,
+            yAxisID: 'y1'
+          }
+        ]
+      };
+    }
   }
 });
 
@@ -328,4 +432,101 @@ async function loadAllAthletes(): Promise<Athlete[]> {
 
   return allAthletes;
 }
+
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      y: {
+        beginAtZero: true,
+        max: 10,
+        title: {
+          display: true,
+          text: t('pages.admin.dashboard.athletePage.efforts.effortPleasure')
+        }
+      },
+      y1: {
+        beginAtZero: true,
+        position: 'right',
+        title: {
+          display: true,
+          text: t('pages.admin.dashboard.athletePage.efforts.duration')
+        },
+        grid: {
+          drawOnChartArea: false
+        }
+      },
+      x: {
+        title: {
+          display: true,
+          text: t('pages.admin.dashboard.athletePage.efforts.date')
+        }
+      }
+    }
+  };
 </script>
+
+<style scoped>
+.admin-dashboard__date-filters {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.admin-dashboard__filter-group {
+  flex: 1;
+  min-width: 200px;
+}
+
+.admin-dashboard__filter-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.admin-dashboard__filter-input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.admin-dashboard__chart-container {
+  height: 300px;
+  margin-bottom: 1.5rem;
+  background: white;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.admin-dashboard__chart {
+  height: 100%;
+  width: 100%;
+}
+
+.admin-dashboard__table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.admin-dashboard__table th,
+.admin-dashboard__table td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.admin-dashboard__table th {
+  background-color: #f5f5f5;
+  font-weight: 600;
+}
+
+.admin-dashboard__table tr:hover {
+  background-color: #f9f9f9;
+}
+</style>

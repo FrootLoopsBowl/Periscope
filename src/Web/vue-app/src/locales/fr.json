@@ -193,7 +193,20 @@
           "injuryNotesSubmit": "Ajouter la note",
           "injuryNotesSubmitSuccess": "Note ajoutée avec succès.",
           "injuryNotesSubmitError": "Une erreur est survenue lors de l'ajout de la note.",
-          "injuryNotesEmpty": "Aucune note de blessure pour cet athlète."
+          "injuryNotesEmpty": "Aucune note de blessure pour cet athlète.",
+          "efforts": {
+            "date": "Date",
+            "effort": "Effort",
+            "pleasure": "Plaisir",
+            "effortPleasure": "Effort / Plaisir",
+            "noPleasureData": "Non renseigné",
+            "duration": "Durée (minutes)",
+            "empty": "Aucun effort enregistré pour cet athlète.",
+            "startDate": "Date de début",
+            "startDatePlaceholder": "YYYY-MM-DD",
+            "endDate": "Date de fin",
+            "endDatePlaceholder": "YYYY-MM-DD"
+          }
         },
         "weeklyGraphsTitle": "Graph de suivi hebdomadaires",
         "weeklyGraphsPlaceholder": "Les graph de suivi hebdomadaires seront affichés ici.",
@@ -209,6 +222,13 @@
       }
     },
     "athletes": {
+      "detail": {
+        "effortsSection": "Efforts de l'athlète",
+        "effortLevel": "Niveau d'effort",
+        "duration": "Durée",
+        "pleasure": "Plaisir",
+        "noEfforts": "Aucun effort enregistré pour cet athlète."
+      },
       "create": {
         "validation": {
           "successMessage": "L'athlète a été ajouté et un courriel lui a été envoyé.",
