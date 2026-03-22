@@ -274,12 +274,19 @@ const teamOptions = computed<FormOption[]>(() =>
   })).filter((option) => option.name.length > 0 && option.label.length > 0)
 );
 
-const athleteOptions = computed<FormOption[]>(() =>
-  athletes.value.map((athlete) => ({
+const athleteOptions = computed<FormOption[]>(() => {
+  let filteredAthletes = athletes.value;
+  
+  // Filtrer par équipe si une équipe est sélectionnée
+  if (selectedTeamId.value) {
+    filteredAthletes = athletes.value.filter(a => a.teamId === selectedTeamId.value);
+  }
+  
+  return filteredAthletes.map((athlete) => ({
     name: athlete.id ?? "",
     label: `${athlete.firstName ?? ""} ${athlete.lastName ?? ""}`.trim(),
   })).filter((option) => option.name.length > 0 && option.label.length > 0)
-);
+});
 
 const displayedAthlete = computed<Athlete | undefined>(() =>
   athletes.value.find((athlete) => athlete.id === displayedAthleteId.value)
@@ -291,6 +298,19 @@ const displayedAthleteFullName = computed(() =>
 
 const isSearchDisabled = computed(() => selectedAthleteId.value.length === 0);
 const isNoteButtonDisabled = computed(() => newNoteContenu.value.trim().length === 0 || isSubmittingNote.value);
+
+// Réinitialiser la sélection d'athlète lorsque l'équipe change
+watch(selectedTeamId, (newTeamId) => {
+  if (newTeamId) {
+    // Vérifier si l'athlète actuellement sélectionné fait partie de la nouvelle équipe
+    const currentAthlete = athletes.value.find(a => a.id === selectedAthleteId.value);
+    if (currentAthlete && currentAthlete.teamId !== newTeamId) {
+      // Réinitialiser la sélection si l'athlète n'est pas dans la nouvelle équipe
+      selectedAthleteId.value = "";
+      displayedAthleteId.value = "";
+    }
+  }
+});
 
 onMounted(async () => {
   teams.value = await loadAllTeams();
