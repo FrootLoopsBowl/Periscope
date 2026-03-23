@@ -5,7 +5,7 @@ import {ApiService} from "@/services/apiService"
 import {IAthleteService} from "@/injection/interfaces"
 import {PaginatedResponse, SucceededOrNotResponse} from "@/types/responses"
 import {IAssignTeamToAthleteRequest, ICreateAthleteRequest} from "@/types/requests"
-import {Athlete, NoteBlessure} from "@/types/entities"
+import {Athlete, AthleteEffort, NoteBlessure} from "@/types/entities"
 import { IUpdateAthleteRequest } from "../types/requests/updateAthleteRequest"
 
 @injectable()
@@ -146,6 +146,24 @@ export class AthleteService extends ApiService implements IAthleteService {
         return error.response as AxiosResponse<any>
       })
     return response.data as Athlete[]
+  }
+
+  public async getAthleteEfforts(athleteId: string, pageIndex: number, pageSize: number, startDate?: string, endDate?: string): Promise<PaginatedResponse<AthleteEffort>> {
+    let url = `${import.meta.env.VITE_API_BASE_URL}/athletes/${athleteId}/efforts?pageIndex=${pageIndex}&pageSize=${pageSize}`;
+    if (startDate) {
+      url += `&startDate=${startDate}`;
+    }
+    if (endDate) {
+      url += `&endDate=${endDate}`;
+    }
+    
+    const response = await this
+      ._httpClient
+      .get<any, AxiosResponse<PaginatedResponse<AthleteEffort>>>(url)
+      .catch(function (error: AxiosError): AxiosResponse<PaginatedResponse<AthleteEffort>> {
+        return error.response as AxiosResponse<PaginatedResponse<AthleteEffort>>
+      })
+    return response.data as PaginatedResponse<AthleteEffort>
   }
 
   public async getById(id: string): Promise<Athlete | null> {

@@ -39,7 +39,7 @@ public class SubmitAthleteEffortEndpoint : Endpoint<SubmitAthleteEffortRequest, 
             return;
         }
 
-        var effort = new AthleteEffort(athlete.Id, req.Effort, req.DurationMinutes);
+        var effort = new AthleteEffort(athlete.Id, req.Effort, req.DurationMinutes, req.Pleasure);
         await _athleteEffortRepository.CreateAsync(effort);
 
         await Send.OkAsync(new Domain.Common.SucceededOrNotResponse(true), ct);

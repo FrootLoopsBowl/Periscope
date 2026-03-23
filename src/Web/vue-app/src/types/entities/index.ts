@@ -1,5 +1,6 @@
 export * from "./administrator"
 export * from "./athlete"
+export * from "./athleteEffort"
 export * from "./team"
 export * from "./book"
 export * from "./member"

@@ -12,7 +12,7 @@ import {
   ITwoFactorRequest
 } from "@/types/requests"
 import {PaginatedResponse, SucceededOrNotResponse} from "@/types/responses"
-import {Administrator, Athlete, NoteBlessure, Book, Member, Team, User} from "@/types/entities"
+import {Administrator, Athlete, AthleteEffort, NoteBlessure, Book, Member, Team, User} from "@/types/entities"
 import {Guid} from "@/types";
 import { IUpdateAthleteRequest, IUpdateTeamRequest } from "../types/requests/updateAthleteRequest";
 
@@ -39,6 +39,7 @@ export interface IAthleteService {
   createNoteBlessure(athleteId: string, contenu: string): Promise<SucceededOrNotResponse>
   getNotesBlessure(athleteId: string): Promise<NoteBlessure[]>
   getAllNonPaginated(): Promise<Athlete[]>
+  getAthleteEfforts(athleteId: string, pageIndex: number, pageSize: number, startDate?: string, endDate?: string): Promise<PaginatedResponse<AthleteEffort>>
   getById(id: string): Promise<Athlete | null>
   assignTeam(athleteId: string, request: IAssignTeamToAthleteRequest): Promise<SucceededOrNotResponse>
   deleteAthlete(id: string): Promise<SucceededOrNotResponse>

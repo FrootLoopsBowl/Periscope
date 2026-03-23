@@ -184,7 +184,20 @@
           "injuryNotesSubmit": "Add note",
           "injuryNotesSubmitSuccess": "Note added successfully.",
           "injuryNotesSubmitError": "An error occurred while adding the note.",
-          "injuryNotesEmpty": "No injury notes for this athlete."
+          "injuryNotesEmpty": "No injury notes for this athlete.",
+          "efforts": {
+            "date": "Date",
+            "effort": "Effort",
+            "pleasure": "Pleasure",
+            "effortPleasure": "Effort / Pleasure",
+            "noPleasureData": "Not provided",
+            "duration": "Duration (minutes)",
+            "empty": "No efforts recorded for this athlete.",
+            "startDate": "Start Date",
+            "startDatePlaceholder": "YYYY-MM-DD",
+            "endDate": "End Date",
+            "endDatePlaceholder": "YYYY-MM-DD"
+          }
         },
         "weeklyGraphsTitle": "Weekly tracking graphs",
         "weeklyGraphsPlaceholder": "Graphs of weekly tracking will be displayed here.",
@@ -200,6 +213,13 @@
       }
     },
     "athletes": {
+      "detail": {
+        "effortsSection": "Athlete Efforts",
+        "effortLevel": "Effort Level",
+        "duration": "Duration",
+        "pleasure": "Pleasure",
+        "noEfforts": "No efforts recorded for this athlete."
+      },
       "create": {
         "validation": {
           "successMessage": "The athlete was added and an email has been sent to them.",
