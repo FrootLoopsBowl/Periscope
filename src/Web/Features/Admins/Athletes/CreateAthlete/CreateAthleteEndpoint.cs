@@ -116,10 +116,6 @@ public class CreateAthleteEndpoint : EndpointWithSanitizedRequest<CreateAthleteR
 
     private string ResolvePublicBaseUrl()
     {
-        var origin = HttpContext.Request.Headers.Origin.ToString().Trim();
-
-        return Uri.TryCreate(origin, UriKind.Absolute, out var originUri)
-            ? originUri.GetLeftPart(UriPartial.Authority).TrimEnd('/')
-            : _publicBaseUrl.TrimEnd('/');
+        return _publicBaseUrl.TrimEnd('/');
     }
 }

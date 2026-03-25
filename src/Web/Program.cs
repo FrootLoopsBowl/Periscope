@@ -4,6 +4,7 @@ using Domain.Extensions;
 using FastEndpoints;
 using FastEndpoints.Swagger;
 using Infrastructure;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Diagnostics;
 using Persistence;
 using Serilog;
@@ -73,6 +74,10 @@ builder.Services.AddCors(options =>
 
 
 var app = builder.Build();
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost
+});
 app.UseDefaultFiles();
 app.UseStaticFiles();
 await app.Services.InitializeAndSeedDatabase();
