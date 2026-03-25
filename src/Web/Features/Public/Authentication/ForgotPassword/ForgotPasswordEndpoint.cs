@@ -10,7 +10,7 @@ namespace Web.Features.Public.Authentication.ForgotPassword;
 
 public class ForgotPasswordEndpoint : EndpointWithSanitizedRequest<ForgotPasswordRequest, SucceededOrNotResponse>
 {
-    private readonly string _baseUrl;
+    private readonly string _publicBaseUrl;
     private readonly IUserRepository _userRepository;
     private readonly ILogger<ForgotPasswordEndpoint> _logger;
     private readonly INotificationService _notificationService;
@@ -24,7 +24,9 @@ public class ForgotPasswordEndpoint : EndpointWithSanitizedRequest<ForgotPasswor
         _logger = logger;
         _userRepository = userRepository;
         _notificationService = notificationService;
-        _baseUrl = applicationSettings.Value.BaseUrl;
+        _publicBaseUrl = string.IsNullOrWhiteSpace(applicationSettings.Value.PublicBaseUrl)
+            ? applicationSettings.Value.BaseUrl
+            : applicationSettings.Value.PublicBaseUrl;
     }
 
     public override void Configure()
@@ -46,7 +48,9 @@ public class ForgotPasswordEndpoint : EndpointWithSanitizedRequest<ForgotPasswor
         }
 
         var token = await _userRepository.GetResetPasswordTokenForUser(user);
-        var link = $"{_baseUrl}{req.ResetPasswordRelativeUrl}?userId={user.Id}&token={token.Base64UrlEncode()}";
+        var baseUrl = _publicBaseUrl.TrimEnd('/');
+        var relativePath = req.ResetPasswordRelativeUrl.TrimStart('/');
+        var link = $"{baseUrl}/{relativePath}?userId={user.Id}&token={token.Base64UrlEncode()}";
 
         var response = await _notificationService.SendForgotPasswordNotification(user, link);
 
