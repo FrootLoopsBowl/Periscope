@@ -10,7 +10,7 @@ namespace Web.Features.Admins.Athletes.ResendAccessLink;
 
 public class ResendAccessLinkEndpoint : EndpointWithSanitizedRequest<ResendAccessLinkRequest, SucceededOrNotResponse>
 {
-    private readonly string _baseUrl;
+    private readonly string _publicBaseUrl;
     private readonly IAthleteRepository _athleteRepository;
     private readonly INotificationService _notificationService;
 
@@ -21,7 +21,9 @@ public class ResendAccessLinkEndpoint : EndpointWithSanitizedRequest<ResendAcces
     {
         _athleteRepository = athleteRepository;
         _notificationService = notificationService;
-        _baseUrl = applicationSettings.Value.BaseUrl;
+        _publicBaseUrl = string.IsNullOrWhiteSpace(applicationSettings.Value.PublicBaseUrl)
+            ? applicationSettings.Value.BaseUrl
+            : applicationSettings.Value.PublicBaseUrl;
     }
 
     public override void Configure()
@@ -44,11 +46,20 @@ public class ResendAccessLinkEndpoint : EndpointWithSanitizedRequest<ResendAcces
             return;
         }
 
-        var baseUrl = _baseUrl.TrimEnd('/');
-        var relativePath = req.AthletePageRelativeUrl.TrimEnd('/');
-        var athleteLink = $"{baseUrl}{relativePath}/{athlete.SubmissionToken}";
+        var baseUrl = ResolvePublicBaseUrl();
+        var relativePath = req.AthletePageRelativeUrl.Trim('/');
+        var athleteLink = $"{baseUrl}/{relativePath}/{athlete.SubmissionToken}";
 
         var response = await _notificationService.SendAthleteAccessNotification(athlete.Email, athleteLink);
         await Send.OkAsync(new SucceededOrNotResponse(response.Succeeded, response.Errors), ct);
+    }
+
+    private string ResolvePublicBaseUrl()
+    {
+        var origin = HttpContext.Request.Headers.Origin.ToString().Trim();
+
+        return Uri.TryCreate(origin, UriKind.Absolute, out var originUri)
+            ? originUri.GetLeftPart(UriPartial.Authority).TrimEnd('/')
+            : _publicBaseUrl.TrimEnd('/');
     }
 }
