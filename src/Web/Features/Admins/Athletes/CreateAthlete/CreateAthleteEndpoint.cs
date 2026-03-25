@@ -10,7 +10,7 @@ namespace Web.Features.Admins.Athletes.CreateAthlete;
 
 public class CreateAthleteEndpoint : EndpointWithSanitizedRequest<CreateAthleteRequest, AthleteResponse>
 {
-    private readonly string _baseUrl;
+    private readonly string _publicBaseUrl;
     private readonly IAthleteRepository _athleteRepository;
     private readonly INotificationService _notificationService;
 
@@ -19,7 +19,9 @@ public class CreateAthleteEndpoint : EndpointWithSanitizedRequest<CreateAthleteR
         INotificationService notificationService,
         IOptions<ApplicationSettings> applicationSettings)
     {
-        _baseUrl = applicationSettings.Value.BaseUrl;
+        _publicBaseUrl = string.IsNullOrWhiteSpace(applicationSettings.Value.PublicBaseUrl)
+            ? applicationSettings.Value.BaseUrl
+            : applicationSettings.Value.PublicBaseUrl;
         _athleteRepository = athleteRepository;
         _notificationService = notificationService;
     }
@@ -94,9 +96,9 @@ public class CreateAthleteEndpoint : EndpointWithSanitizedRequest<CreateAthleteR
 
     private async Task<bool> SendAccessLinkAsync(Athlete athlete, string athletePageRelativeUrl, CancellationToken ct)
     {
-        var baseUrl = _baseUrl.TrimEnd('/');
-        var relativePath = athletePageRelativeUrl.TrimEnd('/');
-        var athleteLink = $"{baseUrl}{relativePath}/{athlete.SubmissionToken}";
+        var baseUrl = ResolvePublicBaseUrl();
+        var relativePath = athletePageRelativeUrl.Trim('/');
+        var athleteLink = $"{baseUrl}/{relativePath}/{athlete.SubmissionToken}";
         var emailResponse = await _notificationService.SendAthleteAccessNotification(athlete.Email, athleteLink);
 
         if (!emailResponse.Succeeded)
@@ -110,5 +112,14 @@ public class CreateAthleteEndpoint : EndpointWithSanitizedRequest<CreateAthleteR
         }
         
         return true;
+    }
+
+    private string ResolvePublicBaseUrl()
+    {
+        var origin = HttpContext.Request.Headers.Origin.ToString().Trim();
+
+        return Uri.TryCreate(origin, UriKind.Absolute, out var originUri)
+            ? originUri.GetLeftPart(UriPartial.Authority).TrimEnd('/')
+            : _publicBaseUrl.TrimEnd('/');
     }
 }
