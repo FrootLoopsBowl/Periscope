@@ -10,11 +10,15 @@ namespace Persistence.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<int>(
-                name: "Pleasure",
-                table: "AthleteEfforts",
-                type: "int",
-                nullable: true);
+            migrationBuilder.Sql(@"
+                IF NOT EXISTS (
+                    SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS
+                    WHERE TABLE_NAME = 'AthleteEfforts' AND COLUMN_NAME = 'Pleasure'
+                )
+                BEGIN
+                    ALTER TABLE [AthleteEfforts] ADD [Pleasure] int NULL;
+                END
+            ");
         }
 
         /// <inheritdoc />
