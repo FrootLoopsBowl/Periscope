@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(GarneauTemplateDbContext))]
-    [Migration("20240321145555_AddPleasureToAthleteEffort")]
+    [Migration("20260315232306_AddPleasureToAthleteEffort")]
     partial class AddPleasureToAthleteEffort
     {
         /// <inheritdoc />
