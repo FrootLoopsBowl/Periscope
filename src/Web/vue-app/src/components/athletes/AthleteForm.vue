@@ -54,7 +54,9 @@ const emit = defineEmits<{
 
 const {t} = useI18n()
 
-const athlete = ref<Partial<ICreateAthleteRequest>>({})
+const athlete = ref<Partial<ICreateAthleteRequest>>({
+  athletePageRelativeUrl: ""
+})
 
 const today = computed(() => new Date().toISOString().split('T')[0])
 

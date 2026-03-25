@@ -25,9 +25,9 @@
       "fullPath": "/mon-compte",
       "name": "Mon compte"
     },
-    "athleteForm": {
-      "path": "/athlete-form/:token",
-      "name": "Formulaire athlète"
+    "athletePage": {
+      "path": "/page-athlete/:token",
+      "name": "Page athlète"
     },
     "admin": {
       "path": "/administration",
@@ -47,6 +47,16 @@
             "path": "ajouter",
             "fullPath": "/administration/athletes/ajouter",
             "name": "Ajouter un athlète"
+          },
+          "detail": {
+            "path": ":id",
+            "fullPath": "/administration/athletes/:id",
+            "name": "Profil de l'athlète"
+          },
+          "edit": {
+            "path": ":id/modifier",
+            "fullPath": "/administration/athletes/:id/modifier",
+            "name": "Modifier un athlète"
           }
         },
         "teams": {
@@ -57,6 +67,11 @@
             "path": "ajouter",
             "fullPath": "/administration/equipes/ajouter",
             "name": "Ajouter une équipe"
+          },
+          "detail": {
+            "path": ":id",
+            "fullPath": "/administration/equipes/:id",
+            "name": "Profil de l'équipe"
           }
         },
         "members": {
@@ -143,9 +158,17 @@
         "errorOccured": "Une erreur est survenue lors de la réinitialisation du mot de passe."
       }
     },
-    "athleteForm": {
-      "success": "Bonjour {firstName}, votre formulaire d'effort physique fonctionne correctement !",
+    "athletePage": {
       "notFound": "Ce lien est invalide ou votre accès a été révoqué."
+    },
+    "athleteForm": {
+      "title": "Bonjour {firstName}",
+      "thanks": "Merci! Vos informations ont été reçues.",
+      "submitError": "Une erreur est survenue lors de l'envoi de votre réponse.",
+      "descriptions": {
+        "pleasure": "Échelle perception du plaisir:\n1 - Je n'ai pas terminé l'entraînement en raison de mon humeur.\n2 - J'ai pensé à plusieurs reprises d'arrêter l'entraînement.\n3 - J'ai pensé une fois à arrêter l'entraînement.\n4 - J'ai fait l'entraînement par obligation.\n5 - L'entraînement n'a pas été plaisant.\n6 - L'entraînement n'a pas été marquant.\n7 - L'entraînement a été plaisant.\n8 - J'ai aimé l'entraînement.\n9 - J'ai adoré l'entraînement.\n10 - J'aurais voulu continuer l'entraînement, j'étais déçu qu'il se termine.",
+        "effort": "Échelle perception de l'effort:\n1-3 \nJe : suis assis.\n    Je peux : tout faire.\n4 \nJe : trottine.\n    Je peux : parler sans arrêt.\n5 \nJe : fais un jogging lent.\n    Je peux : tenir une conversation.\n6 \nJe : fais un jogging régulier.\n    Je peux : dire \"Je vais bien, je vais très bien, je peux communiquer\" sans reprendre mon souffle.\n7 \nJe : fais un effort intense.\n    Je peux : répondre par une phrase courte.\n8 \nJe : fais un effort très intense.\n    Je peux : dire un mot.\n9 \nJe : fais un sprint.\n    Je peux : rien dire.\n10 \nJe : fais un effort maximal en compétition.\n    Je peux : rien dire et si je continue à ce rythme je vais vomir."
+      }
     },
     "admin": {
       "dashboard": {
@@ -164,21 +187,98 @@
           "weeklyTitle": "Suivi hebdomadaire",
           "weeklyPlaceholder": "Le suivi hebdomadaire de l'athlète sera affiché ici.",
           "activeLabel": "Statut",
-          "createdAtLabel": "Créé le"
+          "createdAtLabel": "Créé le",
+          "injuryNotesTitle": "Notes de blessure",
+          "injuryNotesPlaceholder": "Ex. : Entorse cheville droite match",
+          "injuryNotesSubmit": "Ajouter la note",
+          "injuryNotesSubmitSuccess": "Note ajoutée avec succès.",
+          "injuryNotesSubmitError": "Une erreur est survenue lors de l'ajout de la note.",
+          "injuryNotesEmpty": "Aucune note de blessure pour cet athlète.",
+          "efforts": {
+            "date": "Date",
+            "effort": "Effort",
+            "pleasure": "Plaisir",
+            "effortPleasure": "Effort / Plaisir",
+            "noPleasureData": "Non renseigné",
+            "duration": "Durée (minutes)",
+            "empty": "Aucun effort enregistré pour cet athlète.",
+            "startDate": "Date de début",
+            "startDatePlaceholder": "YYYY-MM-DD",
+            "endDate": "Date de fin",
+            "endDatePlaceholder": "YYYY-MM-DD"
+          }
         },
         "weeklyGraphsTitle": "Graph de suivi hebdomadaires",
         "weeklyGraphsPlaceholder": "Les graph de suivi hebdomadaires seront affichés ici.",
         "prioritizedAthletesTitle": "Athlètes priorisés",
         "prioritizedAthletesPlaceholder": "La liste des athlètes priorisés sera affichée ici.",
         "watchlistTitle": "Athlètes à surveiller",
-        "watchlistPlaceholder": "La liste des athlètes à surveiller sera affichée ici."
+        "watchlistPlaceholder": "La liste des athlètes à surveiller sera affichée ici.",
+        "injuredAthletesTitle": "Athlètes blessés",
+        "injuredAthletesEmpty": "Aucun athlète blessé pour le moment.",
+        "markAsRecovered": "Marquer comme rétabli",
+        "markAsRecoveredSuccess": "L'athlète a été marqué comme rétabli.",
+        "markAsRecoveredError": "Une erreur est survenue lors de la mise à jour du statut de l'athlète."
       }
     },
     "athletes": {
+      "detail": {
+        "effortsSection": "Efforts de l'athlète",
+        "effortLevel": "Niveau d'effort",
+        "duration": "Durée",
+        "pleasure": "Plaisir",
+        "noEfforts": "Aucun effort enregistré pour cet athlète."
+      },
       "create": {
         "validation": {
           "successMessage": "L'athlète a été ajouté et un courriel lui a été envoyé.",
           "failedMessage": "Une erreur est survenue lors de la création de l'athlète.",
+          "invalidFirstName": "Le prénom est invalide.",
+          "invalidLastName": "Le nom est invalide.",
+          "invalidEmail": "Le courriel est invalide.",
+          "invalidEmailFormat": "Le format du courriel est invalide.",
+          "invalidDateOfBirth": "La date de naissance est invalide.",
+          "invalidAthletePageRelativeUrl": "L'URL de la page athlète est invalide.",
+          "athleteWithEmailAlreadyExists": "Un athlète avec ce courriel existe déjà."
+        }
+      },
+      "detail": {
+        "title": "Profil de l'athlète",
+        "teamSection": "Équipe",
+        "noTeam": "Aucune équipe",
+        "assignTeam": "Attitrer une équipe",
+        "removeTeam": "Retirer de l'équipe",
+        "selectTeam": "Sélectionner une équipe...",
+        "validation": {
+          "successMessage": "L'équipe a été attitré à l'athlète avec succès.",
+          "removeSuccessMessage": "L'athlète a été retiré de l'équipe avec succès.",
+          "failedMessage": "Une erreur est survenue lors de l'attribution de l'équipe."
+        }
+      },
+      "delete": {
+        "modal": {
+          "title": "Supprimer l'athlète",
+          "message": "Êtes-vous sûr de vouloir supprimer cet athlète ? Cette action est irréversible."
+        },
+        "validation": {
+          "successMessage": "L'athlète a été supprimé avec succès.",
+          "failedMessage": "Une erreur est survenue lors de la suppression de l'athlète."
+        }
+      },
+      "resend": {
+        "validation": {
+          "successMessage": "Le lien d'accès a été renvoyé.",
+          "failedMessage": "Une erreur est survenue lors du renvoi du lien d'accès.",
+          "athleteNotFound": "L'athlète est introuvable.",
+          "invalidAthleteId": "L'identifiant de l'athlète est invalide.",
+          "invalidAthletePageRelativeUrl": "L'URL de la page athlète est invalide."
+        }
+      },
+      "edit": {
+        "title": "Modifier un athlète",
+        "validation": {
+          "successMessage": "L'athlète a été modifié avec succès.",
+          "failedMessage": "Une erreur est survenue lors de la modification de l'athlète.",
           "invalidFirstName": "Le prénom est invalide.",
           "invalidLastName": "Le nom est invalide.",
           "invalidEmail": "Le courriel est invalide.",
@@ -197,6 +297,22 @@
           "teamWithNameAlreadyExists": "Une équipe avec ce nom existe déjà."
         }
       },
+      "detail": {
+        "title": "Profil de l'équipe",
+        "athletesSection": "Athlètes de l'équipe",
+        "assignAthletes": "Attitrer des athlètes",
+        "selectAthletes": "Sélectionner des athlètes...",
+        "noAthletes": "Aucun athlète dans cette équipe",
+        "removeAthlete": "Retirer de l'équipe",
+        "searchAthletes": "Rechercher par prénom, nom ou courriel...",
+        "noSearchResults": "Aucun athlète ne correspond à la recherche.",
+        "selected": "athlète(s) sélectionné(s)",
+        "validation": {
+          "successMessage": "Les athlètes ont été attitré à l'équipe avec succès.",
+          "removeSuccessMessage": "L'athlète a été retiré de l'équipe avec succès.",
+          "failedMessage": "Une erreur est survenue lors de l'attribution des athlètes."
+        }
+      },
       "delete": {
         "confirmation": "Êtes-vous sûr de vouloir supprimer cette équipe ?",
         "modal": {
@@ -206,6 +322,13 @@
         "validation": {
           "successMessage": "L'équipe a été supprimée avec succès.",
           "failedMessage": "Une erreur est survenue lors de la suppression de l'équipe."
+        }
+      },
+      "edit": {
+        "validation": {
+          "successMessage": "Le nom de l'équipe a été modifié avec succès.",
+          "failedMessage": "Une erreur est survenue lors de la modification de l'équipe.",
+          "teamWithNameAlreadyExists": "Une équipe avec ce nom existe déjà."
         }
       }
     },
@@ -267,6 +390,16 @@
         }
       }
     }
+  },
+  "athleteForm": {
+    "effort": "Effort (1-10)",
+    "pleasure": "Indice de plaisir (1-10)",
+    "duration": "Durée (minutes)",
+    "selectPlaceholder": "Sélectionner...",
+    "submit": "Envoyer"
+  },
+  "validation": {
+    "errorsInForm": "Veuillez corriger les erreurs du formulaire."
   },
   "products": {
     "form": {
@@ -363,6 +496,7 @@
       "view": "Voir",
       "download": "Télécharger",
       "update": "Modifier",
+      "resend": "Renvoyer le lien",
       "delete": "Supprimer"
     }
   },

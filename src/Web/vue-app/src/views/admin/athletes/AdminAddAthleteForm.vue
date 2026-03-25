@@ -52,7 +52,12 @@ async function handleSubmit(athlete: ICreateAthleteRequest) {
 
   preventMultipleSubmit.value = true
 
-  const succeededOrNotResponse = await athleteService.createAthlete(athlete)
+  const athletePageRelativeUrl = t("routes.athletePage.path").replace("/:token", "")
+
+  const succeededOrNotResponse = await athleteService.createAthlete({
+    ...athlete,
+    athletePageRelativeUrl
+  })
   if (succeededOrNotResponse.succeeded) {
     preventMultipleSubmit.value = false
     notifySuccess(t('pages.athletes.create.validation.successMessage'))

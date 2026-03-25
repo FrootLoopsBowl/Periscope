@@ -9,10 +9,12 @@ using Infrastructure.ExternalApis.Azure.Http;
 using Infrastructure.Mailing;
 using Infrastructure.Repositories.Admins;
 using Infrastructure.Repositories.Athletes;
+using Infrastructure.Repositories.AthleteEfforts;
 using Infrastructure.Repositories.Authentication;
 using Infrastructure.Repositories.Books;
 using Infrastructure.Repositories.Teams;
 using Infrastructure.Repositories.Members;
+using Infrastructure.Repositories.Blessures;
 using Infrastructure.Repositories.Entraineurs;
 using Infrastructure.Repositories.Users;
 using Infrastructure.Services;
@@ -66,6 +68,7 @@ public static class ConfigureServices
 
         services.AddScoped<IAdministratorRepository, AdministratorRepository>();
         services.AddScoped<IAthleteRepository, AthleteRepository>();
+        services.AddScoped<IAthleteEffortRepository, AthleteEffortRepository>();
         services.AddScoped<ITeamRepository, TeamRepository>();
         services.AddScoped<IBookRepository, BookRepository>();
         services.AddScoped<IMemberRepository, MemberRepository>();
@@ -73,6 +76,7 @@ public static class ConfigureServices
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+        services.AddScoped<INoteBlessureRepository, NoteBlessureRepository>();
 
         services.AddScoped<IFileStorageApiConsumer, AzureBlobApiConsumer>();
         services.AddScoped<IAzureApiHttpClient, AzureApiHttpClient>();

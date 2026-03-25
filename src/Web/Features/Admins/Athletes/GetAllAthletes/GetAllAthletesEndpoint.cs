@@ -37,7 +37,9 @@ public class GetAllAthletesEndpoint : Endpoint<PaginateRequest, PaginatedList<At
                 DateOfBirth = a.DateOfBirth,
                 SubmissionToken = a.SubmissionToken,
                 Active = a.Active,
-                CreatedAt = a.CreatedAt
+                CreatedAt = a.CreatedAt,
+                TeamId = a.TeamId,
+                TeamName = a.Team?.Name
             }),
             paginatedList.TotalItems);
         await Send.OkAsync(response, cancellation: ct);

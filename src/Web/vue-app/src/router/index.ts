@@ -8,16 +8,19 @@ import ForgotPassword from "@/views/ForgotPassword.vue";
 import ResetPassword from "@/views/ResetPassword.vue";
 import Account from "@/views/shared/Account.vue";
 
-import AthleteSubmission from "@/views/AthleteSubmission.vue";
+import AthletePage from "@/views/PageAthlete.vue";
 import Admin from "../views/admin/Admin.vue";
 import AdminDashboard from "@/views/admin/AdminDashboard.vue";
 import AdminAthleteIndex from "@/views/admin/athletes/AdminAthleteIndex.vue";
 import AdminAddAthleteForm from "@/views/admin/athletes/AdminAddAthleteForm.vue";
+import AdminAthleteDetail from "@/views/admin/athletes/AdminAthleteDetail.vue";
 import AdminTeamIndex from "@/views/admin/teams/AdminTeamIndex.vue";
 import AdminAddTeamForm from "@/views/admin/teams/AdminAddTeamForm.vue";
+import AdminTeamDetail from "@/views/admin/teams/AdminTeamDetail.vue";
 import AdminMemberIndex from "@/views/admin/members/AdminMemberIndex.vue";
 import AdminAddMemberForm from "@/views/admin/members/AdminAddMemberForm.vue";
 import AdminEditMemberForm from "@/views/admin/members/AdminEditMemberForm.vue";
+import AdminEditAthleteForm from "@/views/admin/athletes/AdminEditAthleteForm.vue";
 
 import Books from "../views/member/Books.vue";
 import BookIndex from "@/views/member/BookIndex.vue";
@@ -83,11 +86,12 @@ const router = createRouter({
     },
     {
       // Route publique — pas de requiredRole, le guard laisse passer sans authentification
-      path: i18n.t("routes.athleteForm.path"),
-      name: "athleteForm",
-      component: AthleteSubmission,
+      path: i18n.t("routes.athletePage.path"),
+      name: "athletePage",
+      component: AthletePage,
       meta: {
-        title: "routes.athleteForm.name"
+        title: "routes.athletePage.name",
+        publicLayout: true
       }
     },
     {
@@ -116,6 +120,13 @@ const router = createRouter({
               name: "admin.children.athletes.add",
               component: AdminAddAthleteForm,
             },
+            {
+              path: i18n.t("routes.admin.children.athletes.detail.path"),
+              alias: getLocalizedRoutes("routes.admin.children.athletes.detail.path"),
+              name: "admin.children.athletes.detail",
+              component: AdminAthleteDetail,
+              props: true,
+            },
           ],
         },
         {
@@ -134,6 +145,20 @@ const router = createRouter({
               alias: getLocalizedRoutes("routes.admin.children.teams.add.path"),
               name: "admin.children.teams.add",
               component: AdminAddTeamForm,
+            },
+            {
+              path: i18n.t("routes.admin.children.teams.detail.path"),
+              alias: getLocalizedRoutes("routes.admin.children.teams.detail.path"),
+              name: "admin.children.teams.detail",
+              component: AdminTeamDetail,
+              props: true,
+            },
+            {
+                path: i18n.t("routes.admin.children.athletes.edit.path"),
+                alias: getLocalizedRoutes("routes.admin.children.athletes.edit.path"),
+                name: "admin.children.athletes.edit",
+                component: AdminEditAthleteForm,
+                props: true,
             },
           ],
         },
@@ -223,7 +248,7 @@ router.beforeEach(async (to, from) => {
   // Handle root path redirect
   if (to.path === "/") {
     if (userStore.user.email)
-      return { name: "account" };
+      return { name: "admin.children.dashboard" };
     return { name: "login" };
   }
 

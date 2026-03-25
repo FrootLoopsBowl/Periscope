@@ -4,7 +4,7 @@ import {injectable} from "inversify"
 import {ApiService} from "@/services/apiService"
 import {ITeamService} from "@/injection/interfaces"
 import {PaginatedResponse, SucceededOrNotResponse} from "@/types/responses"
-import {ICreateTeamRequest} from "@/types/requests"
+import {IAssignAthletesToTeamRequest, ICreateTeamRequest} from "@/types/requests"
 import {Team} from "@/types/entities"
 import {Guid} from "@/types"
 
@@ -40,6 +40,44 @@ export class TeamService extends ApiService implements ITeamService {
     return response.data as PaginatedResponse<Team>
   }
 
+  public async getAllNonPaginated(): Promise<Team[]> {
+    const response = await this
+      ._httpClient
+      .get<any, AxiosResponse<Team[]>>(
+        `${import.meta.env.VITE_API_BASE_URL}/teams/all`)
+      .catch(function (error: AxiosError): AxiosResponse<any> {
+        return error.response as AxiosResponse<any>
+      })
+    return response.data as Team[]
+  }
+
+  public async getById(id: string): Promise<Team | null> {
+    const response = await this
+      ._httpClient
+      .get<any, AxiosResponse<Team>>(
+        `${import.meta.env.VITE_API_BASE_URL}/teams/${id}`)
+      .catch(function (error: AxiosError): AxiosResponse<any> {
+        return error.response as AxiosResponse<any>
+      })
+    if (response.status === 200) {
+      return response.data
+    }
+    return null
+  }
+
+  public async assignAthletes(teamId: string, request: IAssignAthletesToTeamRequest): Promise<SucceededOrNotResponse> {
+    const response = await this
+      ._httpClient
+      .put<any, AxiosResponse<any>>(
+        `${import.meta.env.VITE_API_BASE_URL}/teams/${teamId}/athletes`,
+        request,
+        this.headersWithJsonContentType())
+      .catch(function (error: AxiosError): AxiosResponse<any> {
+        return error.response as AxiosResponse<any>
+      })
+    return new SucceededOrNotResponse(response.status === 204)
+  }
+
   public async deleteTeam(id: Guid): Promise<SucceededOrNotResponse> {
     const response = await this
       ._httpClient
@@ -48,5 +86,24 @@ export class TeamService extends ApiService implements ITeamService {
         return error.response as AxiosResponse<any>
       })
     return new SucceededOrNotResponse(response.status === 204)
-  }
+    }
+
+    public async updateTeam(id: string, request: IUpdateTeamRequest): Promise<SucceededOrNotResponse> {
+        const response = await this
+            ._httpClient
+            .put<any, AxiosResponse<any>>(
+                `${import.meta.env.VITE_API_BASE_URL}/teams/${id}`,
+                request,
+                this.headersWithJsonContentType())
+            .catch(function (error: AxiosError): AxiosResponse<any> {
+                return error.response as AxiosResponse<any>
+            })
+
+        if (response.status === 204) {
+            return new SucceededOrNotResponse(true)
+        }
+
+        const errorResponse = response.data as SucceededOrNotResponse
+        return new SucceededOrNotResponse(false, errorResponse?.errors)
+    }
 }
