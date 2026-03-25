@@ -261,8 +261,14 @@ const injuredAthletes = ref<Athlete[]>([]);
 const injuryNotes = ref<NoteBlessure[]>([]);
 const athleteEfforts = ref<AthleteEffort[]>([]);
 const effortChartData = ref<any>(null);
-const startDateFilter = ref<string>("");
-const endDateFilter = ref<string>("");
+const today = new Date();
+const fiveWeeksAgo = new Date(today);
+fiveWeeksAgo.setDate(today.getDate() - 35);
+
+const toDateInputValue = (date: Date) => date.toISOString().split("T")[0];
+
+const startDateFilter = ref<string>(toDateInputValue(fiveWeeksAgo));
+const endDateFilter = ref<string>(toDateInputValue(today));
 const newNoteContenu = ref<string>("");
 const isSubmittingNote = ref<boolean>(false);
 const noteSubmitMessage = ref<string>("");
