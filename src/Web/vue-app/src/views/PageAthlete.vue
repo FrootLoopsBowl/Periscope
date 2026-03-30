@@ -52,16 +52,19 @@ onMounted(async () => {
 .athlete-page {
   display: flex;
   min-height: 100vh;
-  background: var(--color-page-bg);
+  background:
+    radial-gradient(circle at top left, rgba(255, 96, 96, 0.1), transparent 24%),
+    linear-gradient(180deg, #fbf3ee 0%, var(--color-page-bg) 100%);
 }
 
 .athlete-page__sidebar {
   width: 260px;
   min-width: 260px;
-  background: var(--color-green);
+  background: linear-gradient(180deg, var(--color-green-dark) 0%, var(--color-green) 100%);
   display: flex;
   flex-direction: column;
   padding: 2rem 1.5rem;
+  box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.08);
 }
 
 .athlete-page__brand {
@@ -92,10 +95,10 @@ onMounted(async () => {
 
 .athlete-page__panel {
   background: var(--color-white);
-  border: 1px solid var(--color-grey);
+  border: 1px solid rgba(110, 62, 62, 0.14);
   border-radius: 1rem;
   overflow: hidden;
-  box-shadow: var(--shadow-bold);
+  box-shadow: 0 18px 42px rgba(110, 62, 62, 0.12);
 }
 
 .athlete-page__panel--error {
@@ -107,7 +110,7 @@ onMounted(async () => {
   gap: 1rem;
   align-items: flex-start;
   padding: 1.5rem;
-  background: linear-gradient(180deg, var(--color-green-lighter) 0%, var(--color-white) 100%);
+  background: linear-gradient(180deg, #fff3f3 0%, var(--color-white) 100%);
 }
 
 .athlete-page__accent {
@@ -116,7 +119,7 @@ onMounted(async () => {
   min-width: 0.4rem;
   height: 3rem;
   border-radius: 999px;
-  background: var(--color-green);
+  background: linear-gradient(180deg, var(--color-red) 0%, var(--color-red-dark) 100%);
 }
 
 .athlete-page__panel-title {
