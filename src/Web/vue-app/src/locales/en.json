@@ -221,7 +221,13 @@
         "injuredAthletesEmpty": "No injured athletes at the moment.",
         "markAsRecovered": "Mark as recovered",
         "markAsRecoveredSuccess": "The athlete has been marked as recovered.",
-        "markAsRecoveredError": "An error occurred while updating the athlete's injury status."
+        "markAsRecoveredError": "An error occurred while updating the athlete's injury status.",
+        "overloadedAthletesTitle": "Overloaded Athletes",
+        "overloadedAthletesEmpty": "No overloaded athletes at the moment.",
+        "overloadedTableLastName": "Last Name",
+        "overloadedTableFirstName": "First Name",
+        "overloadedTableTeam": "Team",
+        "overloadedTablePercentage": "% Overload"
       }
     },
     "athletes": {
