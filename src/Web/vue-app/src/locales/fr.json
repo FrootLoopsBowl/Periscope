@@ -194,6 +194,9 @@
           "injuryNotesSubmitSuccess": "Note ajoutée avec succès.",
           "injuryNotesSubmitError": "Une erreur est survenue lors de l'ajout de la note.",
           "injuryNotesEmpty": "Aucune note de blessure pour cet athlète.",
+          "fitStatus": "Apte à jouer",
+          "injuredStatus": "Blessé",
+          "markedAsInjured": "L'athlète a été marqué comme blessé.",
           "efforts": {
             "date": "Date",
             "effort": "Effort",

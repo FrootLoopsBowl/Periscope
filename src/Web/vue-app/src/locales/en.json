@@ -185,6 +185,9 @@
           "injuryNotesSubmitSuccess": "Note added successfully.",
           "injuryNotesSubmitError": "An error occurred while adding the note.",
           "injuryNotesEmpty": "No injury notes for this athlete.",
+          "fitStatus": "Fit",
+          "injuredStatus": "Injured",
+          "markedAsInjured": "The athlete has been marked as injured.",
           "efforts": {
             "date": "Date",
             "effort": "Effort",

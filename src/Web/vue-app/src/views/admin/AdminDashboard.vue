@@ -200,14 +200,6 @@
               class="admin-dashboard__note-contenu"
               :to="{ name: 'admin.children.athletes.detail', params: { id: athlete.id } }"
             >{{ athlete.firstName }} {{ athlete.lastName }}</RouterLink>
-            <button
-              type="button"
-              class="btn btn--square"
-              :title="t('pages.admin.dashboard.markAsRecovered')"
-              @click="handleMarkAsRecovered(athlete.id!)"
-            >
-              <IconBandage :size="16" />
-            </button>
           </li>
         </ul>
         <p v-else class="content-grid__text">
@@ -244,7 +236,6 @@ import Card from "@/components/layouts/items/Card.vue";
 import LineChart from "@/components/charts/LineChart.vue";
 import { FormOption } from "@/types/formOption";
 import { Athlete, AthleteEffort, NoteBlessure, Team } from "@/types/entities";
-import IconBandage from 'vue-material-design-icons/Bandage.vue';
 
 const { t } = useI18n();
 
@@ -383,13 +374,6 @@ function handleReset() {
   selectedTeamId.value = "";
   selectedAthleteId.value = "";
   displayedAthleteId.value = "";
-}
-
-async function handleMarkAsRecovered(athleteId: string) {
-  const result = await athleteService.toggleInjured(athleteId, false);
-  if (result.succeeded) {
-    injuredAthletes.value = injuredAthletes.value.filter((a) => a.id !== athleteId);
-  }
 }
 
 async function handleAddNote() {
