@@ -30,6 +30,33 @@
 
                     <form class="form athlete-submission__form" novalidate @submit.prevent="handleSubmit">
 
+                        <!-- Date de l'entraînement -->
+                        <section class="athlete-submission__field-card">
+                            <div class="athlete-submission__field-head">
+                                <label for="training-date" class="athlete-submission__label">Date de l'entraînement </label>
+                            </div>
+                            <p class="athlete-submission__hint">Par défaut : aujourd'hui. Modifie si tu entres une séance passée.</p>
+                            <input id="training-date" class="form__input athlete-submission__input" type="date" v-model="trainingDate" :max="todayISO" required />
+                        </section>
+
+                        <!-- Durée -->
+                        <section class="athlete-submission__field-card">
+                            <div class="athlete-submission__field-head">
+                                <label for="duration" class="athlete-submission__label">
+                                    {{ t('athleteForm.duration') }} <span class="athlete-submission__required">*</span>
+                                </label>
+                            </div>
+                            <p class="athlete-submission__hint">Entre la durée totale de l'entraînement en minutes.</p>
+                            <input id="duration"
+                                   class="form__input athlete-submission__input athlete-submission__input--large"
+                                   type="number"
+                                   v-model.number="duration"
+                                   min="1"
+                                   placeholder="Ex : 60"
+                                   @input="onDurationInput"
+                                   required />
+                        </section>
+
                         <!-- Niveau d'effort -->
                         <section class="athlete-submission__field-card">
                             <div class="athlete-submission__field-head">
@@ -80,24 +107,6 @@
                   {{ n }}
                 </button>
                             </div>
-                        </section>
-
-                        <!-- Durée -->
-                        <section class="athlete-submission__field-card">
-                            <div class="athlete-submission__field-head">
-                                <label for="duration" class="athlete-submission__label">
-                                    {{ t('athleteForm.duration') }} <span class="athlete-submission__required">*</span>
-                                </label>
-                            </div>
-                            <p class="athlete-submission__hint">Entre la durée totale de l'entraînement en minutes.</p>
-                            <input id="duration"
-                                   class="form__input athlete-submission__input athlete-submission__input--large"
-                                   type="number"
-                                   v-model.number="duration"
-                                   min="1"
-                                   placeholder="Ex : 60"
-                                   @input="onDurationInput"
-                                   required />
                         </section>
 
                         <!-- Indice de plaisir -->
@@ -198,6 +207,14 @@
     const submitSuccess = ref(false)
     const submitError = ref<string | null>(null)
 
+    // Date par défaut = aujourd'hui 
+    function getTodayISO(): string {
+        return new Date().toISOString().split("T")[0]
+    }
+
+    const todayISO = computed(() => getTodayISO())
+    const trainingDate = ref<string>(getTodayISO())
+
     const effortScaleRows = [
         { level: "1–3", feeling: "Je suis assis.", speaking: "Je peux tout faire." },
         { level: "4", feeling: "Je trottine.", speaking: "Je peux parler sans arrêt." },
@@ -269,7 +286,8 @@
                 token,
                 effort.value,
                 duration.value,
-                pleasure.value
+                pleasure.value,
+                trainingDate.value
             )
             if (res.succeeded) {
                 submitSuccess.value = true
