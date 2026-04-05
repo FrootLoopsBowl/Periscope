@@ -101,15 +101,14 @@
                                         type="button"
                                         class="athlete-submission__scale-btn"
                                         :class="[
-                                        `athlete-submission__scale-btn--${n <= 3 ? 'low' : n <= 6 ? 'mid' : 'high'}`,
-                    { 'is-selected': effort === n }
-                  ]"
-                  :aria-pressed="effort === n"
-                  :aria-label="`Niveau ${n}`"
-                  @click="effort = n"
-                >
-                  {{ n }}
-                </button>
+                                            { 'is-selected': effort === n }
+                                         ]"
+                                        :aria-pressed="effort === n"
+                                        :aria-label="`Niveau ${n}`"
+                                        @click="effort = n"
+                                >
+                                {{ n }}
+                                </button>
                             </div>
                         </section>
 
@@ -151,15 +150,14 @@
                                         type="button"
                                         class="athlete-submission__scale-btn"
                                         :class="[
-                                        `athlete-submission__scale-btn--${n <= 3 ? 'high' : n <= 6 ? 'mid' : 'low'}`,
-                    { 'is-selected': pleasure === n }
-                  ]"
-                  :aria-pressed="pleasure === n"
-                  :aria-label="`Niveau ${n}`"
-                  @click="pleasure = n"
-                >
-                  {{ n }}
-                </button>
+                                            { 'is-selected': pleasure === n }
+                                        ]"
+                                        :aria-pressed="pleasure === n"
+                                        :aria-label="`Niveau ${n}`"
+                                        @click="pleasure = n"
+                                >
+                                {{ n }}
+                                </button>
                             </div>
                         </section>
 
@@ -510,26 +508,11 @@
              transform: translateY(-1px);
          }
 
-     /* Couleurs selon zone */
-     .athlete-submission__scale-btn--low.is-selected {
-         background: #3a8f2e;
-         border-color: #3a8f2e;
-         color: #fff;
-         box-shadow: 0 4px 12px rgba(58, 143, 46, 0.35);
-     }
-
-     .athlete-submission__scale-btn--mid.is-selected {
-         background: #c97c22;
-         border-color: #c97c22;
-         color: #fff;
-         box-shadow: 0 4px 12px rgba(201, 124, 34, 0.35);
-     }
-
-     .athlete-submission__scale-btn--high.is-selected {
+     .athlete-submission__scale-btn.is-selected{
          background: var(--color-red-dark);
          border-color: var(--color-red-dark);
          color: #fff;
-         box-shadow: 0 4px 12px rgba(110, 62, 62, 0.35);
+         box-shadow: 0 4px 12px rgba(110, 62, 62, 0.35)
      }
 
      /* =============================================
