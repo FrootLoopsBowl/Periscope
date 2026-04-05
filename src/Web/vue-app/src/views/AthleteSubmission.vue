@@ -28,7 +28,11 @@
                         </div>
                     </header>
 
-                    <form class="form athlete-submission__form" novalidate @submit.prevent="handleSubmit">
+                    <form v-if="!submitSuccess"
+                          class="form athlete-submission__form" 
+                          novalidate 
+                          @submit.prevent="handleSubmit"
+                          >
 
                         <!-- Date de l'entraînement -->
                         <section class="athlete-submission__field-card">
@@ -147,7 +151,7 @@
                                         type="button"
                                         class="athlete-submission__scale-btn"
                                         :class="[
-                                        `athlete-submission__scale-btn--${n <= 3 ? 'low' : n <= 6 ? 'mid' : 'high'}`,
+                                        `athlete-submission__scale-btn--${n <= 3 ? 'high' : n <= 6 ? 'mid' : 'low'}`,
                     { 'is-selected': pleasure === n }
                   ]"
                   :aria-pressed="pleasure === n"
