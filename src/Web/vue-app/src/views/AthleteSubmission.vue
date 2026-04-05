@@ -93,23 +93,6 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <!-- Boutons 1 à 10 -->
-                            <div class="athlete-submission__scale-buttons" role="group" aria-label="Niveau d'effort">
-                                <button v-for="n in 10"
-                                        :key="n"
-                                        type="button"
-                                        class="athlete-submission__scale-btn"
-                                        :class="[
-                                            { 'is-selected': effort === n }
-                                         ]"
-                                        :aria-pressed="effort === n"
-                                        :aria-label="`Niveau ${n}`"
-                                        @click="effort = n"
-                                >
-                                {{ n }}
-                                </button>
-                            </div>
                         </section>
 
                         <!-- Indice de plaisir -->
@@ -141,23 +124,6 @@
                                         <div role="cell">{{ item.text }}</div>
                                     </div>
                                 </div>
-                            </div>
-
-                            <!-- Boutons 1 à 10 -->
-                            <div class="athlete-submission__scale-buttons" role="group" aria-label="Indice de plaisir">
-                                <button v-for="n in 10"
-                                        :key="n"
-                                        type="button"
-                                        class="athlete-submission__scale-btn"
-                                        :class="[
-                                            { 'is-selected': pleasure === n }
-                                        ]"
-                                        :aria-pressed="pleasure === n"
-                                        :aria-label="`Niveau ${n}`"
-                                        @click="pleasure = n"
-                                >
-                                {{ n }}
-                                </button>
                             </div>
                         </section>
 
@@ -479,40 +445,6 @@
          outline: none;
          border-color: var(--color-red);
          box-shadow: 0 0 0 4px rgba(255, 96, 96, 0.14);
-     }
-
-     /* =============================================
-    BOUTONS D'ÉCHELLE 1-10
-    ============================================= */
-     .athlete-submission__scale-buttons {
-         display: grid;
-         grid-template-columns: repeat(5, 1fr);
-         gap: 0.45rem;
-     }
-
-     .athlete-submission__scale-btn {
-         padding: 0.75rem 0;
-         border-radius: 0.75rem;
-         border: 2px solid rgba(142, 148, 125, 0.22);
-         background: #fff;
-         color: var(--color-grey-darker);
-         font-weight: 600;
-         font-size: 1.05rem;
-         cursor: pointer;
-         transition: all 0.15s;
-         -webkit-tap-highlight-color: transparent;
-         min-height: 3rem; /* accessibilité tactile */
-     }
-
-         .athlete-submission__scale-btn:hover {
-             transform: translateY(-1px);
-         }
-
-     .athlete-submission__scale-btn.is-selected{
-         background: var(--color-red-dark);
-         border-color: var(--color-red-dark);
-         color: #fff;
-         box-shadow: 0 4px 12px rgba(110, 62, 62, 0.35)
      }
 
      /* =============================================
