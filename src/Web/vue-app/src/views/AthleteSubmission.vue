@@ -213,7 +213,12 @@
 
     // Date par défaut = aujourd'hui 
     function getTodayISO(): string {
-        return new Date().toISOString().split("T")[0]
+        return new Intl.DateTimeFormat("fr-CA", {
+            timeZone: "America/Toronto",
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit"
+        }).format(new Date())
     }
 
     const todayISO = computed(() => getTodayISO())
