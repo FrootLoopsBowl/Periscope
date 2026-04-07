@@ -20,4 +20,11 @@ public class NoteBlessure : Common.Entity
         Contenu = contenu;
         CreatedAt = DateTime.UtcNow;
     }
+
+    public void UpdateContenu(string contenu)
+    {
+        if (string.IsNullOrWhiteSpace(contenu))
+            throw new ArgumentException("Contenu cannot be empty.", nameof(contenu));
+        Contenu = contenu;
+    }
 }

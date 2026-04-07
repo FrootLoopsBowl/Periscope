@@ -38,6 +38,8 @@ export interface IAthleteService {
   toggleInjured(athleteId: string, isInjured: boolean): Promise<SucceededOrNotResponse>
   createNoteBlessure(athleteId: string, contenu: string): Promise<SucceededOrNotResponse>
   getNotesBlessure(athleteId: string): Promise<NoteBlessure[]>
+  updateNoteBlessure(athleteId: string, noteId: string, contenu: string): Promise<SucceededOrNotResponse>
+  deleteNoteBlessure(athleteId: string, noteId: string): Promise<SucceededOrNotResponse>
   getAllNonPaginated(): Promise<Athlete[]>
   getAthleteEfforts(athleteId: string, pageIndex: number, pageSize: number, startDate?: string, endDate?: string): Promise<PaginatedResponse<AthleteEffort>>
   getById(id: string): Promise<Athlete | null>
