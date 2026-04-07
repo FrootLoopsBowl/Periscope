@@ -103,6 +103,40 @@ export class AthleteService extends ApiService implements IAthleteService {
     return response.data ?? []
   }
 
+  public async updateNoteBlessure(athleteId: string, noteId: string, contenu: string): Promise<SucceededOrNotResponse> {
+    const response = await this
+      ._httpClient
+      .put<any, AxiosResponse<any>>(
+        `${import.meta.env.VITE_API_BASE_URL}/athletes/${athleteId}/notes-blessure/${noteId}`,
+        { contenu },
+        this.headersWithJsonContentType())
+      .catch(function (error: AxiosError): AxiosResponse<any> {
+        return error.response as AxiosResponse<any>
+      })
+
+    if (response.status === 204) {
+      return new SucceededOrNotResponse(true)
+    }
+    const errorResponse = response.data as SucceededOrNotResponse
+    return new SucceededOrNotResponse(false, errorResponse?.errors)
+  }
+
+  public async deleteNoteBlessure(athleteId: string, noteId: string): Promise<SucceededOrNotResponse> {
+    const response = await this
+      ._httpClient
+      .delete<any, AxiosResponse<any>>(
+        `${import.meta.env.VITE_API_BASE_URL}/athletes/${athleteId}/notes-blessure/${noteId}`)
+      .catch(function (error: AxiosError): AxiosResponse<any> {
+        return error.response as AxiosResponse<any>
+      })
+
+    if (response.status === 204) {
+      return new SucceededOrNotResponse(true)
+    }
+    const errorResponse = response.data as SucceededOrNotResponse
+    return new SucceededOrNotResponse(false, errorResponse?.errors)
+  }
+
   public async getBySubmissionToken(token: string): Promise<{ firstName: string; lastName: string } | null> {
     const response = await this
       ._httpClient
