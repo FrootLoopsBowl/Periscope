@@ -6,4 +6,5 @@ public class SubmitAthleteEffortRequest
     public int Effort { get; set; }
     public int DurationMinutes { get; set; }
     public int? Pleasure { get; set; }
+    public DateTime TrainingDate { get; set; }
 }
