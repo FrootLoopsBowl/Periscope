@@ -23,12 +23,14 @@
                   :text="t('pages.login.forgotPassword')"/>
       </template>
     </FormInput>
-    <button class="btn btn--full btn--purple btn--big" @click="sendLoginRequest" :disabled="preventMultipleSubmit">
-      {{ t('pages.login.submit') }}
-    </button>
-    <div class="login__forgot-password">
-      <TextLink :path="{path: t('routes.forgotPassword.path') }"
-                :text="t('pages.login.forgotPassword')"/>
+    <div class="login__actions">
+      <button class="btn btn--purple btn--big login__submit" @click="sendLoginRequest" :disabled="preventMultipleSubmit">
+        {{ t('pages.login.submit') }}
+      </button>
+      <div class="login__forgot-password">
+        <TextLink :path="{path: t('routes.forgotPassword.path') }"
+                  :text="t('pages.login.forgotPassword')"/>
+      </div>
     </div>
   </Card>
 </template>
@@ -119,9 +121,34 @@ async function sendLoginRequest() {
 </script>
 
 <style scoped>
+.login__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.75rem;
+}
+
+.login__submit {
+  width: auto;
+  min-width: 9rem;
+  justify-content: center;
+  text-align: center;
+}
+
 .login__forgot-password {
   display: flex;
-  justify-content: center;
-  margin-top: 0.75rem;
+  justify-content: flex-end;
+}
+
+@media (max-width: 640px) {
+  .login__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .login__submit {
+    width: 100%;
+  }
 }
 </style>
