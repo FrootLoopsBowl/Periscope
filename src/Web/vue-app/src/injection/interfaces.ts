@@ -2,6 +2,7 @@
 import {
   IAssignAthletesToTeamRequest,
   IAssignTeamToAthleteRequest,
+  IChangePasswordRequest,
   ICreateAthleteRequest,
   ICreateBookRequest,
   ICreateTeamRequest,
@@ -100,4 +101,5 @@ export interface ITeamService {
 
 export interface IUserService {
   getCurrentUser(): Promise<User>
+  changePassword(request: IChangePasswordRequest): Promise<SucceededOrNotResponse>
 }

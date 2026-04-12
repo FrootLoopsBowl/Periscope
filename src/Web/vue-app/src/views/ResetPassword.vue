@@ -1,19 +1,24 @@
 <template>
+  <BackLink :path="{name: 'login'}"/>
+
   <Card :title="t('routes.resetPassword.name')" 
         class="form" 
         :is-authentication="true">
     <Loader v-if="preventMultipleSubmit" />
+    <FormTooltip>
+      <p v-html="t('pages.resetPassword.tooltip')"></p>
+    </FormTooltip>
     <FormInput :ref="addFormInputRef"
                v-model="resetPasswordRequest.password"
                :label="t('global.password')"
-               :rules="[required]"
+               :rules="[required, validateNewPassword]"
                name="password"
                type="password"
                @validated="handleValidation"/>
     <FormInput :ref="addFormInputRef"
                v-model="resetPasswordRequest.passwordConfirmation"
                :label="t('global.passwordConfirmation')"
-               :rules="[required]"
+               :rules="[required, validatePasswordConfirmation]"
                name="passwordConfirmation"
                type="password"
                @validated="handleValidation"/>
@@ -35,6 +40,8 @@ import FormInput from "@/components/forms/FormInput.vue";
 import {Guid} from "@/types";
 import {useRouter} from "vue-router";
 import Loader from "@/components/layouts/items/Loader.vue";
+import BackLink from "@/components/layouts/items/BackLink.vue";
+import FormTooltip from "@/components/layouts/items/Tooltip.vue";
 
 // eslint-disable-next-line no-undef
 const props = defineProps<{
@@ -58,6 +65,28 @@ const inputValidationStatuses: any = {}
 
 const preventMultipleSubmit = ref<boolean>(false);
 
+function validateNewPassword(value?: string): Status {
+  if ((value ?? "").toLowerCase() === "qwerty123!") {
+    return {
+      valid: false,
+      message: t("pages.resetPassword.validation.passwordTooPredictable")
+    };
+  }
+
+  return { valid: true };
+}
+
+function validatePasswordConfirmation(value?: string): Status {
+  if ((value ?? "") !== resetPasswordRequest.value.password) {
+    return {
+      valid: false,
+      message: t("pages.resetPassword.validation.passwordAndConfirmationMustMatch")
+    };
+  }
+
+  return { valid: true };
+}
+
 function addFormInputRef(ref: typeof FormInput) {
   if (!formInputs.value.includes(ref))
     formInputs.value.push(ref)
@@ -69,6 +98,11 @@ async function handleValidation(name: string, validationStatus: Status) {
 
 async function sendResetPasswordRequest() {
   if(preventMultipleSubmit.value) return;
+
+  if (!resetPasswordRequest.value.userId || !resetPasswordRequest.value.token) {
+    notifyError(t('pages.resetPassword.validation.invalidLink'))
+    return;
+  }
 
   preventMultipleSubmit.value = true;
   

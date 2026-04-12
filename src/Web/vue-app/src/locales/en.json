@@ -142,8 +142,10 @@
       }
     },
     "resetPassword": {
+      "tooltip": "Choose a new password to recover access to your account.",
       "validation": {
         "success": "The password was successfully reset. You'll be redirected to the login page.",
+        "invalidLink": "The reset link is invalid or incomplete.",
         "invalidUserId": "The user id is not valid.",
         "invalidToken": "The reset password token is not valid.",
         "invalidPassword": "The password is not valid.",
@@ -153,9 +155,35 @@
         "passwordRequiresDigit": "Must contain a digit.",
         "passwordRequiresUpper": "Must contain uppercase letter.",
         "passwordRequiresLower": "Must contain lowercase letter.",
+        "passwordTooPredictable": "Please choose a password that is a little less predictable.",
         "passwordMismatch": "The password entered does not match your current password.",
         "passwordAndConfirmationMustMatch": "The password and its confirmation must match.",
         "errorOccured": "An error occured during password reset."
+      }
+    },
+    "account": {
+      "loginInfos": "Login information",
+      "loginInfosDescription": "Overview of your administrator access and the identity used to sign in.",
+      "changePasswordTitle": "Account security",
+      "passwordDescription": "Change your password by first confirming your current password.",
+      "currentPassword": "Current password",
+      "newPassword": "New password",
+      "newPasswordConfirmation": "New password confirmation",
+      "changePasswordSubmit": "Change password",
+      "validation": {
+        "success": "Your password was changed successfully. You will be logged out and redirected to the login page.",
+        "invalidCurrentPassword": "The current password is invalid.",
+        "invalidNewPassword": "The new password is invalid.",
+        "invalidNewPasswordConfirmation": "The new password confirmation is invalid.",
+        "passwordTooShort": "Must be at least 8 characters.",
+        "passwordRequiresNonAlphanumeric": "Must contain a special character.",
+        "passwordRequiresDigit": "Must contain a digit.",
+        "passwordRequiresUpper": "Must contain uppercase letter.",
+        "passwordRequiresLower": "Must contain lowercase letter.",
+        "passwordTooPredictable": "Please choose a password that is a little less predictable.",
+        "passwordMismatch": "The password entered does not match your current password.",
+        "passwordAndConfirmationMustMatch": "The password and its confirmation must match.",
+        "errorOccured": "An error occured while changing the password."
       }
     },
     "athletePage": {

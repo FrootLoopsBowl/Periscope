@@ -26,6 +26,10 @@
     <button class="btn btn--full btn--purple btn--big" @click="sendLoginRequest" :disabled="preventMultipleSubmit">
       {{ t('pages.login.submit') }}
     </button>
+    <div class="login__forgot-password">
+      <TextLink :path="{path: t('routes.forgotPassword.path') }"
+                :text="t('pages.login.forgotPassword')"/>
+    </div>
   </Card>
 </template>
 <script lang="ts" setup>
@@ -36,6 +40,7 @@ import { useRouter } from "vue-router";
 import { useAuthenticationService, useUserService } from "@/inversify.config";
 import { useUserStore } from "@/stores/userStore";
 import { notifyError } from "@/notify";
+import { Role } from "@/types/enums";
 
 import { Status } from "@/validation";
 import { ILoginRequest } from "@/types/requests/loginRequest";
@@ -87,7 +92,10 @@ async function sendLoginRequest() {
     userStore.setUser(user)
     userStore.setUsername(loginRequest.value.username)
     apiStore.setNeedToLogout(false)
-    await router.push(t("routes.account.path"))
+    if (user.roles.includes(Role.Admin))
+      await router.push({ name: "admin.children.dashboard" })
+    else
+      await router.push(t("routes.account.path"))
     preventMultipleSubmit.value = false;
     return;
   }
@@ -109,3 +117,11 @@ async function sendLoginRequest() {
   preventMultipleSubmit.value = false;
 }
 </script>
+
+<style scoped>
+.login__forgot-password {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.75rem;
+}
+</style>
