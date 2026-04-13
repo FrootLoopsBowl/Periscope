@@ -286,6 +286,19 @@
           "invalidAthletePageRelativeUrl": "L'URL de la page athlète est invalide."
         }
       },
+      "import": {
+        "button": "Importer CSV",
+        "modalTitle": "Importer des athlètes",
+        "modalDescription": "Sélectionnez un fichier CSV. Colonnes attendues: Prénom, Nom, Courriel, Date de naissance (AAAA-MM-JJ), Équipe.",
+        "submit": "Importer",
+        "importing": "Importation...",
+        "createdLabel": "Athlètes créés:",
+        "updatedLabel": "Athlètes mis à jour:",
+        "errorsLabel": "Erreurs:",
+        "errorRowPrefix": "Ligne",
+        "successMessage": "Importation terminée.",
+        "failedMessage": "Une erreur est survenue lors de l'importation."
+      },
       "edit": {
         "title": "Modifier un athlète",
         "validation": {
@@ -490,6 +503,7 @@
     "delete": "Supprimer",
     "deleted": "Supprimé(e)",
     "save": "Sauvegarder",
+    "close": "Fermer",
     "back": "Retour",
     "yes": "Oui",
     "no": "Non",

@@ -10,6 +10,7 @@ public interface ITeamRepository
     PaginatedList<Team> GetAllPaginated(int pageIndex, int pageSize);
     Task<IEnumerable<Team>> GetAllAsync();
     Task<Team?> FindByIdAsync(Guid id);
+    Task<Team?> FindByNameNormalizedAsync(string name);
     Task<Team?> FindByIdWithAthletesAsync(Guid id);
     Task DeleteAsync(Team team);
 

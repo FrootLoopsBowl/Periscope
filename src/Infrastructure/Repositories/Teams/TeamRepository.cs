@@ -53,6 +53,13 @@ public class TeamRepository : ITeamRepository
         return await _context.Teams.FindAsync(id);
     }
 
+    public async Task<Team?> FindByNameNormalizedAsync(string name)
+    {
+        var normalized = name.Trim().ToLower();
+        return await _context.Teams
+            .FirstOrDefaultAsync(x => x.Name.Trim().ToLower() == normalized);
+    }
+
     public async Task<Team?> FindByIdWithAthletesAsync(Guid id)
     {
         return await _context.Teams

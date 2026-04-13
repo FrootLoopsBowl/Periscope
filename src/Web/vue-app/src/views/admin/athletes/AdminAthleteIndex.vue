@@ -25,10 +25,63 @@
             {{ paginatedResponse.totalItems ?? pageAthletes.length }}
           </span>
         </div>
-        <BtnLink
-          :name="t('routes.admin.children.athletes.add.name')"
-          :path="{ path: t('routes.admin.children.athletes.add.fullPath') }"
+        <div class="flex items-center gap-3">
+          <button type="button" class="btn" @click="showImportModal = true">
+            {{ t('pages.athletes.import.button') }}
+          </button>
+          <BtnLink
+            :name="t('routes.admin.children.athletes.add.name')"
+            :path="{ path: t('routes.admin.children.athletes.add.fullPath') }"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Modale d'import CSV -->
+    <div v-if="showImportModal" class="import-modal-overlay" @click.self="closeImportModal">
+      <div class="import-modal">
+        <h2 class="text-2xl font-montserrat font-semibold text-grey-darker mb-4">
+          {{ t('pages.athletes.import.modalTitle') }}
+        </h2>
+        <p class="font-montserrat text-sm text-grey-dark mb-4">
+          {{ t('pages.athletes.import.modalDescription') }}
+        </p>
+
+        <input
+          type="file"
+          accept=".csv"
+          @change="onFileSelected"
+          class="mb-4 font-montserrat"
+          :disabled="isImporting"
         />
+
+        <div v-if="importResult" class="mb-4 flex flex-col gap-2">
+          <p class="font-montserrat text-grey-darker">
+            <strong>{{ t('pages.athletes.import.createdLabel') }}</strong> {{ importResult.createdCount }}
+          </p>
+          <p class="font-montserrat text-grey-darker">
+            <strong>{{ t('pages.athletes.import.updatedLabel') }}</strong> {{ importResult.updatedCount }}
+          </p>
+          <div v-if="importResult.errors.length > 0">
+            <p class="font-montserrat text-grey-darker mb-2">
+              <strong>{{ t('pages.athletes.import.errorsLabel') }}</strong> {{ importResult.errors.length }}
+            </p>
+            <ul class="flex flex-col gap-1 max-h-60 overflow-y-auto">
+              <li v-for="err in importResult.errors" :key="`${err.row}-${err.message}`" class="font-montserrat text-sm text-red">
+                {{ t('pages.athletes.import.errorRowPrefix') }} {{ err.row }}<span v-if="err.email"> ({{ err.email }})</span>: {{ err.message }}
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="flex gap-2 justify-end">
+          <button type="button" class="btn" @click="closeImportModal" :disabled="isImporting">
+            {{ t('global.close') }}
+          </button>
+          <button type="button" class="btn btn--primary" :disabled="!selectedFile || isImporting" @click="handleImport">
+            {{ isImporting ? t('pages.athletes.import.importing') : t('pages.athletes.import.submit') }}
+          </button>
+        </div>
       </div>
     </div>
 
@@ -57,6 +110,7 @@ import Loader from "@/components/layouts/items/Loader.vue"
 import ConfirmModal from "@/components/layouts/items/ConfirmModal.vue"
 import {Tables} from "@/types/enums"
 import {notifyError, notifySuccess} from "@/notify"
+import {ImportAthletesResult} from "@/injection/interfaces"
 
 const {t} = useI18n()
 const router = useRouter()
@@ -68,6 +122,10 @@ const pageAthletes = ref<Athlete[]>([])
 const paginatedResponse = ref<PaginatedResponse<Athlete>>({totalItems: 0})
 const showConfirmModal = ref(false)
 const pendingDeleteItem = ref<any>(null)
+const showImportModal = ref(false)
+const selectedFile = ref<File | null>(null)
+const isImporting = ref(false)
+const importResult = ref<ImportAthletesResult | null>(null)
 
 const tableAthletes = computed(() =>
   pageAthletes.value.map((x: Athlete) => ({
@@ -150,6 +208,40 @@ async function onResendLink(item: any) {
   preventMultipleSubmit.value = false
 }
 
+function onFileSelected(event: Event) {
+  const target = event.target as HTMLInputElement
+  selectedFile.value = target.files && target.files.length > 0 ? target.files[0] : null
+  importResult.value = null
+}
+
+function closeImportModal() {
+  if (isImporting.value) return
+  showImportModal.value = false
+  selectedFile.value = null
+  importResult.value = null
+  if (importResult.value === null) {
+    loadAthletes(1, Tables.DefaultRowsPerPage)
+  }
+}
+
+async function handleImport() {
+  if (!selectedFile.value || isImporting.value) return
+  isImporting.value = true
+  importResult.value = null
+
+  const athletePageRelativeUrl = t("routes.athletePage.path").replace("/:token", "")
+  const result = await athleteService.importAthletes(selectedFile.value, athletePageRelativeUrl)
+  importResult.value = result
+
+  if (result.succeeded) {
+    notifySuccess(t('pages.athletes.import.successMessage'))
+    await loadAthletes(1, Tables.DefaultRowsPerPage)
+  } else {
+    notifyError(t('pages.athletes.import.failedMessage'))
+  }
+  isImporting.value = false
+}
+
 const athleteHeaders = computed(() => [
   {text: t("global.firstName"), value: 'firstName', width: 150},
   {text: t("global.lastName"), value: 'lastName', width: 150},
@@ -158,3 +250,24 @@ const athleteHeaders = computed(() => [
   {text: t("global.table.actions"), value: 'actions', width: 100},
 ])
 </script>
+
+<style scoped>
+.import-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.import-modal {
+  background: white;
+  border-radius: 0.75rem;
+  padding: 2rem;
+  max-width: 600px;
+  width: 90%;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+</style>
