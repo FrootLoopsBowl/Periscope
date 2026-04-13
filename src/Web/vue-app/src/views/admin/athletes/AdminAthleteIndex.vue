@@ -38,52 +38,139 @@
     </div>
 
     <!-- Modale d'import CSV -->
-    <div v-if="showImportModal" class="import-modal-overlay" @click.self="closeImportModal">
-      <div class="import-modal">
-        <h2 class="text-2xl font-montserrat font-semibold text-grey-darker mb-4">
-          {{ t('pages.athletes.import.modalTitle') }}
-        </h2>
-        <p class="font-montserrat text-sm text-grey-dark mb-4">
-          {{ t('pages.athletes.import.modalDescription') }}
-        </p>
+    <Transition name="fade">
+      <div v-if="showImportModal" class="import-popup">
+        <span class="import-popup__bg" @click="closeImportModal"></span>
+        <div class="import-popup__container">
+          <div class="import-popup__header">
+            <h2 class="font-montserrat font-semibold text-green-dark text-xl">
+              {{ t('pages.athletes.import.modalTitle') }}
+            </h2>
+            <button
+              type="button"
+              class="import-popup__close"
+              :disabled="isImporting"
+              @click="closeImportModal"
+              aria-label="Close"
+            >×</button>
+          </div>
 
-        <input
-          type="file"
-          accept=".csv"
-          @change="onFileSelected"
-          class="mb-4 font-montserrat"
-          :disabled="isImporting"
-        />
+          <div class="import-popup__content">
+            <!-- Instructions -->
+            <div v-if="!importResult" class="flex flex-col gap-4">
+              <p class="font-montserrat text-sm text-grey-darker">
+                {{ t('pages.athletes.import.modalDescription') }}
+              </p>
 
-        <div v-if="importResult" class="mb-4 flex flex-col gap-2">
-          <p class="font-montserrat text-grey-darker">
-            <strong>{{ t('pages.athletes.import.createdLabel') }}</strong> {{ importResult.createdCount }}
-          </p>
-          <p class="font-montserrat text-grey-darker">
-            <strong>{{ t('pages.athletes.import.updatedLabel') }}</strong> {{ importResult.updatedCount }}
-          </p>
-          <div v-if="importResult.errors.length > 0">
-            <p class="font-montserrat text-grey-darker mb-2">
-              <strong>{{ t('pages.athletes.import.errorsLabel') }}</strong> {{ importResult.errors.length }}
-            </p>
-            <ul class="flex flex-col gap-1 max-h-60 overflow-y-auto">
-              <li v-for="err in importResult.errors" :key="`${err.row}-${err.message}`" class="font-montserrat text-sm text-red">
-                {{ t('pages.athletes.import.errorRowPrefix') }} {{ err.row }}<span v-if="err.email"> ({{ err.email }})</span>: {{ err.message }}
-              </li>
-            </ul>
+              <div class="import-popup__columns">
+                <p class="text-xs font-montserrat uppercase tracking-widest text-grey-dark mb-2">
+                  {{ t('pages.athletes.import.columnsTitle') }}
+                </p>
+                <ol class="font-montserrat text-sm text-grey-darker flex flex-col gap-1">
+                  <li>1. {{ t('global.firstName') }}</li>
+                  <li>2. {{ t('global.lastName') }}</li>
+                  <li>3. {{ t('global.email') }}</li>
+                  <li>4. {{ t('pages.athletes.import.dobFormat') }}</li>
+                  <li>5. {{ t('global.team') }}</li>
+                </ol>
+              </div>
+
+              <!-- Zone de dépôt -->
+              <label
+                class="import-popup__dropzone"
+                :class="{ 'import-popup__dropzone--has-file': selectedFile, 'import-popup__dropzone--disabled': isImporting }"
+              >
+                <input
+                  type="file"
+                  accept=".csv"
+                  class="import-popup__input"
+                  @change="onFileSelected"
+                  :disabled="isImporting"
+                />
+                <template v-if="selectedFile">
+                  <span class="import-popup__dropzone-icon">📄</span>
+                  <span class="font-montserrat font-semibold text-green-dark">{{ selectedFile.name }}</span>
+                  <span class="font-montserrat text-xs text-grey-dark">{{ formatFileSize(selectedFile.size) }}</span>
+                  <span class="font-montserrat text-xs text-green underline mt-2">
+                    {{ t('pages.athletes.import.changeFile') }}
+                  </span>
+                </template>
+                <template v-else>
+                  <span class="import-popup__dropzone-icon">⬆️</span>
+                  <span class="font-montserrat font-semibold text-grey-darker">
+                    {{ t('pages.athletes.import.selectFile') }}
+                  </span>
+                  <span class="font-montserrat text-xs text-grey-dark mt-1">
+                    {{ t('pages.athletes.import.fileHint') }}
+                  </span>
+                </template>
+              </label>
+            </div>
+
+            <!-- Résultat -->
+            <div v-else class="flex flex-col gap-4">
+              <div class="import-popup__stats">
+                <div class="import-popup__stat import-popup__stat--created">
+                  <span class="import-popup__stat-value">{{ importResult.createdCount }}</span>
+                  <span class="import-popup__stat-label">{{ t('pages.athletes.import.createdLabel') }}</span>
+                </div>
+                <div class="import-popup__stat import-popup__stat--updated">
+                  <span class="import-popup__stat-value">{{ importResult.updatedCount }}</span>
+                  <span class="import-popup__stat-label">{{ t('pages.athletes.import.updatedLabel') }}</span>
+                </div>
+                <div class="import-popup__stat import-popup__stat--errors" :class="{ 'import-popup__stat--muted': importResult.errors.length === 0 }">
+                  <span class="import-popup__stat-value">{{ importResult.errors.length }}</span>
+                  <span class="import-popup__stat-label">{{ t('pages.athletes.import.errorsLabel') }}</span>
+                </div>
+              </div>
+
+              <div v-if="importResult.errors.length > 0" class="import-popup__errors">
+                <p class="text-xs font-montserrat uppercase tracking-widest text-grey-dark mb-2">
+                  {{ t('pages.athletes.import.errorsDetailTitle') }}
+                </p>
+                <ul class="flex flex-col gap-2">
+                  <li
+                    v-for="err in importResult.errors"
+                    :key="`${err.row}-${err.message}`"
+                    class="import-popup__error-item"
+                  >
+                    <span class="import-popup__error-row">
+                      {{ t('pages.athletes.import.errorRowPrefix') }} {{ err.row }}
+                    </span>
+                    <span v-if="err.email" class="import-popup__error-email">{{ err.email }}</span>
+                    <span class="import-popup__error-message">{{ err.message }}</span>
+                  </li>
+                </ul>
+              </div>
+
+              <p v-else class="font-montserrat text-sm text-green-dark italic">
+                {{ t('pages.athletes.import.allSuccess') }}
+              </p>
+            </div>
+          </div>
+
+          <div class="import-popup__actions">
+            <button
+              type="button"
+              class="btn import-popup__btn import-popup__btn-cancel"
+              @click="closeImportModal"
+              :disabled="isImporting"
+            >
+              {{ importResult ? t('global.close') : t('global.cancel') }}
+            </button>
+            <button
+              v-if="!importResult"
+              type="button"
+              class="btn btn--primary import-popup__btn"
+              :disabled="!selectedFile || isImporting"
+              @click="handleImport"
+            >
+              {{ isImporting ? t('pages.athletes.import.importing') : t('pages.athletes.import.submit') }}
+            </button>
           </div>
         </div>
-
-        <div class="flex gap-2 justify-end">
-          <button type="button" class="btn" @click="closeImportModal" :disabled="isImporting">
-            {{ t('global.close') }}
-          </button>
-          <button type="button" class="btn btn--primary" :disabled="!selectedFile || isImporting" @click="handleImport">
-            {{ isImporting ? t('pages.athletes.import.importing') : t('pages.athletes.import.submit') }}
-          </button>
-        </div>
       </div>
-    </div>
+    </Transition>
 
     <Loader v-if="preventMultipleSubmit" />
     <DataTable
@@ -216,12 +303,19 @@ function onFileSelected(event: Event) {
 
 function closeImportModal() {
   if (isImporting.value) return
+  const hadResult = importResult.value !== null
   showImportModal.value = false
   selectedFile.value = null
   importResult.value = null
-  if (importResult.value === null) {
+  if (hadResult) {
     loadAthletes(1, Tables.DefaultRowsPerPage)
   }
+}
+
+function formatFileSize(bytes: number): string {
+  if (bytes < 1024) return `${bytes} B`
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
 }
 
 async function handleImport() {
@@ -252,22 +346,193 @@ const athleteHeaders = computed(() => [
 </script>
 
 <style scoped>
-.import-modal-overlay {
+.import-popup {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
 }
-.import-modal {
-  background: white;
+.import-popup__bg {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+.import-popup__container {
+  position: relative;
+  background: #fff;
   border-radius: 0.75rem;
-  padding: 2rem;
-  max-width: 600px;
-  width: 90%;
-  max-height: 85vh;
+  width: 95%;
+  max-width: 640px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-bold, 0 20px 40px rgba(0,0,0,0.2));
+  overflow: hidden;
+}
+.import-popup__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  background: var(--color-green-lighter, #e8f5e9);
+  border-bottom: 1px solid var(--color-green-light, #c8e6c9);
+}
+.import-popup__close {
+  background: none;
+  border: none;
+  font-size: 1.75rem;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--color-green-dark, #2c3e50);
+  padding: 0 0.25rem;
+}
+.import-popup__close:disabled { opacity: 0.5; cursor: not-allowed; }
+.import-popup__content {
+  padding: 1.5rem;
   overflow-y: auto;
+}
+.import-popup__columns {
+  background: var(--color-grey-lighter, #f5f5f5);
+  padding: 0.875rem 1rem;
+  border-radius: 0.5rem;
+}
+
+/* Dropzone */
+.import-popup__dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 2rem 1rem;
+  border: 2px dashed var(--color-green-light, #c8e6c9);
+  border-radius: 0.75rem;
+  background: var(--color-green-lighter, #f1f8f4);
+  cursor: pointer;
+  text-align: center;
+  transition: border-color 0.2s, background 0.2s;
+}
+.import-popup__dropzone:hover {
+  border-color: var(--color-green, #4caf50);
+}
+.import-popup__dropzone--has-file {
+  border-style: solid;
+  border-color: var(--color-green, #4caf50);
+  background: #fff;
+}
+.import-popup__dropzone--disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.import-popup__dropzone-icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+.import-popup__input {
+  display: none;
+}
+
+/* Stats */
+.import-popup__stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+}
+.import-popup__stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem 0.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid;
+}
+.import-popup__stat-value {
+  font-family: var(--font-montserrat);
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1;
+}
+.import-popup__stat-label {
+  font-family: var(--font-montserrat);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-top: 0.5rem;
+  text-align: center;
+}
+.import-popup__stat--created {
+  background: #e8f5e9;
+  border-color: #a5d6a7;
+  color: #1b5e20;
+}
+.import-popup__stat--updated {
+  background: #e3f2fd;
+  border-color: #90caf9;
+  color: #0d47a1;
+}
+.import-popup__stat--errors {
+  background: #ffebee;
+  border-color: #ef9a9a;
+  color: #b71c1c;
+}
+.import-popup__stat--muted {
+  background: var(--color-grey-lighter, #f5f5f5);
+  border-color: var(--color-grey-light, #e0e0e0);
+  color: var(--color-grey-dark, #666);
+}
+
+/* Errors list */
+.import-popup__errors {
+  max-height: 240px;
+  overflow-y: auto;
+  border: 1px solid var(--color-grey-light, #e0e0e0);
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+}
+.import-popup__error-item {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: baseline;
+  padding: 0.5rem 0.75rem;
+  border-left: 3px solid #ef5350;
+  background: #fff5f5;
+  border-radius: 0.25rem;
+  font-family: var(--font-montserrat);
+  font-size: 0.85rem;
+}
+.import-popup__error-row {
+  font-weight: 700;
+  color: #b71c1c;
+}
+.import-popup__error-email {
+  color: var(--color-grey-dark, #666);
+  font-style: italic;
+}
+.import-popup__error-message {
+  color: var(--color-grey-darker, #333);
+  flex: 1;
+  min-width: 200px;
+}
+
+/* Actions */
+.import-popup__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--color-grey-light, #e0e0e0);
+  background: var(--color-grey-lighter, #fafafa);
+}
+
+.fade-leave-active,
+.fade-enter-active {
+  transition: opacity 0.2s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
