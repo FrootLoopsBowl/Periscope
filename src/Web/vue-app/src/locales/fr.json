@@ -162,10 +162,14 @@
       }
     },
     "account": {
+      "heroEyebrow": "Mon espace",
+      "heroIntro": "Retrouvez vos informations de connexion et mettez à jour votre mot de passe en toute sécurité.",
       "loginInfos": "Informations de connexion",
-      "loginInfosDescription": "Vue d'ensemble de votre accès administrateur et de l'identité utilisée pour vous connecter.",
+      "loginInfosDescription": "Vue d'ensemble de l'identité utilisée pour vous connecter et de vos accès actuels.",
       "changePasswordTitle": "Sécurité du compte",
       "passwordDescription": "Modifiez votre mot de passe en confirmant d'abord votre mot de passe actuel.",
+      "passwordCalloutTitle": "Changement de mot de passe",
+      "passwordCalloutText": "Après validation, votre session sera fermée automatiquement et vous devrez vous reconnecter avec votre nouveau mot de passe.",
       "currentPassword": "Mot de passe actuel",
       "newPassword": "Nouveau mot de passe",
       "newPasswordConfirmation": "Confirmation du nouveau mot de passe",
@@ -477,7 +481,9 @@
   },
   "user": {
     "roles": {
-      "admin": "Administrateur"
+      "admin": "Administrateur",
+      "member": "Membre",
+      "entraineur": "Entraîneur"
     }
   },
   "global": {

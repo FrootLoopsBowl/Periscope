@@ -162,10 +162,14 @@
       }
     },
     "account": {
+      "heroEyebrow": "My space",
+      "heroIntro": "Review your sign-in details and update your password in a single secure place.",
       "loginInfos": "Login information",
-      "loginInfosDescription": "Overview of your administrator access and the identity used to sign in.",
+      "loginInfosDescription": "Overview of the identity used to sign in and your current access.",
       "changePasswordTitle": "Account security",
       "passwordDescription": "Change your password by first confirming your current password.",
+      "passwordCalloutTitle": "Password update",
+      "passwordCalloutText": "After confirmation, your current session will be closed automatically and you will need to sign in again with your new password.",
       "currentPassword": "Current password",
       "newPassword": "New password",
       "newPasswordConfirmation": "New password confirmation",
@@ -459,7 +463,9 @@
   },
   "user": {
     "roles": {
-      "admin": "Administrator"
+      "admin": "Administrator",
+      "member": "Member",
+      "entraineur": "Coach"
     }
   },
   "global": {
