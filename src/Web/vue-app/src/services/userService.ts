@@ -5,6 +5,8 @@ import "@/extensions/date.extensions";
 import {ApiService} from "@/services/apiService";
 import {IUserService} from "@/injection/interfaces";
 import {User} from "@/types";
+import { IChangePasswordRequest } from "@/types/requests";
+import { SucceededOrNotResponse } from "@/types/responses";
 
 @injectable()
 export class UserService extends ApiService implements IUserService {
@@ -16,5 +18,21 @@ export class UserService extends ApiService implements IUserService {
       return error.response as AxiosResponse<User>
     })
     return response.data as User
+  }
+
+  public async changePassword(request: IChangePasswordRequest): Promise<SucceededOrNotResponse> {
+    const response = await this
+      ._httpClient
+      .post<any, AxiosResponse<SucceededOrNotResponse>>(
+        `${import.meta.env.VITE_API_BASE_URL}/users/me/change-password`,
+        request,
+        this.headersWithJsonContentType()
+      )
+      .catch(function (error: AxiosError): AxiosResponse<SucceededOrNotResponse> {
+        return error.response as AxiosResponse<SucceededOrNotResponse>
+      })
+
+    const succeededOrNotResponse = response.data as SucceededOrNotResponse
+    return new SucceededOrNotResponse(succeededOrNotResponse.succeeded, succeededOrNotResponse.errors)
   }
 }

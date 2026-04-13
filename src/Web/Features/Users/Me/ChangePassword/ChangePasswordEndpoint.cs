@@ -1,30 +1,26 @@
-using Application.Extensions;
 using Application.Interfaces.Services.Users;
 using Application.Settings;
 using Domain.Common;
 using Domain.Extensions;
-using Domain.Repositories;
 using FastEndpoints;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Web.Cookies;
 
-namespace Web.Features.Public.Authentication.ResetPassword;
+namespace Web.Features.Users.Me.ChangePassword;
 
-public class ResetPasswordEndpoint : Endpoint<ResetPasswordRequest, SucceededOrNotResponse>
+public class ChangePasswordEndpoint : Endpoint<ChangePasswordRequest, SucceededOrNotResponse>
 {
     private readonly CookieSettings _cookieSettings;
     private readonly IAuthenticationService _authenticationService;
-    private readonly IUserRepository _userRepository;
-    private readonly ILogger<ResetPasswordEndpoint> _logger;
+    private readonly IAuthenticatedUserService _authenticatedUserService;
 
-    public ResetPasswordEndpoint(
-        IUserRepository userRepository,
-        ILogger<ResetPasswordEndpoint> logger,
+    public ChangePasswordEndpoint(
+        IAuthenticatedUserService authenticatedUserService,
         IAuthenticationService authenticationService,
         IOptions<CookieSettings> cookieSettings)
     {
-        _logger = logger;
-        _userRepository = userRepository;
+        _authenticatedUserService = authenticatedUserService;
         _authenticationService = authenticationService;
         _cookieSettings = cookieSettings.Value;
     }
@@ -33,21 +29,13 @@ public class ResetPasswordEndpoint : Endpoint<ResetPasswordRequest, SucceededOrN
     {
         DontCatchExceptions();
 
-        Post("authentication/reset-password");
-        AllowAnonymous();
+        Post("users/me/change-password");
+        AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
     }
 
-    public override async Task HandleAsync(ResetPasswordRequest req, CancellationToken ct)
+    public override async Task HandleAsync(ChangePasswordRequest req, CancellationToken ct)
     {
-        var user = _userRepository.FindById(req.UserId);
-        if (user == null)
-        {
-            _logger.LogInformation("Could not reset password since no user with user id {id} exists.", req.UserId);
-            await Send.OkAsync(new SucceededOrNotResponse(false), ct);
-            return;
-        }
-
-        var identityResult = await _userRepository.ResetUserPassword(user, req.Password, req.Token.Base64UrlDecode());
+        var identityResult = await _authenticatedUserService.ChangeUserPassword(req.CurrentPassword, req.NewPassword);
         if (!identityResult.Succeeded)
         {
             await Send.OkAsync(new SucceededOrNotResponse(false, identityResult.GetErrors()), ct);

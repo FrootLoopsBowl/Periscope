@@ -10,7 +10,7 @@ namespace Persistence;
 public class GarneauTemplateDbContextInitializer
 {
     private const string MemberEmail = "member@gmail.com";
-    private const string AdminEmail = "admin@gmail.com";
+    private const string AdminEmail = "nepasrepondreperiscope@gmail.com";
     private const string entraineurEmail = "entraineur@gmail.com";
     private const string Password = "Qwerty123!";
 

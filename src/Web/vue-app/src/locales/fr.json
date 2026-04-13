@@ -142,8 +142,10 @@
       }
     },
     "resetPassword": {
+      "tooltip": "Choisissez un nouveau mot de passe pour récupérer l'accès à votre compte.",
       "validation": {
         "success": "Mot de passe réinitalisé avec succès. Vous serez redirigé à la page de connexion.",
+        "invalidLink": "Le lien de réinitialisation est invalide ou incomplet.",
         "invalidUserId": "L'identifiant de l'utilisateur est invalide.",
         "invalidToken": "Le token de réinitalisation du mot de passe est invalide.",
         "invalidPassword": "Le mot de passe est invalide.",
@@ -153,9 +155,39 @@
         "passwordRequiresDigit": "Doit contenir un chiffre.",
         "passwordRequiresUpper": "Doit contenir une majuscule.",
         "passwordRequiresLower": "Doit contenir une minuscule.",
+        "passwordTooPredictable": "Veuillez choisir un mot de passe un peu moins prévisible.",
         "passwordMismatch": "Le mot de passe entré ne correspond pas à votre mot de passe actuel.",
         "passwordAndConfirmationMustMatch": "Le mot de passe et sa confirmation doivent être identiques.",
         "errorOccured": "Une erreur est survenue lors de la réinitialisation du mot de passe."
+      }
+    },
+    "account": {
+      "heroEyebrow": "Mon espace",
+      "heroIntro": "Retrouvez vos informations de connexion et mettez à jour votre mot de passe en toute sécurité.",
+      "loginInfos": "Informations de connexion",
+      "loginInfosDescription": "Vue d'ensemble de l'identité utilisée pour vous connecter et de vos accès actuels.",
+      "changePasswordTitle": "Sécurité du compte",
+      "passwordDescription": "Modifiez votre mot de passe en confirmant d'abord votre mot de passe actuel.",
+      "passwordCalloutTitle": "Changement de mot de passe",
+      "passwordCalloutText": "Après validation, votre session sera fermée automatiquement et vous devrez vous reconnecter avec votre nouveau mot de passe.",
+      "currentPassword": "Mot de passe actuel",
+      "newPassword": "Nouveau mot de passe",
+      "newPasswordConfirmation": "Confirmation du nouveau mot de passe",
+      "changePasswordSubmit": "Modifier le mot de passe",
+      "validation": {
+        "success": "Votre mot de passe a été modifié avec succès. Vous allez être déconnecté et redirigé vers la page de connexion.",
+        "invalidCurrentPassword": "Le mot de passe actuel est invalide.",
+        "invalidNewPassword": "Le nouveau mot de passe est invalide.",
+        "invalidNewPasswordConfirmation": "La confirmation du nouveau mot de passe est invalide.",
+        "passwordTooShort": "Doit contenir au moins 8 caractères.",
+        "passwordRequiresNonAlphanumeric": "Doit contenir un caractère spécial.",
+        "passwordRequiresDigit": "Doit contenir un chiffre.",
+        "passwordRequiresUpper": "Doit contenir une majuscule.",
+        "passwordRequiresLower": "Doit contenir une minuscule.",
+        "passwordTooPredictable": "Veuillez choisir un mot de passe un peu moins prévisible.",
+        "passwordMismatch": "Le mot de passe entré ne correspond pas à votre mot de passe actuel.",
+        "passwordAndConfirmationMustMatch": "Le mot de passe et sa confirmation doivent être identiques.",
+        "errorOccured": "Une erreur est survenue lors de la modification du mot de passe."
       }
     },
     "athletePage": {
@@ -455,7 +487,9 @@
   },
   "user": {
     "roles": {
-      "admin": "Administrateur"
+      "admin": "Administrateur",
+      "member": "Membre",
+      "entraineur": "Entraîneur"
     }
   },
   "global": {

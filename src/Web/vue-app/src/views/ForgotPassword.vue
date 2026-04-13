@@ -12,8 +12,8 @@
                v-model="username"
                :label="t('global.username')"
                :rules="[required]"
-               name="code"
-               type="text"
+               name="username"
+               type="email"
                @validated="handleValidation"/>
     <button class="btn btn--full btn--purple btn--big" @click="sendForgotPasswordRequest" :disabled="preventMultipleSubmit">
       {{ t('global.submit') }}

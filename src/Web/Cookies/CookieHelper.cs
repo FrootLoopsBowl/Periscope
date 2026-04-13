@@ -39,4 +39,27 @@ public static class CookieHelper
 
         response.Cookies.Append(cookieName, cookieValue, cookieOptions);
     }
+
+    public static void DeleteCookieValue(
+        this HttpResponse response,
+        string cookieName,
+        string domain,
+        bool secure)
+    {
+        if (string.IsNullOrWhiteSpace(cookieName))
+            return;
+
+        var cookieOptions = new CookieOptions
+        {
+            Path = "/",
+            Secure = secure,
+            IsEssential = true,
+            SameSite = secure ? SameSiteMode.None : SameSiteMode.Lax
+        };
+
+        if (!string.IsNullOrWhiteSpace(domain))
+            cookieOptions.Domain = domain;
+
+        response.Cookies.Delete(cookieName, cookieOptions);
+    }
 }
