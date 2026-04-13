@@ -158,35 +158,7 @@
           />
         </div>
         
-        <!-- Table -->
-        <div v-if="athleteEfforts.length > 0" class="admin-dashboard__efforts-table">
-          <table class="admin-dashboard__table">
-            <thead>
-              <tr>
-                <th>{{ t('pages.admin.dashboard.athletePage.efforts.date') }}</th>
-                <th>{{ t('pages.admin.dashboard.athletePage.efforts.effort') }}</th>
-                <th>{{ t('pages.admin.dashboard.athletePage.efforts.pleasure') }}</th>
-                <th>{{ t('pages.admin.dashboard.athletePage.efforts.duration') }}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="effort in athleteEfforts" :key="effort.id">
-                <td>{{ formatDateOnly(effort.createdAt) }}</td>
-                <td>{{ effort.effort }}</td>
-                <td>
-                  <span v-if="effort.pleasure !== undefined && effort.pleasure !== null">
-                    {{ effort.pleasure }}
-                  </span>
-                  <span v-else class="text-grey-dark italic">
-                    {{ t('pages.admin.dashboard.athletePage.efforts.noPleasureData') }}
-                  </span>
-                </td>
-                <td>{{ effort.durationMinutes }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <p v-else class="content-grid__text">
+        <p v-if="athleteEfforts.length === 0" class="content-grid__text">
           {{ t("pages.admin.dashboard.athletePage.efforts.empty") }}
         </p>
       </Card>
@@ -253,15 +225,18 @@ const injuryNotes = ref<NoteBlessure[]>([]);
 const athleteEfforts = ref<AthleteEffort[]>([]);
 const effortChartData = ref<any>(null);
 const today = new Date();
-const tomorrow = new Date(today);
-tomorrow.setDate(today.getDate() + 1);
-const fiveWeeksAgo = new Date(today);
-fiveWeeksAgo.setDate(today.getDate() - 35);
+const mondayBasedDay = (today.getDay() + 6) % 7;
+const startOfCurrentWeek = new Date(today);
+startOfCurrentWeek.setDate(today.getDate() - mondayBasedDay);
+const startOfRange = new Date(startOfCurrentWeek);
+startOfRange.setDate(startOfCurrentWeek.getDate() - (5 * 7));
+const endOfCurrentWeek = new Date(startOfCurrentWeek);
+endOfCurrentWeek.setDate(startOfCurrentWeek.getDate() + 6);
 
 const toDateInputValue = (date: Date) => date.toISOString().split("T")[0];
 
-const startDateFilter = ref<string>(toDateInputValue(fiveWeeksAgo));
-const endDateFilter = ref<string>(toDateInputValue(tomorrow));
+const startDateFilter = ref<string>(toDateInputValue(startOfRange));
+const endDateFilter = ref<string>(toDateInputValue(endOfCurrentWeek));
 const newNoteContenu = ref<string>("");
 const isSubmittingNote = ref<boolean>(false);
 const noteSubmitMessage = ref<string>("");
@@ -341,8 +316,8 @@ watch([displayedAthleteId, startDateFilter, endDateFilter], async ([newId, newSt
         labels: sortedEfforts.map(e => formatDateOnly(e.createdAt)),
         datasets: [
           {
-            label: t('pages.admin.dashboard.athletePage.efforts.effort'),
-            data: sortedEfforts.map(e => e.effort),
+            label: 'Effort/Temps',
+            data: sortedEfforts.map(e => ((e.durationMinutes ?? 0) * (e.effort ?? 0)) / 100),
             borderColor: '#42b983',
             backgroundColor: 'rgba(66, 185, 131, 0.1)',
             tension: 0.1,
@@ -355,14 +330,6 @@ watch([displayedAthleteId, startDateFilter, endDateFilter], async ([newId, newSt
             backgroundColor: 'rgba(77, 171, 247, 0.1)',
             tension: 0.1,
             yAxisID: 'y'
-          },
-          {
-            label: t('pages.admin.dashboard.athletePage.efforts.duration'),
-            data: sortedEfforts.map(e => e.durationMinutes),
-            borderColor: '#ff6b6b',
-            backgroundColor: 'rgba(255, 107, 107, 0.1)',
-            tension: 0.1,
-            yAxisID: 'y1'
           }
         ]
       };
@@ -455,21 +422,9 @@ async function loadAllAthletes(): Promise<Athlete[]> {
     scales: {
       y: {
         beginAtZero: true,
-        max: 10,
         title: {
           display: true,
-          text: t('pages.admin.dashboard.athletePage.efforts.effortPleasure')
-        }
-      },
-      y1: {
-        beginAtZero: true,
-        position: 'right',
-        title: {
-          display: true,
-          text: t('pages.admin.dashboard.athletePage.efforts.duration')
-        },
-        grid: {
-          drawOnChartArea: false
+        text: 'Effort/Temps et plaisir'
         }
       },
       x: {
