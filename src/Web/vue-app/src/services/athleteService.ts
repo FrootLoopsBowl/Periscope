@@ -5,7 +5,7 @@ import {ApiService} from "@/services/apiService"
 import {IAthleteService} from "@/injection/interfaces"
 import {PaginatedResponse, SucceededOrNotResponse} from "@/types/responses"
 import {IAssignTeamToAthleteRequest, ICreateAthleteRequest} from "@/types/requests"
-import {Athlete, AthleteEffort, NoteBlessure} from "@/types/entities"
+import {Athlete, AthleteEffort, NoteBlessure, OverloadedAthlete} from "@/types/entities"
 import { IUpdateAthleteRequest } from "../types/requests/updateAthleteRequest"
 
 @injectable()
@@ -70,6 +70,17 @@ export class AthleteService extends ApiService implements IAthleteService {
         `${import.meta.env.VITE_API_BASE_URL}/athletes/injured`)
       .catch(function (error: AxiosError): AxiosResponse<Athlete[]> {
         return error.response as AxiosResponse<Athlete[]>
+      })
+    return response.data ?? []
+  }
+
+  public async getOverloaded(): Promise<OverloadedAthlete[]> {
+    const response = await this
+      ._httpClient
+      .get<any, AxiosResponse<OverloadedAthlete[]>>(
+        `${import.meta.env.VITE_API_BASE_URL}/athletes/overloaded`)
+      .catch(function (error: AxiosError): AxiosResponse<OverloadedAthlete[]> {
+        return error.response as AxiosResponse<OverloadedAthlete[]>
       })
     return response.data ?? []
   }

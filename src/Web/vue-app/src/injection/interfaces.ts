@@ -12,7 +12,7 @@ import {
   ITwoFactorRequest
 } from "@/types/requests"
 import {PaginatedResponse, SucceededOrNotResponse} from "@/types/responses"
-import {Administrator, Athlete, AthleteEffort, NoteBlessure, Book, Member, Team, User} from "@/types/entities"
+import {Administrator, Athlete, AthleteEffort, NoteBlessure, OverloadedAthlete, Book, Member, Team, User} from "@/types/entities"
 import {Guid} from "@/types";
 import { IUpdateAthleteRequest, IUpdateTeamRequest } from "../types/requests/updateAthleteRequest";
 
@@ -35,6 +35,7 @@ export interface IAthleteService {
   submitSubmission(token: string, effort: number, durationMinutes: number, pleasure?: number, trainingDate?: string): Promise<SucceededOrNotResponse>
   getAll(pageIndex: number, pageSize: number): Promise<PaginatedResponse<Athlete>>
   getInjured(): Promise<Athlete[]>
+  getOverloaded(): Promise<OverloadedAthlete[]>
   toggleInjured(athleteId: string, isInjured: boolean): Promise<SucceededOrNotResponse>
   createNoteBlessure(athleteId: string, contenu: string): Promise<SucceededOrNotResponse>
   getNotesBlessure(athleteId: string): Promise<NoteBlessure[]>
