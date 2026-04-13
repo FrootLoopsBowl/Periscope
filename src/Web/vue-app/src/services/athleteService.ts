@@ -2,7 +2,7 @@ import {AxiosError, AxiosResponse} from "axios"
 import {injectable} from "inversify"
 
 import {ApiService} from "@/services/apiService"
-import {IAthleteService} from "@/injection/interfaces"
+import {IAthleteService, ImportAthletesResult} from "@/injection/interfaces"
 import {PaginatedResponse, SucceededOrNotResponse} from "@/types/responses"
 import {IAssignTeamToAthleteRequest, ICreateAthleteRequest} from "@/types/requests"
 import {Athlete, AthleteEffort, NoteBlessure, OverloadedAthlete} from "@/types/entities"
@@ -279,4 +279,31 @@ export class AthleteService extends ApiService implements IAthleteService {
         const errorResponse = response.data as SucceededOrNotResponse
         return new SucceededOrNotResponse(false, errorResponse?.errors)
     }
+
+  public async importAthletes(file: File, athletePageRelativeUrl: string): Promise<ImportAthletesResult> {
+    const formData = new FormData()
+    formData.append("File", file)
+    formData.append("AthletePageRelativeUrl", athletePageRelativeUrl)
+
+    const response = await this
+      ._httpClient
+      .post<any, AxiosResponse<any>>(
+        `${import.meta.env.VITE_API_BASE_URL}/athletes/import`,
+        formData)
+      .catch(function (error: AxiosError): AxiosResponse<any> {
+        return error.response as AxiosResponse<any>
+      })
+
+    if (response && response.status === 200) {
+      const data = response.data
+      return {
+        succeeded: true,
+        createdCount: data?.createdCount ?? 0,
+        updatedCount: data?.updatedCount ?? 0,
+        errors: data?.errors ?? []
+      }
+    }
+
+    return { succeeded: false, createdCount: 0, updatedCount: 0, errors: [] }
+  }
 }
