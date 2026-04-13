@@ -52,6 +52,85 @@
         </div>
       </div>
 
+      <!-- Section suivi hebdomadaire -->
+      <div class="bg-white rounded-xl border border-grey overflow-hidden" style="box-shadow: var(--shadow-bold)">
+        <div class="flex items-center gap-3 px-6 py-4 bg-green-lighter border-b border-green-light">
+          <span class="block w-1.5 h-7 rounded-full bg-green"></span>
+          <h2 class="font-montserrat font-semibold text-green-dark text-base">
+            {{ t('pages.admin.dashboard.athletePage.weeklyTitle') }}
+          </h2>
+        </div>
+        <div class="p-6 flex flex-col gap-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="flex flex-col gap-2">
+              <label class="text-xs font-montserrat uppercase tracking-widest text-grey-dark">
+                {{ t('pages.admin.dashboard.athletePage.efforts.startDate') }}
+              </label>
+              <input
+                type="date"
+                v-model="startDateFilter"
+                class="border border-grey rounded-lg px-4 py-2 font-montserrat text-grey-darker focus:outline-none focus:border-green"
+                :placeholder="t('pages.admin.dashboard.athletePage.efforts.startDatePlaceholder')"
+              />
+            </div>
+            <div class="flex flex-col gap-2">
+              <label class="text-xs font-montserrat uppercase tracking-widest text-grey-dark">
+                {{ t('pages.admin.dashboard.athletePage.efforts.endDate') }}
+              </label>
+              <input
+                type="date"
+                v-model="endDateFilter"
+                class="border border-grey rounded-lg px-4 py-2 font-montserrat text-grey-darker focus:outline-none focus:border-green"
+                :placeholder="t('pages.admin.dashboard.athletePage.efforts.endDatePlaceholder')"
+              />
+            </div>
+          </div>
+
+          <div v-if="effortChartData" class="h-80 bg-white rounded-lg p-4 border border-grey-light">
+            <LineChart :chart-data="effortChartData" :options="chartOptions" class="h-full" />
+          </div>
+
+          <div v-if="athleteEfforts.length > 0" class="overflow-x-auto">
+            <table class="w-full min-w-[36rem] border border-grey-light rounded-lg overflow-hidden">
+              <thead class="bg-green-lighter">
+                <tr>
+                  <th class="text-left px-4 py-3 font-montserrat text-xs uppercase tracking-widest text-green-dark">
+                    {{ t('pages.admin.dashboard.athletePage.efforts.date') }}
+                  </th>
+                  <th class="text-left px-4 py-3 font-montserrat text-xs uppercase tracking-widest text-green-dark">
+                    {{ t('pages.admin.dashboard.athletePage.efforts.effort') }}
+                  </th>
+                  <th class="text-left px-4 py-3 font-montserrat text-xs uppercase tracking-widest text-green-dark">
+                    {{ t('pages.admin.dashboard.athletePage.efforts.pleasure') }}
+                  </th>
+                  <th class="text-left px-4 py-3 font-montserrat text-xs uppercase tracking-widest text-green-dark">
+                    {{ t('pages.admin.dashboard.athletePage.efforts.duration') }}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="effort in athleteEfforts" :key="effort.id" class="border-t border-grey-light">
+                  <td class="px-4 py-3 font-montserrat text-sm text-grey-darker">{{ formatDateOnly(effort.createdAt) }}</td>
+                  <td class="px-4 py-3 font-montserrat text-sm text-grey-darker">{{ effort.effort }}</td>
+                  <td class="px-4 py-3 font-montserrat text-sm text-grey-darker">
+                    <span v-if="effort.pleasure !== undefined && effort.pleasure !== null">
+                      {{ effort.pleasure }}
+                    </span>
+                    <span v-else class="text-grey-dark italic">
+                      {{ t('pages.admin.dashboard.athletePage.efforts.noPleasureData') }}
+                    </span>
+                  </td>
+                  <td class="px-4 py-3 font-montserrat text-sm text-grey-darker">{{ effort.durationMinutes }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p v-else class="font-montserrat text-grey-dark italic">
+            {{ t('pages.admin.dashboard.athletePage.efforts.empty') }}
+          </p>
+        </div>
+      </div>
+
       <!-- Section notes de blessure -->
       <div class="bg-white rounded-xl border border-grey overflow-hidden" style="box-shadow: var(--shadow-bold)">
         <div class="flex items-center gap-3 px-6 py-4 bg-green-lighter border-b border-green-light">
@@ -197,13 +276,14 @@
 
 <script lang="ts" setup>
 import {useI18n} from "vue3-i18n"
-import {computed, onMounted, ref} from "vue"
+import {computed, onMounted, ref, watch} from "vue"
 import {useAthleteService, useTeamService} from "@/inversify.config"
 import {notifyError, notifySuccess} from "@/notify"
-import {Athlete, NoteBlessure, Team} from "@/types/entities"
+import {Athlete, AthleteEffort, NoteBlessure, Team} from "@/types/entities"
 import BackLink from "@/components/layouts/items/BackLink.vue"
 import Loader from "@/components/layouts/items/Loader.vue"
 import ConfirmModal from "@/components/layouts/items/ConfirmModal.vue"
+import LineChart from "@/components/charts/LineChart.vue"
 import IconEdit from "@/assets/icons/icon__edit.svg"
 import IconDelete from "@/assets/icons/icon__delete.svg"
 
@@ -227,12 +307,31 @@ const editingNoteId = ref<string | null>(null)
 const editingNoteContenu = ref<string>("")
 const showDeleteNoteModal = ref(false)
 const pendingDeleteNoteId = ref<string | null>(null)
+const athleteEfforts = ref<AthleteEffort[]>([])
+const effortChartData = ref<{ labels: string[]; datasets: Array<Record<string, unknown>> } | null>(null)
+
+const today = new Date()
+const mondayBasedDay = (today.getDay() + 6) % 7
+const startOfCurrentWeek = new Date(today)
+startOfCurrentWeek.setDate(today.getDate() - mondayBasedDay)
+const startOfRange = new Date(startOfCurrentWeek)
+startOfRange.setDate(startOfCurrentWeek.getDate() - (5 * 7))
+const endOfCurrentWeek = new Date(startOfCurrentWeek)
+endOfCurrentWeek.setDate(startOfCurrentWeek.getDate() + 6)
+
+const toDateInputValue = (date: Date): string => date.toISOString().split("T")[0]
+const startDateFilter = ref<string>(toDateInputValue(startOfRange))
+const endDateFilter = ref<string>(toDateInputValue(endOfCurrentWeek))
 
 const isNoteButtonDisabled = computed(() => newNoteContenu.value.trim().length === 0 || isSubmittingNote.value)
 
 onMounted(async () => {
-  await Promise.all([loadAthlete(), loadTeams(), loadNotes()])
+  await Promise.all([loadAthlete(), loadTeams(), loadNotes(), loadEfforts()])
   isLoading.value = false
+})
+
+watch([startDateFilter, endDateFilter], async () => {
+  await loadEfforts()
 })
 
 async function loadAthlete() {
@@ -301,6 +400,44 @@ async function loadNotes() {
   injuryNotes.value = await athleteService.getNotesBlessure(props.id)
 }
 
+async function loadEfforts() {
+  const effortsResponse = await athleteService.getAthleteEfforts(props.id, 1, 10, startDateFilter.value, endDateFilter.value)
+  const sortedEfforts = [...(effortsResponse.items ?? [])].sort((a, b) => {
+    const timeA = new Date(a.createdAt ?? "").getTime()
+    const timeB = new Date(b.createdAt ?? "").getTime()
+    const safeTimeA = Number.isNaN(timeA) ? 0 : timeA
+    const safeTimeB = Number.isNaN(timeB) ? 0 : timeB
+    return safeTimeA - safeTimeB
+  })
+
+  athleteEfforts.value = sortedEfforts
+  effortChartData.value = null
+
+  if (sortedEfforts.length > 0) {
+    effortChartData.value = {
+      labels: sortedEfforts.map(effort => formatDateOnly(effort.createdAt)),
+      datasets: [
+        {
+          label: 'Effort/Temps',
+          data: sortedEfforts.map(effort => ((effort.durationMinutes ?? 0) * (effort.effort ?? 0)) / 100),
+          borderColor: '#42b983',
+          backgroundColor: 'rgba(66, 185, 131, 0.1)',
+          tension: 0.1,
+          yAxisID: 'y'
+        },
+        {
+          label: t('pages.admin.dashboard.athletePage.efforts.pleasure'),
+          data: sortedEfforts.map(effort => effort.pleasure !== undefined && effort.pleasure !== null ? effort.pleasure : 0),
+          borderColor: '#4dabf7',
+          backgroundColor: 'rgba(77, 171, 247, 0.1)',
+          tension: 0.1,
+          yAxisID: 'y'
+        }
+      ]
+    }
+  }
+}
+
 async function handleAddNote() {
   if (newNoteContenu.value.trim().length === 0) return
   isSubmittingNote.value = true
@@ -359,5 +496,37 @@ async function onConfirmDeleteNote() {
 function formatDate(dateStr?: string): string {
   if (!dateStr) return t('global.undefined')
   return new Date(dateStr).toLocaleDateString()
+}
+
+function formatDateOnly(value?: string): string {
+  if (!value) return ""
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return value
+
+  return new Intl.DateTimeFormat("fr-CA", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit"
+  }).format(date)
+}
+
+const chartOptions = {
+  responsive: true,
+  maintainAspectRatio: false,
+  scales: {
+    y: {
+      beginAtZero: true,
+      title: {
+        display: true,
+        text: 'Effort/Temps et plaisir'
+      }
+    },
+    x: {
+      title: {
+        display: true,
+        text: t('pages.admin.dashboard.athletePage.efforts.date')
+      }
+    }
+  }
 }
 </script>

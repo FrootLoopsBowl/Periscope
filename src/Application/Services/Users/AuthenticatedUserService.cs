@@ -9,6 +9,7 @@ namespace Application.Services.Users;
 
 public class AuthenticatedUserService : IAuthenticatedUserService
 {
+    private const string DisallowedPassword = "Qwerty123!";
     private readonly IUserRepository _userRepository;
     private readonly IHttpContextUserService _httpContextUserService;
 
@@ -29,6 +30,15 @@ public class AuthenticatedUserService : IAuthenticatedUserService
     {
         if (string.IsNullOrWhiteSpace(currentPassword) || string.IsNullOrWhiteSpace(newPassword))
             throw new ChangeAuthenticatedUserPasswordException("Current and new password cannot be null");
+
+        if (string.Equals(newPassword, DisallowedPassword, StringComparison.OrdinalIgnoreCase))
+        {
+            return IdentityResult.Failed(new IdentityError
+            {
+                Code = "PasswordTooPredictable",
+                Description = "Please choose a password that is less predictable."
+            });
+        }
 
         var currentUserEmail = _httpContextUserService.Username;
         var user = _userRepository.FindByEmail(currentUserEmail!);

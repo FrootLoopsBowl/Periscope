@@ -23,9 +23,15 @@
                   :text="t('pages.login.forgotPassword')"/>
       </template>
     </FormInput>
-    <button class="btn btn--full btn--purple btn--big" @click="sendLoginRequest" :disabled="preventMultipleSubmit">
-      {{ t('pages.login.submit') }}
-    </button>
+    <div class="login__actions">
+      <button class="btn btn--purple btn--big login__submit" @click="sendLoginRequest" :disabled="preventMultipleSubmit">
+        {{ t('pages.login.submit') }}
+      </button>
+      <div class="login__forgot-password">
+        <TextLink :path="{path: t('routes.forgotPassword.path') }"
+                  :text="t('pages.login.forgotPassword')"/>
+      </div>
+    </div>
   </Card>
 </template>
 <script lang="ts" setup>
@@ -36,6 +42,7 @@ import { useRouter } from "vue-router";
 import { useAuthenticationService, useUserService } from "@/inversify.config";
 import { useUserStore } from "@/stores/userStore";
 import { notifyError } from "@/notify";
+import { Role } from "@/types/enums";
 
 import { Status } from "@/validation";
 import { ILoginRequest } from "@/types/requests/loginRequest";
@@ -87,7 +94,10 @@ async function sendLoginRequest() {
     userStore.setUser(user)
     userStore.setUsername(loginRequest.value.username)
     apiStore.setNeedToLogout(false)
-    await router.push(t("routes.account.path"))
+    if (user.roles.includes(Role.Admin))
+      await router.push({ name: "admin.children.dashboard" })
+    else
+      await router.push(t("routes.account.path"))
     preventMultipleSubmit.value = false;
     return;
   }
@@ -109,3 +119,36 @@ async function sendLoginRequest() {
   preventMultipleSubmit.value = false;
 }
 </script>
+
+<style scoped>
+.login__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.75rem;
+}
+
+.login__submit {
+  width: auto;
+  min-width: 9rem;
+  justify-content: center;
+  text-align: center;
+}
+
+.login__forgot-password {
+  display: flex;
+  justify-content: flex-end;
+}
+
+@media (max-width: 640px) {
+  .login__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .login__submit {
+    width: 100%;
+  }
+}
+</style>

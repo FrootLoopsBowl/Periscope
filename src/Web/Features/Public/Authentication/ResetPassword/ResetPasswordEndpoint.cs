@@ -1,22 +1,32 @@
 using Application.Extensions;
+using Application.Interfaces.Services.Users;
+using Application.Settings;
 using Domain.Common;
 using Domain.Extensions;
 using Domain.Repositories;
 using FastEndpoints;
+using Microsoft.Extensions.Options;
+using Web.Cookies;
 
 namespace Web.Features.Public.Authentication.ResetPassword;
 
 public class ResetPasswordEndpoint : Endpoint<ResetPasswordRequest, SucceededOrNotResponse>
 {
+    private readonly CookieSettings _cookieSettings;
+    private readonly IAuthenticationService _authenticationService;
     private readonly IUserRepository _userRepository;
     private readonly ILogger<ResetPasswordEndpoint> _logger;
 
     public ResetPasswordEndpoint(
         IUserRepository userRepository,
-        ILogger<ResetPasswordEndpoint> logger)
+        ILogger<ResetPasswordEndpoint> logger,
+        IAuthenticationService authenticationService,
+        IOptions<CookieSettings> cookieSettings)
     {
         _logger = logger;
         _userRepository = userRepository;
+        _authenticationService = authenticationService;
+        _cookieSettings = cookieSettings.Value;
     }
 
     public override void Configure()
@@ -43,6 +53,13 @@ public class ResetPasswordEndpoint : Endpoint<ResetPasswordRequest, SucceededOrN
             await Send.OkAsync(new SucceededOrNotResponse(false, identityResult.GetErrors()), ct);
             return;
         }
+
+        var currentRefreshToken = HttpContext.GetCookieValue(CookieName.REFRESH);
+        if (!string.IsNullOrWhiteSpace(currentRefreshToken))
+            await _authenticationService.DeleteRefreshToken(currentRefreshToken);
+
+        HttpContext.Response.DeleteCookieValue(CookieName.ACCESS, _cookieSettings.Domain, _cookieSettings.Secure);
+        HttpContext.Response.DeleteCookieValue(CookieName.REFRESH, _cookieSettings.Domain, _cookieSettings.Secure);
 
         await Send.OkAsync(new SucceededOrNotResponse(true), ct);
     }

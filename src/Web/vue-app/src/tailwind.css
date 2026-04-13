@@ -295,23 +295,25 @@
 
   /* Typography */
   h1, .h1-like {
-    font-weight: 700;
-    font-size: 1.25rem;
-    line-height: 1.25rem;
+    font-weight: 800;
+    font-size: clamp(1.5rem, 2.4vw, 2.25rem);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
     text-transform: none;
   }
 
   h2, .h2-like {
-    font-weight: 700;
-    font-size: 1.25rem;
-    line-height: 1.25rem;
+    font-weight: 800;
+    font-size: clamp(1.2rem, 1.8vw, 1.65rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
     text-transform: none;
   }
 
   h3, .h3-like {
     font-weight: 700;
     font-size: 1.125rem;
-    line-height: 1.125rem;
+    line-height: 1.25;
     text-transform: none;
   }
 
@@ -916,10 +918,11 @@ form > .form__fieldset:last-of-type,
 form label,
 .form__fields-title {
   transition: color 0.2s var(--ease-snappy);
-  color: var(--color-grey-medium);
+  color: var(--color-grey-dark);
   order: -1;
   font-size: 0.875rem;
   line-height: 1.5rem;
+  font-weight: 700;
 }
 
 /* Form inputs */
@@ -930,11 +933,11 @@ form input,
 form textarea,
 form select {
   width: 100%;
-  border: 1px solid var(--color-border);
-  border-radius: 4px;
-  padding: 8px;
-  transition: border-color 0.2s var(--ease-snappy), background-color 0.2s var(--ease-snappy);
-  background-color: var(--color-grey-lighter);
+  border: 1px solid rgba(94, 32, 40, 0.14);
+  border-radius: 12px;
+  padding: 12px 14px;
+  transition: border-color 0.2s var(--ease-snappy), background-color 0.2s var(--ease-snappy), box-shadow 0.2s var(--ease-snappy);
+  background-color: #fff;
 }
 
 @media (hover: hover) {
@@ -953,6 +956,7 @@ form select {
     outline: none;
     border-color: var(--color-green);
     background-color: var(--color-white);
+    box-shadow: 0 0 0 4px rgba(94, 32, 40, 0.08);
   }
 
   .form input:not(:read-only):not(:disabled):focus + label,
@@ -1496,18 +1500,21 @@ form input[type="checkbox"] + label::before {
 .btn {
   display: flex;
   gap: 12px;
-  padding: 12px 8px;
-  font-size: 0.8125rem;
-  line-height: 0.9375rem;
-  font-weight: 700;
+  padding: 12px 14px;
+  font-size: 0.875rem;
+  line-height: 1rem;
+  font-weight: 800;
   background-color: var(--color-cta-light);
   border: 1px solid var(--color-cta);
-  border-radius: 4px;
+  border-radius: 12px;
   cursor: pointer;
   width: fit-content;
   text-transform: none;
   color: var(--color-text);
   align-items: center;
+  justify-content: center;
+  transition: transform 0.18s var(--ease-snappy), box-shadow 0.18s var(--ease-snappy), background-color 0.18s var(--ease-snappy), border-color 0.18s var(--ease-snappy);
+  box-shadow: 0 8px 18px rgba(20, 20, 20, 0.06);
 }
 
 .btn--red {
@@ -1520,6 +1527,11 @@ form input[type="checkbox"] + label::before {
   .btn--red:hover {
     background-color: var(--color-red);
     color: var(--color-text);
+  }
+
+  .btn:hover:not(:disabled):not(.btn--disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 24px rgba(20, 20, 20, 0.1);
   }
 }
 
@@ -1548,6 +1560,7 @@ form input[type="checkbox"] + label::before {
   background-color: var(--color-grey-light);
   border-color: var(--color-grey);
   color: var(--color-grey);
+  box-shadow: none;
 }
 
 .btn--fullscreen {
@@ -1602,10 +1615,11 @@ form input[type="checkbox"] + label::before {
 /* === Blocks: card === */
 .card {
   background-color: var(--color-white);
-  border-radius: 4px;
-  border: 1px solid var(--color-green);
-  padding: 12px;
+  border-radius: 18px;
+  border: 1px solid rgba(94, 32, 40, 0.12);
+  padding: 14px;
   height: auto;
+  box-shadow: 0 12px 32px rgba(37, 24, 26, 0.06);
 }
 
 .card__expand-trigger {
@@ -1635,6 +1649,7 @@ form input[type="checkbox"] + label::before {
 
 .card__title {
   margin-bottom: 0;
+  color: var(--color-green-medium);
 }
 
 .card__content {
@@ -1667,7 +1682,7 @@ form input[type="checkbox"] + label::before {
 
 @media (min-width: 768px) {
   .card {
-    padding: 24px 16px;
+    padding: 24px 20px;
   }
 
   .card__expand-trigger {
@@ -1709,13 +1724,15 @@ form input[type="checkbox"] + label::before {
   display: flex;
   justify-content: space-between;
   flex-direction: column;
+  border-radius: 0 0 20px 20px;
+  overflow: hidden;
 }
 
 .navbar__title,
 .navbar__drawer-btn {
-  width: calc(100% + 2rem * 2);
-  margin: 0 -2rem;
-  padding: 10px;
+  width: 100%;
+  margin: 0;
+  padding: 12px 16px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1727,7 +1744,7 @@ form input[type="checkbox"] + label::before {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 8px 0;
+  padding: 12px 16px 8px;
 }
 
 .navbar__logo {
@@ -1741,6 +1758,7 @@ form input[type="checkbox"] + label::before {
   font-size: 0.8125rem;
   line-height: 1rem;
   border-top: 1px solid var(--color-green);
+  color: var(--color-green-medium);
 }
 
 .navbar__drawer-btn {
@@ -1748,6 +1766,9 @@ form input[type="checkbox"] + label::before {
   line-height: 1rem;
   color: var(--color-white);
   transition: background-color 0.2s var(--ease-snappy);
+  justify-content: space-between;
+  gap: 12px;
+  text-align: left;
 }
 
 @media (hover: hover) {
@@ -1758,12 +1779,12 @@ form input[type="checkbox"] + label::before {
 
 .navbar__drawer-btn .icon {
   flex-shrink: 0;
-  margin-left: 24px;
+  margin-left: 0;
   width: 10px;
 }
 
 .navbar__nav {
-  padding: 16px 0;
+  padding: 12px 0;
 }
 
 .navbar__navlink {
@@ -1774,20 +1795,21 @@ form input[type="checkbox"] + label::before {
   line-height: 1rem;
   color: var(--color-white);
   width: 100%;
-  padding: 12px 20px;
-  border-radius: 4px;
-  transition: color 0.2s var(--ease-snappy);
+  padding: 12px 16px;
+  border-radius: 10px;
+  transition: color 0.2s var(--ease-snappy), background-color 0.2s var(--ease-snappy);
 }
 
 @media (hover: hover) {
   .navbar__navlink:hover {
     color: var(--color-white);
+    background-color: rgba(255, 255, 255, 0.08);
   }
 }
 
 .navbar__navlink.router-link-active {
   color: var(--color-white);
-  background-color: var(--color-green-medium);
+  background-color: rgba(255, 255, 255, 0.14);
   pointer-events: none;
 }
 
@@ -1811,11 +1833,11 @@ form input[type="checkbox"] + label::before {
 
 .navbar__footer {
   border-top: 1px solid var(--color-green-lighter);
-  padding: 40px 48px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 32px;
+  align-items: stretch;
+  gap: 16px;
 }
 
 @media (min-width: 1225px) {
@@ -1825,6 +1847,7 @@ form input[type="checkbox"] + label::before {
     height: 100vh;
     padding-top: 16px;
     justify-content: flex-start;
+    border-radius: 0;
   }
 
   .navbar__content {
@@ -1835,6 +1858,8 @@ form input[type="checkbox"] + label::before {
   .navbar__footer {
     margin-top: auto;
     flex-shrink: 0;
+    padding: 40px 48px;
+    align-items: flex-start;
   }
 
   .navbar__nav {
@@ -1844,7 +1869,7 @@ form input[type="checkbox"] + label::before {
 
 /* === Blocks: subnav === */
 .subnav {
-  border-radius: 4px;
+  border-radius: 10px;
   transition: background-color 0.2s var(--ease-snappy), margin 0.2s var(--ease-snappy);
 }
 
@@ -1859,8 +1884,8 @@ form input[type="checkbox"] + label::before {
   font-size: 1rem;
   line-height: 1rem;
   color: var(--color-white);
-  padding: 12px 20px;
-  border-radius: 4px;
+  padding: 12px 16px;
+  border-radius: 10px;
   transition: color 0.2s var(--ease-snappy);
 }
 
@@ -1889,7 +1914,7 @@ form input[type="checkbox"] + label::before {
 }
 
 .subnav__content {
-  padding: 8px 20px;
+  padding: 6px 8px 10px;
 }
 
 .subnav__navlink {
@@ -1898,15 +1923,16 @@ form input[type="checkbox"] + label::before {
   font-size: 0.875rem;
   line-height: 0.875rem;
   width: 100%;
-  padding: 8px;
-  border-radius: 4px;
+  padding: 10px 12px;
+  border-radius: 8px;
   color: var(--color-white);
-  transition: color 0.2s var(--ease-snappy);
+  transition: color 0.2s var(--ease-snappy), background-color 0.2s var(--ease-snappy);
 }
 
 @media (hover: hover) {
   .subnav__navlink:hover {
     color: var(--color-black);
+    background-color: var(--color-green-lighter);
   }
 }
 
@@ -1917,7 +1943,7 @@ form input[type="checkbox"] + label::before {
 }
 
 .subnav--expand {
-  margin: 8px 0;
+  margin: 6px 0;
   background-color: var(--color-green-medium);
 }
 
@@ -2501,7 +2527,9 @@ form input[type="checkbox"] + label::before {
 .dashboard__content {
   flex: 1;
   padding: 24px 2rem 48px;
-  background-color: var(--color-page-bg);
+  background:
+    radial-gradient(circle at top right, rgba(94, 32, 40, 0.05), transparent 24%),
+    linear-gradient(180deg, #fffdfa 0%, #f8f2f3 100%);
 }
 
 @media (min-width: 768px) {
@@ -2522,7 +2550,9 @@ form input[type="checkbox"] + label::before {
   display: flex;
   justify-content: flex-end;
   gap: 32px;
-  margin-bottom: 60px;
+  margin-bottom: 40px;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(94, 32, 40, 0.08);
 }
 
 /* === Blocks: admin-dashboard === */

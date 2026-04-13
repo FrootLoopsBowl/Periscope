@@ -27,6 +27,7 @@ import {useRouter} from "vue-router";
 import {useAuthenticationService, useUserService} from "@/inversify.config";
 import {notifyError} from "@/notify";
 import {useUserStore} from "@/stores/userStore";
+import {Role} from "@/types/enums";
 
 import {Status} from "@/validation";
 import {ITwoFactorRequest} from "@/types/requests/twoFactorRequest";
@@ -89,7 +90,10 @@ async function sendTwoFactorAuthenticationRequest() {
   let user = await userService.getCurrentUser()
   userStore.setUser(user)
   apiStore.setNeedToLogout(false)
-  await router.push(t("routes.account.path"))
+  if (user.roles.includes(Role.Admin))
+    await router.push({ name: "admin.children.dashboard" })
+  else
+    await router.push(t("routes.account.path"))
   preventMultipleSubmit.value = false;
 }
 </script>

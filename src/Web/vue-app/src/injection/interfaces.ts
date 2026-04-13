@@ -2,6 +2,7 @@
 import {
   IAssignAthletesToTeamRequest,
   IAssignTeamToAthleteRequest,
+  IChangePasswordRequest,
   ICreateAthleteRequest,
   ICreateBookRequest,
   ICreateTeamRequest,
@@ -47,6 +48,20 @@ export interface IAthleteService {
   assignTeam(athleteId: string, request: IAssignTeamToAthleteRequest): Promise<SucceededOrNotResponse>
   deleteAthlete(id: string): Promise<SucceededOrNotResponse>
   updateAthlete(id: string, request: IUpdateAthleteRequest): Promise<SucceededOrNotResponse>
+  importAthletes(file: File, athletePageRelativeUrl: string): Promise<ImportAthletesResult>
+}
+
+export interface ImportAthletesRowError {
+  row: number
+  email?: string
+  message: string
+}
+
+export interface ImportAthletesResult {
+  succeeded: boolean
+  createdCount: number
+  updatedCount: number
+  errors: ImportAthletesRowError[]
 }
 
 
@@ -101,4 +116,5 @@ export interface ITeamService {
 
 export interface IUserService {
   getCurrentUser(): Promise<User>
+  changePassword(request: IChangePasswordRequest): Promise<SucceededOrNotResponse>
 }

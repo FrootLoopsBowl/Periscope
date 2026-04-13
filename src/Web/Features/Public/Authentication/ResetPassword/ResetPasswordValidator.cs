@@ -5,6 +5,8 @@ namespace Web.Features.Public.Authentication.ResetPassword;
 
 public class ResetPasswordValidator : Validator<ResetPasswordRequest>
 {
+    private const string DisallowedPassword = "Qwerty123!";
+
     public ResetPasswordValidator()
     {
         RuleFor(x => x.UserId)
@@ -32,5 +34,10 @@ public class ResetPasswordValidator : Validator<ResetPasswordRequest>
             .Equal(x => x.Password)
             .WithErrorCode("PasswordAndConfirmationMustMatch")
             .WithMessage("The password and its confirmation must match.");
+
+        RuleFor(x => x.Password)
+            .Must(password => !string.Equals(password, DisallowedPassword, StringComparison.OrdinalIgnoreCase))
+            .WithErrorCode("PasswordTooPredictable")
+            .WithMessage("Please choose a password that is less predictable.");
     }
 }

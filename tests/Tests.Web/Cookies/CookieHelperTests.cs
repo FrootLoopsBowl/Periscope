@@ -61,4 +61,27 @@ public class CookieHelperTests
         // Assert
         _httpContext.Response.Cookies.ShouldNotBeNull();
     }
+
+    [Fact]
+    public void WhenDeleteCookieValue_ThenResponseCookiesShouldStillBeAccessible()
+    {
+        // Act
+        _httpContext.Response.DeleteCookieValue(AnyCookieName, AnyCookieDomain, true);
+
+        // Assert
+        _httpContext.Response.Cookies.ShouldNotBeNull();
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("   ")]
+    public void GivenNullEmptyOrWhiteSpaceCookieName_WhenDeleteCookieValue_ThenDontThrow(string? cookieName)
+    {
+        // Act
+        _httpContext.Response.DeleteCookieValue(cookieName!, AnyCookieDomain, false);
+
+        // Assert
+        _httpContext.Response.Cookies.ShouldNotBeNull();
+    }
 }
