@@ -185,6 +185,18 @@
           "injuryNotesSubmitSuccess": "Note added successfully.",
           "injuryNotesSubmitError": "An error occurred while adding the note.",
           "injuryNotesEmpty": "No injury notes for this athlete.",
+          "injuryNotesEditSave": "Save",
+          "injuryNotesEditCancel": "Cancel",
+          "injuryNotesEditSuccess": "Note updated successfully.",
+          "injuryNotesEditError": "An error occurred while updating the note.",
+          "injuryNotesDeleteSuccess": "Note deleted successfully.",
+          "injuryNotesDeleteError": "An error occurred while deleting the note.",
+          "injuryNotesDeleteConfirm": "Delete this note?",
+          "injuryNotesDeleteModalTitle": "Delete injury note",
+          "injuryNotesDeleteModalMessage": "Are you sure you want to delete this note? This action is irreversible.",
+          "fitStatus": "Fit",
+          "injuredStatus": "Injured",
+          "markedAsInjured": "The athlete has been marked as injured.",
           "efforts": {
             "date": "Date",
             "effort": "Effort",
@@ -209,7 +221,13 @@
         "injuredAthletesEmpty": "No injured athletes at the moment.",
         "markAsRecovered": "Mark as recovered",
         "markAsRecoveredSuccess": "The athlete has been marked as recovered.",
-        "markAsRecoveredError": "An error occurred while updating the athlete's injury status."
+        "markAsRecoveredError": "An error occurred while updating the athlete's injury status.",
+        "overloadedAthletesTitle": "Overloaded Athletes",
+        "overloadedAthletesEmpty": "No overloaded athletes at the moment.",
+        "overloadedTableLastName": "Last Name",
+        "overloadedTableFirstName": "First Name",
+        "overloadedTableTeam": "Team",
+        "overloadedTablePercentage": "% Overload"
       }
     },
     "athletes": {

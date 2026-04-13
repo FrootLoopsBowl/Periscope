@@ -1,6 +1,14 @@
 <template>
   <div class="content-grid">
 
+    <ConfirmModal
+      :show="showDeleteNoteModal"
+      :title="t('pages.admin.dashboard.athletePage.injuryNotesDeleteModalTitle')"
+      :message="t('pages.admin.dashboard.athletePage.injuryNotesDeleteModalMessage')"
+      @confirm="onConfirmDeleteNote"
+      @cancel="showDeleteNoteModal = false"
+    />
+
     <!-- En-tête -->
     <div class="flex flex-col gap-3 pb-6 border-b-2 border-green-light">
       <span class="text-xs font-montserrat uppercase tracking-widest text-green-dark">Administration</span>
@@ -41,6 +49,82 @@
             <p class="text-xs font-montserrat uppercase tracking-widest text-grey-dark mb-1">{{ t('global.dateOfBirth') }}</p>
             <p class="font-montserrat text-grey-darker font-medium">{{ formatDate(athlete.dateOfBirth) }}</p>
           </div>
+        </div>
+      </div>
+
+      <!-- Section notes de blessure -->
+      <div class="bg-white rounded-xl border border-grey overflow-hidden" style="box-shadow: var(--shadow-bold)">
+        <div class="flex items-center gap-3 px-6 py-4 bg-green-lighter border-b border-green-light">
+          <span class="block w-1.5 h-7 rounded-full bg-green"></span>
+          <h2 class="font-montserrat font-semibold text-green-dark text-base">
+            {{ t('pages.admin.dashboard.athletePage.injuryNotesTitle') }}
+          </h2>
+          <div class="ml-auto flex items-center gap-2">
+            <span class="font-montserrat text-xs text-grey-dark">
+              {{ athlete.isInjured ? t('pages.admin.dashboard.athletePage.injuredStatus') : t('pages.admin.dashboard.athletePage.fitStatus') }}
+            </span>
+            <button
+              type="button"
+              role="switch"
+              :aria-checked="!athlete.isInjured"
+              class="toggle-switch"
+              :class="{ 'toggle-switch--active': !athlete.isInjured }"
+              @click="handleToggleInjured"
+            >
+              <span class="toggle-switch__thumb" />
+            </button>
+          </div>
+        </div>
+        <div class="p-6 flex flex-col gap-4">
+          <div class="flex flex-col gap-2">
+            <textarea
+              class="border border-grey rounded-lg px-4 py-2 font-montserrat text-grey-darker focus:outline-none focus:border-green"
+              v-model="newNoteContenu"
+              :placeholder="t('pages.admin.dashboard.athletePage.injuryNotesPlaceholder')"
+              rows="3"
+            ></textarea>
+            <div class="flex items-center gap-3">
+              <button
+                type="button"
+                class="btn"
+                :disabled="isNoteButtonDisabled"
+                @click="handleAddNote"
+              >
+                {{ t('pages.admin.dashboard.athletePage.injuryNotesSubmit') }}
+              </button>
+              <p v-if="noteSubmitMessage" class="font-montserrat text-sm text-grey-darker">{{ noteSubmitMessage }}</p>
+            </div>
+          </div>
+          <ul v-if="injuryNotes.length > 0" class="flex flex-col gap-2">
+            <li v-for="note in injuryNotes" :key="note.id" class="flex flex-col gap-1 border-b border-grey pb-2">
+              <span class="text-xs font-montserrat text-grey-dark">{{ formatDate(note.createdAt) }}</span>
+              <template v-if="editingNoteId === note.id">
+                <textarea
+                  class="border border-grey rounded-lg px-4 py-2 font-montserrat text-grey-darker focus:outline-none focus:border-green"
+                  v-model="editingNoteContenu"
+                  rows="3"
+                ></textarea>
+                <div class="flex gap-2">
+                  <button type="button" class="btn btn--primary" :disabled="editingNoteContenu.trim().length === 0" @click="handleSaveEdit(note.id!)">
+                    {{ t('pages.admin.dashboard.athletePage.injuryNotesEditSave') }}
+                  </button>
+                  <button type="button" class="btn" @click="cancelEdit">
+                    {{ t('pages.admin.dashboard.athletePage.injuryNotesEditCancel') }}
+                  </button>
+                </div>
+              </template>
+              <template v-else>
+                <span class="font-montserrat text-grey-darker">{{ note.contenu }}</span>
+                <div class="flex gap-2 mt-1">
+                  <button type="button" class="btn" @click="startEdit(note)"><IconEdit class="icon icon--green" /></button>
+                  <button type="button" class="btn btn--red" @click="handleDeleteNote(note.id!)"><IconDelete class="icon icon--green" /></button>
+                </div>
+              </template>
+            </li>
+          </ul>
+          <p v-else class="font-montserrat text-grey-dark italic">
+            {{ t('pages.admin.dashboard.athletePage.injuryNotesEmpty') }}
+          </p>
         </div>
       </div>
 
@@ -106,55 +190,6 @@
         </div>
       </div>
 
-      <!-- Section notes de blessure -->
-      <div class="bg-white rounded-xl border border-grey overflow-hidden" style="box-shadow: var(--shadow-bold)">
-        <div class="flex items-center gap-3 px-6 py-4 bg-green-lighter border-b border-green-light">
-          <span class="block w-1.5 h-7 rounded-full bg-green"></span>
-          <h2 class="font-montserrat font-semibold text-green-dark text-base">
-            {{ t('pages.admin.dashboard.athletePage.injuryNotesTitle') }}
-          </h2>
-          <button
-            v-if="athlete.isInjured"
-            type="button"
-            class="btn btn--square ml-auto"
-            :title="t('pages.admin.dashboard.markAsRecovered')"
-            @click="handleMarkAsRecovered"
-          >
-            <IconBandage :size="16" />
-          </button>
-        </div>
-        <div class="p-6 flex flex-col gap-4">
-          <div class="flex flex-col gap-2">
-            <textarea
-              class="border border-grey rounded-lg px-4 py-2 font-montserrat text-grey-darker focus:outline-none focus:border-green"
-              v-model="newNoteContenu"
-              :placeholder="t('pages.admin.dashboard.athletePage.injuryNotesPlaceholder')"
-              rows="3"
-            ></textarea>
-            <div class="flex items-center gap-3">
-              <button
-                type="button"
-                class="btn"
-                :disabled="isNoteButtonDisabled"
-                @click="handleAddNote"
-              >
-                {{ t('pages.admin.dashboard.athletePage.injuryNotesSubmit') }}
-              </button>
-              <p v-if="noteSubmitMessage" class="font-montserrat text-sm text-grey-darker">{{ noteSubmitMessage }}</p>
-            </div>
-          </div>
-          <ul v-if="injuryNotes.length > 0" class="flex flex-col gap-2">
-            <li v-for="note in injuryNotes" :key="note.id" class="flex flex-col gap-1 border-b border-grey pb-2">
-              <span class="text-xs font-montserrat text-grey-dark">{{ formatDate(note.createdAt) }}</span>
-              <span class="font-montserrat text-grey-darker">{{ note.contenu }}</span>
-            </li>
-          </ul>
-          <p v-else class="font-montserrat text-grey-dark italic">
-            {{ t('pages.admin.dashboard.athletePage.injuryNotesEmpty') }}
-          </p>
-        </div>
-      </div>
-
     </template>
 
   </div>
@@ -166,9 +201,11 @@ import {computed, onMounted, ref} from "vue"
 import {useAthleteService, useTeamService} from "@/inversify.config"
 import {notifyError, notifySuccess} from "@/notify"
 import {Athlete, NoteBlessure, Team} from "@/types/entities"
-import IconBandage from 'vue-material-design-icons/Bandage.vue'
 import BackLink from "@/components/layouts/items/BackLink.vue"
 import Loader from "@/components/layouts/items/Loader.vue"
+import ConfirmModal from "@/components/layouts/items/ConfirmModal.vue"
+import IconEdit from "@/assets/icons/icon__edit.svg"
+import IconDelete from "@/assets/icons/icon__delete.svg"
 
 const {t} = useI18n()
 
@@ -186,6 +223,10 @@ const injuryNotes = ref<NoteBlessure[]>([])
 const newNoteContenu = ref<string>("")
 const isSubmittingNote = ref<boolean>(false)
 const noteSubmitMessage = ref<string>("")
+const editingNoteId = ref<string | null>(null)
+const editingNoteContenu = ref<string>("")
+const showDeleteNoteModal = ref(false)
+const pendingDeleteNoteId = ref<string | null>(null)
 
 const isNoteButtonDisabled = computed(() => newNoteContenu.value.trim().length === 0 || isSubmittingNote.value)
 
@@ -242,11 +283,15 @@ async function handleRemoveTeam() {
   preventMultipleSubmit.value = false
 }
 
-async function handleMarkAsRecovered() {
-  const result = await athleteService.toggleInjured(props.id, false)
-  if (result.succeeded && athlete.value) {
-    athlete.value.isInjured = false
-    notifySuccess(t('pages.admin.dashboard.markAsRecoveredSuccess'))
+async function handleToggleInjured() {
+  if (!athlete.value) return
+  const newStatus = !athlete.value.isInjured
+  const result = await athleteService.toggleInjured(props.id, newStatus)
+  if (result.succeeded) {
+    athlete.value.isInjured = newStatus
+    notifySuccess(newStatus
+      ? t('pages.admin.dashboard.athletePage.markedAsInjured')
+      : t('pages.admin.dashboard.markAsRecoveredSuccess'))
   } else {
     notifyError(t('pages.admin.dashboard.markAsRecoveredError'))
   }
@@ -269,6 +314,46 @@ async function handleAddNote() {
     noteSubmitMessage.value = t('pages.admin.dashboard.athletePage.injuryNotesSubmitError')
   }
   isSubmittingNote.value = false
+}
+
+function startEdit(note: NoteBlessure) {
+  editingNoteId.value = note.id ?? null
+  editingNoteContenu.value = note.contenu ?? ""
+}
+
+function cancelEdit() {
+  editingNoteId.value = null
+  editingNoteContenu.value = ""
+}
+
+async function handleSaveEdit(noteId: string) {
+  if (editingNoteContenu.value.trim().length === 0) return
+  const result = await athleteService.updateNoteBlessure(props.id, noteId, editingNoteContenu.value.trim())
+  if (result.succeeded) {
+    cancelEdit()
+    injuryNotes.value = await athleteService.getNotesBlessure(props.id)
+    notifySuccess(t('pages.admin.dashboard.athletePage.injuryNotesEditSuccess'))
+  } else {
+    notifyError(t('pages.admin.dashboard.athletePage.injuryNotesEditError'))
+  }
+}
+
+function handleDeleteNote(noteId: string) {
+  pendingDeleteNoteId.value = noteId
+  showDeleteNoteModal.value = true
+}
+
+async function onConfirmDeleteNote() {
+  showDeleteNoteModal.value = false
+  if (!pendingDeleteNoteId.value) return
+  const result = await athleteService.deleteNoteBlessure(props.id, pendingDeleteNoteId.value)
+  pendingDeleteNoteId.value = null
+  if (result.succeeded) {
+    injuryNotes.value = await athleteService.getNotesBlessure(props.id)
+    notifySuccess(t('pages.admin.dashboard.athletePage.injuryNotesDeleteSuccess'))
+  } else {
+    notifyError(t('pages.admin.dashboard.athletePage.injuryNotesDeleteError'))
+  }
 }
 
 function formatDate(dateStr?: string): string {

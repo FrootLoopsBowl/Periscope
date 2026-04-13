@@ -28,4 +28,21 @@ public class NoteBlessureRepository : INoteBlessureRepository
             .OrderByDescending(x => x.CreatedAt)
             .ToListAsync();
     }
+
+    public async Task<NoteBlessure?> GetByIdAsync(Guid noteId)
+    {
+        return await _context.NotesBlessure.FindAsync(noteId);
+    }
+
+    public async Task UpdateAsync(NoteBlessure note)
+    {
+        _context.NotesBlessure.Update(note);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task DeleteAsync(NoteBlessure note)
+    {
+        _context.NotesBlessure.Remove(note);
+        await _context.SaveChangesAsync();
+    }
 }

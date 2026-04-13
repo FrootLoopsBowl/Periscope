@@ -6,6 +6,37 @@
       </div>
     </div>
 
+    <Card :title="t('pages.admin.dashboard.overloadedAthletesTitle')">
+      <div v-if="overloadedAthletes.length > 0" class="admin-dashboard__efforts-table">
+        <table class="admin-dashboard__table">
+          <thead>
+            <tr>
+              <th>{{ t("pages.admin.dashboard.overloadedTableFirstName") }}</th>
+              <th>{{ t("pages.admin.dashboard.overloadedTableLastName") }}</th>
+              <th>{{ t("pages.admin.dashboard.overloadedTableTeam") }}</th>
+              <th>{{ t("pages.admin.dashboard.overloadedTablePercentage") }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="athlete in overloadedAthletes"
+              :key="athlete.id"
+              class="admin-dashboard__overload-row"
+              @click="router.push({ name: 'admin.children.athletes.detail', params: { id: athlete.id } })"
+            >
+              <td>{{ athlete.firstName }}</td>
+              <td>{{ athlete.lastName }}</td>
+              <td>{{ athlete.teamName ?? '-' }}</td>
+              <td>{{ athlete.overloadPercentage }}%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p v-else class="content-grid__text">
+        {{ t("pages.admin.dashboard.overloadedAthletesEmpty") }}
+      </p>
+    </Card>
+
     <Card :title="t('pages.admin.dashboard.filters.title')">
       <div class="admin-dashboard__filters">
         <div class="admin-dashboard__field">
@@ -200,14 +231,6 @@
               class="admin-dashboard__note-contenu"
               :to="{ name: 'admin.children.athletes.detail', params: { id: athlete.id } }"
             >{{ athlete.firstName }} {{ athlete.lastName }}</RouterLink>
-            <button
-              type="button"
-              class="btn btn--square"
-              :title="t('pages.admin.dashboard.markAsRecovered')"
-              @click="handleMarkAsRecovered(athlete.id!)"
-            >
-              <IconBandage :size="16" />
-            </button>
           </li>
         </ul>
         <p v-else class="content-grid__text">
@@ -238,15 +261,16 @@
 
 <script lang="ts" setup>
 import { computed, onMounted, ref, watch } from "vue";
+import { useRouter } from "vue-router";
 import { useI18n } from "vue3-i18n";
 import { useAthleteService, useTeamService } from "@/inversify.config";
 import Card from "@/components/layouts/items/Card.vue";
 import LineChart from "@/components/charts/LineChart.vue";
 import { FormOption } from "@/types/formOption";
-import { Athlete, AthleteEffort, NoteBlessure, Team } from "@/types/entities";
-import IconBandage from 'vue-material-design-icons/Bandage.vue';
+import { Athlete, AthleteEffort, NoteBlessure, OverloadedAthlete, Team } from "@/types/entities";
 
 const { t } = useI18n();
+const router = useRouter();
 
 const teamService = useTeamService();
 const athleteService = useAthleteService();
@@ -258,6 +282,7 @@ const displayedAthleteId = ref<string>("");
 const teams = ref<Team[]>([]);
 const athletes = ref<Athlete[]>([]);
 const injuredAthletes = ref<Athlete[]>([]);
+const overloadedAthletes = ref<OverloadedAthlete[]>([]);
 const injuryNotes = ref<NoteBlessure[]>([]);
 const athleteEfforts = ref<AthleteEffort[]>([]);
 const effortChartData = ref<any>(null);
@@ -324,6 +349,7 @@ onMounted(async () => {
   teams.value = await loadAllTeams();
   athletes.value = await loadAllAthletes();
   injuredAthletes.value = await athleteService.getInjured();
+  overloadedAthletes.value = await athleteService.getOverloaded();
 });
 
 watch([displayedAthleteId, startDateFilter, endDateFilter], async ([newId, newStartDate, newEndDate]) => {
@@ -383,13 +409,6 @@ function handleReset() {
   selectedTeamId.value = "";
   selectedAthleteId.value = "";
   displayedAthleteId.value = "";
-}
-
-async function handleMarkAsRecovered(athleteId: string) {
-  const result = await athleteService.toggleInjured(athleteId, false);
-  if (result.succeeded) {
-    injuredAthletes.value = injuredAthletes.value.filter((a) => a.id !== athleteId);
-  }
 }
 
 async function handleAddNote() {
@@ -556,5 +575,13 @@ async function loadAllAthletes(): Promise<Athlete[]> {
 
 .admin-dashboard__table tr:hover {
   background-color: #f9f9f9;
+}
+
+.admin-dashboard__overload-row {
+  cursor: pointer;
+}
+
+.admin-dashboard__overload-row:hover {
+  background-color: var(--color-green-lighter, #e8f5e9);
 }
 </style>

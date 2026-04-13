@@ -14,13 +14,13 @@ public class AthleteEffort : Common.Entity
 
     public AthleteEffort() { }
 
-    public AthleteEffort(Guid athleteId, int effort, int durationMinutes, int? pleasure = null)
+    public AthleteEffort(Guid athleteId, int effort, int durationMinutes, DateTime trainingDate, int? pleasure = null)
     {
         AthleteId = athleteId;
         Effort = effort;
         DurationMinutes = durationMinutes;
         Pleasure = pleasure;
-        CreatedAt = DateTime.UtcNow;
+        CreatedAt = DateTime.SpecifyKind(trainingDate, DateTimeKind.Utc);
     }
 
     public void SetEffort(int effort) => Effort = effort;

@@ -12,7 +12,7 @@ import {
   ITwoFactorRequest
 } from "@/types/requests"
 import {PaginatedResponse, SucceededOrNotResponse} from "@/types/responses"
-import {Administrator, Athlete, AthleteEffort, NoteBlessure, Book, Member, Team, User} from "@/types/entities"
+import {Administrator, Athlete, AthleteEffort, NoteBlessure, OverloadedAthlete, Book, Member, Team, User} from "@/types/entities"
 import {Guid} from "@/types";
 import { IUpdateAthleteRequest, IUpdateTeamRequest } from "../types/requests/updateAthleteRequest";
 
@@ -32,12 +32,15 @@ export interface IAthleteService {
   createAthlete(request: ICreateAthleteRequest): Promise<SucceededOrNotResponse>
   resendAccessLink(athleteId: string, athletePageRelativeUrl: string): Promise<SucceededOrNotResponse>
   getBySubmissionToken(token: string): Promise<{ firstName: string; lastName: string } | null>
-  submitSubmission(token: string, effort: number, durationMinutes: number, pleasure?: number): Promise<SucceededOrNotResponse>
+  submitSubmission(token: string, effort: number, durationMinutes: number, pleasure?: number, trainingDate?: string): Promise<SucceededOrNotResponse>
   getAll(pageIndex: number, pageSize: number): Promise<PaginatedResponse<Athlete>>
   getInjured(): Promise<Athlete[]>
+  getOverloaded(): Promise<OverloadedAthlete[]>
   toggleInjured(athleteId: string, isInjured: boolean): Promise<SucceededOrNotResponse>
   createNoteBlessure(athleteId: string, contenu: string): Promise<SucceededOrNotResponse>
   getNotesBlessure(athleteId: string): Promise<NoteBlessure[]>
+  updateNoteBlessure(athleteId: string, noteId: string, contenu: string): Promise<SucceededOrNotResponse>
+  deleteNoteBlessure(athleteId: string, noteId: string): Promise<SucceededOrNotResponse>
   getAllNonPaginated(): Promise<Athlete[]>
   getAthleteEfforts(athleteId: string, pageIndex: number, pageSize: number, startDate?: string, endDate?: string): Promise<PaginatedResponse<AthleteEffort>>
   getById(id: string): Promise<Athlete | null>

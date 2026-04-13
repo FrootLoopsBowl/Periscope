@@ -194,6 +194,18 @@
           "injuryNotesSubmitSuccess": "Note ajoutée avec succès.",
           "injuryNotesSubmitError": "Une erreur est survenue lors de l'ajout de la note.",
           "injuryNotesEmpty": "Aucune note de blessure pour cet athlète.",
+          "injuryNotesEditSave": "Enregistrer",
+          "injuryNotesEditCancel": "Annuler",
+          "injuryNotesEditSuccess": "Note modifiée avec succès.",
+          "injuryNotesEditError": "Une erreur est survenue lors de la modification.",
+          "injuryNotesDeleteSuccess": "Note supprimée avec succès.",
+          "injuryNotesDeleteError": "Une erreur est survenue lors de la suppression.",
+          "injuryNotesDeleteConfirm": "Supprimer cette note ?",
+          "injuryNotesDeleteModalTitle": "Supprimer la note de blessure",
+          "injuryNotesDeleteModalMessage": "Êtes-vous sûr de vouloir supprimer cette note ? Cette action est irréversible.",
+          "fitStatus": "Apte à jouer",
+          "injuredStatus": "Blessé",
+          "markedAsInjured": "L'athlète a été marqué comme blessé.",
           "efforts": {
             "date": "Date",
             "effort": "Effort",
@@ -218,7 +230,13 @@
         "injuredAthletesEmpty": "Aucun athlète blessé pour le moment.",
         "markAsRecovered": "Marquer comme rétabli",
         "markAsRecoveredSuccess": "L'athlète a été marqué comme rétabli.",
-        "markAsRecoveredError": "Une erreur est survenue lors de la mise à jour du statut de l'athlète."
+        "markAsRecoveredError": "Une erreur est survenue lors de la mise à jour du statut de l'athlète.",
+        "overloadedAthletesTitle": "Athlètes en surcharge",
+        "overloadedAthletesEmpty": "Aucun athlète en surcharge pour le moment.",
+        "overloadedTableLastName": "Nom",
+        "overloadedTableFirstName": "Prénom",
+        "overloadedTableTeam": "Équipe",
+        "overloadedTablePercentage": "% Surcharge"
       }
     },
     "athletes": {

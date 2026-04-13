@@ -5,7 +5,7 @@ import {ApiService} from "@/services/apiService"
 import {IAthleteService} from "@/injection/interfaces"
 import {PaginatedResponse, SucceededOrNotResponse} from "@/types/responses"
 import {IAssignTeamToAthleteRequest, ICreateAthleteRequest} from "@/types/requests"
-import {Athlete, AthleteEffort, NoteBlessure} from "@/types/entities"
+import {Athlete, AthleteEffort, NoteBlessure, OverloadedAthlete} from "@/types/entities"
 import { IUpdateAthleteRequest } from "../types/requests/updateAthleteRequest"
 
 @injectable()
@@ -74,6 +74,17 @@ export class AthleteService extends ApiService implements IAthleteService {
     return response.data ?? []
   }
 
+  public async getOverloaded(): Promise<OverloadedAthlete[]> {
+    const response = await this
+      ._httpClient
+      .get<any, AxiosResponse<OverloadedAthlete[]>>(
+        `${import.meta.env.VITE_API_BASE_URL}/athletes/overloaded`)
+      .catch(function (error: AxiosError): AxiosResponse<OverloadedAthlete[]> {
+        return error.response as AxiosResponse<OverloadedAthlete[]>
+      })
+    return response.data ?? []
+  }
+
   public async createNoteBlessure(athleteId: string, contenu: string): Promise<SucceededOrNotResponse> {
     const response = await this
       ._httpClient
@@ -103,6 +114,40 @@ export class AthleteService extends ApiService implements IAthleteService {
     return response.data ?? []
   }
 
+  public async updateNoteBlessure(athleteId: string, noteId: string, contenu: string): Promise<SucceededOrNotResponse> {
+    const response = await this
+      ._httpClient
+      .put<any, AxiosResponse<any>>(
+        `${import.meta.env.VITE_API_BASE_URL}/athletes/${athleteId}/notes-blessure/${noteId}`,
+        { contenu },
+        this.headersWithJsonContentType())
+      .catch(function (error: AxiosError): AxiosResponse<any> {
+        return error.response as AxiosResponse<any>
+      })
+
+    if (response.status === 204) {
+      return new SucceededOrNotResponse(true)
+    }
+    const errorResponse = response.data as SucceededOrNotResponse
+    return new SucceededOrNotResponse(false, errorResponse?.errors)
+  }
+
+  public async deleteNoteBlessure(athleteId: string, noteId: string): Promise<SucceededOrNotResponse> {
+    const response = await this
+      ._httpClient
+      .delete<any, AxiosResponse<any>>(
+        `${import.meta.env.VITE_API_BASE_URL}/athletes/${athleteId}/notes-blessure/${noteId}`)
+      .catch(function (error: AxiosError): AxiosResponse<any> {
+        return error.response as AxiosResponse<any>
+      })
+
+    if (response.status === 204) {
+      return new SucceededOrNotResponse(true)
+    }
+    const errorResponse = response.data as SucceededOrNotResponse
+    return new SucceededOrNotResponse(false, errorResponse?.errors)
+  }
+
   public async getBySubmissionToken(token: string): Promise<{ firstName: string; lastName: string } | null> {
     const response = await this
       ._httpClient
@@ -118,12 +163,12 @@ export class AthleteService extends ApiService implements IAthleteService {
     return null
   }
 
-  public async submitSubmission(token: string, effort: number, durationMinutes: number, pleasure?: number): Promise<SucceededOrNotResponse> {
+  public async submitSubmission(token: string, effort: number, durationMinutes: number, pleasure?: number, trainingDate?: string): Promise<SucceededOrNotResponse> {
     const response = await this
       ._httpClient
       .post<any, AxiosResponse<any>>(
         `${import.meta.env.VITE_API_BASE_URL}/athletes/submission`,
-        { token, effort, durationMinutes, pleasure },
+        { token, effort, durationMinutes, pleasure, trainingDate },
         this.headersWithJsonContentType())
       .catch(function (error: AxiosError): AxiosResponse<any> {
         return error.response as AxiosResponse<any>
