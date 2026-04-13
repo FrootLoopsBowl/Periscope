@@ -1,19 +1,7 @@
 <template>
   <div class="account-page content-grid">
     <div class="account-page__hero">
-      <div>
-        <p class="account-page__eyebrow">{{ t("pages.account.heroEyebrow") }}</p>
-        <h1 class="account-page__title">{{ t("routes.account.name") }}</h1>
-        <p class="account-page__intro">{{ t("pages.account.heroIntro") }}</p>
-      </div>
-
-      <div class="account-page__identity-card">
-        <div class="account-page__avatar">{{ initials }}</div>
-        <div class="account-page__identity-copy">
-          <strong>{{ displayName }}</strong>
-          <span>{{ roleLabel }}</span>
-        </div>
-      </div>
+      <h1 class="account-page__title">{{ t("routes.account.name") }}</h1>
     </div>
 
     <div class="account-page__grid">
@@ -117,13 +105,6 @@ const inputValidationStatuses: Record<string, boolean> = {};
 const preventMultipleSubmit = ref<boolean>(false);
 
 const displayName = computed(() => personStore.person.fullName || `${personStore.person.firstName ?? ""} ${personStore.person.lastName ?? ""}`.trim() || userStore.user.email || userStore.username || t("global.undefined"));
-const initials = computed(() => {
-  const source = displayName.value.split(" ").filter(Boolean).slice(0, 2);
-  if (source.length === 0)
-    return "?";
-
-  return source.map(part => part.charAt(0).toUpperCase()).join("");
-});
 
 function validateNewPassword(value?: string): Status {
   if ((value ?? "").toLowerCase() === "qwerty123!".toLowerCase()) {
@@ -200,73 +181,20 @@ async function submitChangePassword() {
 }
 
 .account-page__hero {
-  display: grid;
-  grid-template-columns: minmax(0, 1.6fr) minmax(16rem, 22rem);
-  gap: 1rem;
-  align-items: stretch;
-}
-
-.account-page__eyebrow {
-  margin: 0 0 0.5rem;
-  color: var(--color-green-medium);
-  font-size: 0.8rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  display: block;
 }
 
 .account-page__title {
   margin: 0;
+  color: var(--color-black);
+  font-weight: 700;
 }
 
-.account-page__intro {
-  max-width: 48rem;
-  margin: 0.85rem 0 0;
-  color: var(--color-grey-medium);
-  line-height: 1.7;
-}
-
-.account-page__identity-card,
 .account-panel {
   border-radius: 20px;
   border: 1px solid rgba(94, 32, 40, 0.12);
   background: rgba(255, 255, 255, 0.92);
   box-shadow: 0 18px 38px rgba(37, 24, 26, 0.06);
-}
-
-.account-page__identity-card {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 1.25rem;
-  background: linear-gradient(135deg, rgba(94, 32, 40, 0.95) 0%, rgba(124, 45, 56, 0.95) 100%);
-  color: var(--color-white);
-}
-
-.account-page__avatar {
-  display: grid;
-  place-items: center;
-  width: 3.5rem;
-  height: 3.5rem;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.16);
-  font-size: 1.1rem;
-  font-weight: 800;
-}
-
-.account-page__identity-copy {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-}
-
-.account-page__identity-copy strong {
-  font-size: 1.05rem;
-}
-
-.account-page__identity-copy span {
-  color: rgba(255, 255, 255, 0.78);
-  font-size: 0.92rem;
 }
 
 .account-page__grid {
