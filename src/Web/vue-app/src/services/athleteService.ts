@@ -211,6 +211,25 @@ export class AthleteService extends ApiService implements IAthleteService {
     return response.data as PaginatedResponse<AthleteEffort>
   }
 
+  public async updateAthleteEffort(athleteId: string, effortId: string, request: { effort: number; pleasure?: number; durationMinutes: number; trainingDate?: string | null }): Promise<SucceededOrNotResponse> {
+    const response = await this
+      ._httpClient
+      .put<any, AxiosResponse<any>>(
+        `${import.meta.env.VITE_API_BASE_URL}/athletes/${athleteId}/efforts/${effortId}`,
+        request,
+        this.headersWithJsonContentType())
+      .catch(function (error: AxiosError): AxiosResponse<any> {
+        return error.response as AxiosResponse<any>
+      })
+
+    if (response.status === 200 || response.status === 204) {
+      return new SucceededOrNotResponse(true)
+    }
+
+    const errorResponse = response.data as SucceededOrNotResponse
+    return new SucceededOrNotResponse(false, errorResponse?.errors)
+  }
+
   public async getById(id: string): Promise<Athlete | null> {
     const response = await this
       ._httpClient

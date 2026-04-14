@@ -8,4 +8,6 @@ public interface IAthleteEffortRepository
     Task CreateAsync(AthleteEffort effort);
     PaginatedList<AthleteEffort> GetForAthletePaginated(Guid athleteId, int pageIndex, int pageSize);
     Task<List<AthleteEffort>> GetEffortsSinceAsync(DateTime since);
+    Task<AthleteEffort?> GetByIdAsync(Guid id);
+    Task UpdateAsync(AthleteEffort effort);
 }
