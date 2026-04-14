@@ -45,6 +45,7 @@ export interface IAthleteService {
   getAllNonPaginated(): Promise<Athlete[]>
   getAthleteEfforts(athleteId: string, pageIndex: number, pageSize: number, startDate?: string, endDate?: string): Promise<PaginatedResponse<AthleteEffort>>
   getById(id: string): Promise<Athlete | null>
+  updateAthleteEffort(athleteId: string, effortId: string, request: { effort: number; pleasure?: number; durationMinutes: number; trainingDate?: string | null }): Promise<SucceededOrNotResponse>
   assignTeam(athleteId: string, request: IAssignTeamToAthleteRequest): Promise<SucceededOrNotResponse>
   deleteAthlete(id: string): Promise<SucceededOrNotResponse>
   updateAthlete(id: string, request: IUpdateAthleteRequest): Promise<SucceededOrNotResponse>

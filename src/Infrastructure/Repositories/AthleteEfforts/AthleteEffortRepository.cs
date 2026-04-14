@@ -37,4 +37,15 @@ public class AthleteEffortRepository : IAthleteEffortRepository
             .AsNoTracking()
             .ToListAsync();
     }
+
+    public async Task<AthleteEffort?> GetByIdAsync(Guid id)
+    {
+        return await _context.Set<AthleteEffort>().FirstOrDefaultAsync(x => x.Id == id);
+    }
+
+    public async Task UpdateAsync(AthleteEffort effort)
+    {
+        _context.Set<AthleteEffort>().Update(effort);
+        await _context.SaveChangesAsync();
+    }
 }

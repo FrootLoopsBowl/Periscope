@@ -26,4 +26,5 @@ public class AthleteEffort : Common.Entity
     public void SetEffort(int effort) => Effort = effort;
     public void SetDurationMinutes(int minutes) => DurationMinutes = minutes;
     public void SetPleasure(int? pleasure) => Pleasure = pleasure;
+    public void SetTrainingDate(DateTime trainingDate) => CreatedAt = DateTime.SpecifyKind(trainingDate, DateTimeKind.Utc);
 }
