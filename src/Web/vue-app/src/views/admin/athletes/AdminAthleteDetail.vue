@@ -9,6 +9,17 @@
       @cancel="showDeleteNoteModal = false"
     />
 
+    <!-- Edit effort modal moved to top so overlay stacks above content -->
+    <EditEffortModal
+      v-model:show="showEditEffortModal"
+      :key="editingEffort?.id ?? 'edit-effort'"
+      :athleteId="athleteId"
+      :effortId="editingEffort?.id"
+      :effort="editingEffort"
+      :existingDates="athleteEfforts.map(e => formatDateOnly(e.createdAt))"
+      @saved="onEffortSaved"
+    />
+
     <!-- En-tête -->
     <div class="flex flex-col gap-3 pb-6 border-b-2 border-green-light">
       <span class="text-xs font-montserrat uppercase tracking-widest text-green-dark">Administration</span>
@@ -106,6 +117,7 @@
                   <th class="text-left px-4 py-3 font-montserrat text-xs uppercase tracking-widest text-green-dark">
                     {{ t('pages.admin.dashboard.athletePage.efforts.duration') }}
                   </th>
+                  <th class="text-right px-4 py-3 font-montserrat text-xs uppercase tracking-widest text-green-dark">&nbsp;</th>
                 </tr>
               </thead>
               <tbody>
@@ -121,6 +133,13 @@
                     </span>
                   </td>
                   <td class="px-4 py-3 font-montserrat text-sm text-grey-darker">{{ effort.durationMinutes }}</td>
+                  <td class="px-4 py-3 font-montserrat text-sm text-right">
+                    <div class="flex items-center justify-end gap-2">
+                      <button v-if="userStore?.hasRole && userStore.hasRole(Role.Admin)" type="button" class="btn btn--small" @click="openEditEffort(effort)">
+                        <IconEdit class="icon icon--green" />
+                      </button>
+                    </div>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -278,6 +297,8 @@
 import {useI18n} from "vue3-i18n"
 import {computed, onMounted, ref, watch} from "vue"
 import {useAthleteService, useTeamService} from "@/inversify.config"
+import { useUserStore } from '@/stores/userStore'
+import { Role } from '@/types/enums'
 import {notifyError, notifySuccess} from "@/notify"
 import {Athlete, AthleteEffort, NoteBlessure, Team} from "@/types/entities"
 import BackLink from "@/components/layouts/items/BackLink.vue"
@@ -286,10 +307,12 @@ import ConfirmModal from "@/components/layouts/items/ConfirmModal.vue"
 import LineChart from "@/components/charts/LineChart.vue"
 import IconEdit from "@/assets/icons/icon__edit.svg"
 import IconDelete from "@/assets/icons/icon__delete.svg"
+import EditEffortModal from '@/components/athletes/EditEffortModal.vue'
 
 const {t} = useI18n()
 
 const props = defineProps<{ id: string }>()
+const athleteId = props.id
 
 const athleteService = useAthleteService()
 const teamService = useTeamService()
@@ -309,6 +332,9 @@ const showDeleteNoteModal = ref(false)
 const pendingDeleteNoteId = ref<string | null>(null)
 const athleteEfforts = ref<AthleteEffort[]>([])
 const effortChartData = ref<{ labels: string[]; datasets: Array<Record<string, unknown>> } | null>(null)
+const editingEffort = ref<any | null>(null)
+const showEditEffortModal = ref(false)
+const userStore = useUserStore()
 
 const today = new Date()
 const mondayBasedDay = (today.getDay() + 6) % 7
@@ -329,6 +355,16 @@ onMounted(async () => {
   await Promise.all([loadAthlete(), loadTeams(), loadNotes(), loadEfforts()])
   isLoading.value = false
 })
+
+function openEditEffort(effort: any) {
+  // copy to avoid mutating list before save
+  editingEffort.value = effort ? { ...effort } : null
+  showEditEffortModal.value = true
+}
+
+async function onEffortSaved() {
+  await loadEfforts()
+}
 
 watch([startDateFilter, endDateFilter], async () => {
   await loadEfforts()
