@@ -71,6 +71,7 @@
               id="athlete-select"
               class="admin-dashboard__select"
               v-model="selectedAthleteId"
+              @change ="handleSearch"
             >
               <option value="">
                 {{ t("pages.admin.dashboard.filters.selectPlaceholder") }}
@@ -84,15 +85,6 @@
             {{ t("pages.admin.dashboard.filters.noAthletes") }}
           </p>
         </div>
-      </div>
-
-      <div class="admin-dashboard__actions">
-        <button type="button" class="btn" :disabled="isSearchDisabled" @click="handleSearch">
-          {{ t("pages.admin.dashboard.filters.search") }}
-        </button>
-        <button type="button" class="btn admin-dashboard__btn-reset" @click="handleReset">
-          {{ t("pages.admin.dashboard.filters.reset") }}
-        </button>
       </div>
     </Card>
 
