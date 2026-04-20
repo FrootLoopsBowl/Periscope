@@ -551,9 +551,9 @@ const athleteHeaders = computed(() => [
     var(--color-green, #4caf50) 50%,
     transparent 100%
   );
-  animation: shimmer 1.5s infinite linear;
+  animation: import-progress-shimmer 1.5s infinite linear;
 }
-@keyframes shimmer {
+@keyframes import-progress-shimmer {
   from { transform: translateX(-250%); }
   to   { transform: translateX(400%); }
 }
