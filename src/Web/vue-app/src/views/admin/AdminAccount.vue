@@ -53,6 +53,20 @@
             type="password"
             @validated="handleValidation"
           />
+          <div class="password-requirements" aria-live="polite">
+            <p class="password-requirements__title">{{ t("pages.account.passwordRequirementsTitle") }}</p>
+            <ul class="password-requirements__list">
+              <li
+                v-for="requirement in passwordRequirements"
+                :key="requirement.key"
+                class="password-requirements__item"
+                :class="{ 'password-requirements__item--valid': requirement.valid }"
+              >
+                <span class="password-requirements__icon"></span>
+                <span>{{ requirement.label }}</span>
+              </li>
+            </ul>
+          </div>
           <FormInput
             :ref="addFormInputRef"
             v-model="form.newPasswordConfirmation"
@@ -73,12 +87,14 @@
 
 <script lang="ts" setup>
 import { computed, ref } from "vue";
+import type { ComponentPublicInstance } from "vue";
 import { useI18n } from "vue3-i18n";
 import { useRouter } from "vue-router";
 import { useUserService } from "@/inversify.config";
 import { notifyError, notifySuccess } from "@/notify";
 import { required } from "@/validation/rules";
 import { Status } from "@/validation";
+import { getPasswordRequirements } from "@/validation/passwordRequirements";
 import { IChangePasswordRequest } from "@/types/requests";
 import FormInput from "@/components/forms/FormInput.vue";
 import { useUserStore } from "@/stores/userStore";
@@ -100,17 +116,26 @@ const form = ref<IChangePasswordRequest>({
   newPasswordConfirmation: ""
 });
 
-const formInputs = ref<(typeof FormInput)[]>([]);
+type FormInputInstance = ComponentPublicInstance & { validateInput: () => void };
+
+const formInputs = ref<FormInputInstance[]>([]);
 const inputValidationStatuses: Record<string, boolean> = {};
 const preventMultipleSubmit = ref<boolean>(false);
 
 const displayName = computed(() => personStore.person.fullName || `${personStore.person.firstName ?? ""} ${personStore.person.lastName ?? ""}`.trim() || userStore.user.email || userStore.username || t("global.undefined"));
 
+const passwordRequirements = computed(() => {
+  return getPasswordRequirements(form.value.newPassword ?? "", t, "pages.account.validation");
+});
+
 function validateNewPassword(value?: string): Status {
-  if ((value ?? "").toLowerCase() === "qwerty123!".toLowerCase()) {
+  const password = value ?? "";
+  const invalidRequirement = getPasswordRequirements(password, t, "pages.account.validation").find(requirement => !requirement.valid);
+
+  if (invalidRequirement) {
     return {
       valid: false,
-      message: t("pages.account.validation.passwordTooPredictable")
+      message: invalidRequirement.label
     };
   }
 
@@ -128,9 +153,12 @@ function validatePasswordConfirmation(value?: string): Status {
   return { valid: true };
 }
 
-function addFormInputRef(inputRef: typeof FormInput) {
-  if (inputRef && !formInputs.value.includes(inputRef))
-    formInputs.value.push(inputRef);
+function addFormInputRef(inputRef: Element | ComponentPublicInstance | null) {
+  if (!inputRef) return;
+
+  const formInput = inputRef as FormInputInstance;
+  if (!formInputs.value.includes(formInput))
+    formInputs.value.push(formInput);
 }
 
 async function handleValidation(name: string, validationStatus: Status) {
@@ -142,7 +170,7 @@ async function submitChangePassword() {
 
   preventMultipleSubmit.value = true;
 
-  formInputs.value.forEach((input: typeof FormInput) => input.validateInput());
+  formInputs.value.forEach((input: FormInputInstance) => input.validateInput());
   if (Object.values(inputValidationStatuses).some(x => x === false)) {
     notifyError(t("validation.errorsInForm"));
     preventMultipleSubmit.value = false;
@@ -283,6 +311,64 @@ async function submitChangePassword() {
 
 .account-form :deep(.form__field) {
   margin-bottom: 0;
+}
+
+.password-requirements {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  margin: -0.2rem 0 0.2rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid rgba(94, 32, 40, 0.12);
+  border-radius: 12px;
+  background: rgba(94, 32, 40, 0.04);
+}
+
+.password-requirements__title {
+  margin: 0;
+  color: var(--color-grey-dark);
+  font-size: 0.88rem;
+  font-weight: 800;
+}
+
+.password-requirements__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 0.45rem 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.password-requirements__item {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 1.75rem;
+  color: var(--color-grey-medium);
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.password-requirements__item--valid {
+  color: var(--color-green-medium);
+}
+
+.password-requirements__icon {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 1.05rem;
+  width: 1.05rem;
+  height: 1.05rem;
+  border-radius: 50%;
+  border: 2px solid rgba(95, 95, 95, 0.32);
+  background: transparent;
+}
+
+.password-requirements__item--valid .password-requirements__icon {
+  border-color: var(--color-green-medium);
+  background: radial-gradient(circle, var(--color-green-medium) 42%, transparent 48%);
 }
 
 .account-form__submit {

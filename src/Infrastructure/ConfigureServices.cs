@@ -90,7 +90,7 @@ public static class ConfigureServices
                 options.Stores.MaxLengthForKeys = 128;
                 options.User.RequireUniqueEmail = true;
                 options.SignIn.RequireConfirmedEmail = true;
-                options.Password.RequiredLength = 10;
+                options.Password.RequiredLength = 8;
                 options.Password.RequireUppercase = true;
                 options.Password.RequireLowercase = true;
                 options.Password.RequireDigit = true;
