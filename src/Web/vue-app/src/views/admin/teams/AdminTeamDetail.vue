@@ -187,6 +187,11 @@
         </div>
       </div>
 
+      <!-- Section calendrier -->
+      <div class="bg-white rounded-xl border border-grey overflow-hidden" style="box-shadow: var(--shadow-bold)">
+        <TeamCalendar :team-id="team.id!" />
+      </div>
+
       <!-- Zone dangereuse -->
       <div class="bg-white rounded-xl border border-red-300 overflow-hidden" style="box-shadow: var(--shadow-bold)">
         <div class="flex items-center gap-3 px-6 py-4 bg-red-50 border-b border-red-300">
@@ -227,6 +232,7 @@ import BackLink from "@/components/layouts/items/BackLink.vue"
 import Loader from "@/components/layouts/items/Loader.vue"
 import ConfirmModal from "@/components/layouts/items/ConfirmModal.vue"
 import {useTeamStore} from "@/stores/teamStore"
+import TeamCalendar from '@/components/calendar/TeamCalendar.vue'
 
 const {t} = useI18n()
 const router = useRouter()
