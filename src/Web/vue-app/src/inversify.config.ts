@@ -10,6 +10,7 @@ import {
   IAuthenticationService,
   IBookService,
   IMemberService,
+  ITeamEventService,
   ITeamService,
   IUserService
 } from "@/injection/interfaces";
@@ -19,6 +20,7 @@ import {
   AuthenticationService,
   BookService,
   MemberService,
+  TeamEventService,
   TeamService,
   UserService
 } from "@/services";
@@ -33,6 +35,7 @@ dependencyInjection.bind<IAuthenticationService>(TYPES.IAuthenticationService).t
 dependencyInjection.bind<IBookService>(TYPES.IBookService).to(BookService).inSingletonScope()
 dependencyInjection.bind<IMemberService>(TYPES.IMemberService).to(MemberService).inSingletonScope()
 dependencyInjection.bind<ITeamService>(TYPES.ITeamService).to(TeamService).inSingletonScope()
+dependencyInjection.bind<ITeamEventService>(TYPES.ITeamEventService).to(TeamEventService).inSingletonScope()
 dependencyInjection.bind<IUserService>(TYPES.IUserService).to(UserService).inSingletonScope()
 
 function useAdministratorService() {
@@ -59,6 +62,10 @@ function useTeamService() {
   return dependencyInjection.get<ITeamService>(TYPES.ITeamService);
 }
 
+function useTeamEventService() {
+  return dependencyInjection.get<ITeamEventService>(TYPES.ITeamEventService);
+}
+
 function useUserService() {
   return dependencyInjection.get<IUserService>(TYPES.IUserService);
 }
@@ -71,6 +78,7 @@ export {
   useAuthenticationService,
   useBookService,
   useMemberService,
+  useTeamEventService,
   useTeamService,
   useUserService
 };
