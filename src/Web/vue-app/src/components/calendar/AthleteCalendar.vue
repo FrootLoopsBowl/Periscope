@@ -37,7 +37,10 @@ import { ref, computed } from 'vue'
 import { useI18n } from 'vue3-i18n'
 import VueCal from 'vue-cal'
 import 'vue-cal/dist/vuecal.css'
-import 'vue-cal/dist/i18n/fr.es.js'
+// @ts-ignore
+import frLocale from 'vue-cal/dist/i18n/fr.es.js'
+// @ts-ignore
+import enLocale from 'vue-cal/dist/i18n/en.es.js'
 import { useTeamEventService } from '@/inversify.config'
 import { TeamEvent } from '@/types/entities'
 import Loader from '@/components/layouts/items/Loader.vue'
@@ -50,7 +53,7 @@ const props = defineProps<Props>()
 const { t, locale } = useI18n()
 const teamEventService = useTeamEventService()
 
-const currentLocale = computed(() => locale.value === 'fr' ? 'fr' : 'en')
+const currentLocale = computed(() => locale.value === 'fr' ? frLocale : enLocale)
 const isLoading = ref(false)
 const rawEvents = ref<TeamEvent[]>([])
 
