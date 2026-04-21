@@ -8,21 +8,23 @@
     </div>
 
     <div class="p-6">
-      <Loader v-if="isLoading" />
-
-      <vue-cal
-        v-else
-        active-view="month"
-        :disable-views="['years', 'year', 'week', 'day']"
-        :events="calendarEvents"
-        :locale="currentLocale"
-        :time="false"
-        hide-view-selector
-        @cell-click="onCellClick"
-        @event-click="onEventClick"
-        @view-change="onViewChange"
-        class="team-calendar__cal"
-      />
+      <div class="relative">
+        <div v-if="isLoading" class="absolute inset-0 flex items-center justify-center bg-white bg-opacity-70 z-10">
+          <Loader />
+        </div>
+        <vue-cal
+          active-view="month"
+          :disable-views="['years', 'year', 'week', 'day']"
+          :events="calendarEvents"
+          :locale="currentLocale"
+          :time="false"
+          hide-view-selector
+          @cell-click="onCellClick"
+          @event-click="onEventClick"
+          @view-change="onViewChange"
+          class="team-calendar__cal"
+        />
+      </div>
     </div>
 
     <Transition name="fade">
@@ -139,7 +141,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 import { useI18n } from 'vue3-i18n'
 import VueCal from 'vue-cal'
 import 'vue-cal/dist/vuecal.css'
@@ -278,12 +280,6 @@ async function handleDelete() {
   }
 }
 
-onMounted(() => {
-  const now = new Date()
-  const from = new Date(now.getFullYear(), now.getMonth(), 1)
-  const to = new Date(now.getFullYear(), now.getMonth() + 1, 0)
-  loadEvents(from, to)
-})
 </script>
 
 <style scoped>

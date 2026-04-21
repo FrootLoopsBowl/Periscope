@@ -12,10 +12,11 @@
         {{ t('pages.athletes.calendar.noTeam') }}
       </p>
 
-      <template v-else>
-        <Loader v-if="isLoading" />
+      <div v-else class="relative">
+        <div v-if="isLoading" class="absolute inset-0 flex items-center justify-center bg-white bg-opacity-70 z-10">
+          <Loader />
+        </div>
         <vue-cal
-          v-else
           active-view="month"
           :disable-views="['years', 'year', 'week', 'day']"
           :events="calendarEvents"
@@ -26,13 +27,13 @@
           @view-change="onViewChange"
           style="height: 600px;"
         />
-      </template>
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 import { useI18n } from 'vue3-i18n'
 import VueCal from 'vue-cal'
 import 'vue-cal/dist/vuecal.css'
@@ -73,13 +74,6 @@ function onViewChange({ startDate, endDate }: { startDate: Date; endDate: Date }
   loadEvents(startDate, endDate)
 }
 
-onMounted(() => {
-  if (!props.teamId) return
-  const now = new Date()
-  const from = new Date(now.getFullYear(), now.getMonth(), 1)
-  const to = new Date(now.getFullYear(), now.getMonth() + 1, 0)
-  loadEvents(from, to)
-})
 </script>
 
 <style scoped>
