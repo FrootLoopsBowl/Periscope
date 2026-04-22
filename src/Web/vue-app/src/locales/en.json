@@ -203,7 +203,8 @@
           "noTeams": "No team available at the moment.",
           "noAthletes": "No athlete available at the moment.",
           "search": "Search",
-          "reset": "Reset"
+          "reset": "Reset",
+          "injuredTableLastNote": "Lastest injury note"
         },
         "athletePage": {
           "infosTitle": "Athlete information",
