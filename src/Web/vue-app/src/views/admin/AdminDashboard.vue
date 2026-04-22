@@ -37,6 +37,21 @@
       </p>
     </Card>
 
+    <Card :title="t('pages.admin.dashboard.injuredAthletesTitle')">
+      <ul v-if="injuredAthletes.length > 0" class="admin-dashboard__notes-list">
+        <li v-for="athlete in injuredAthletes" :key="athlete.id" class="admin-dashboard__note-item">
+          <RouterLink
+            class="admin-dashboard__note-contenu"
+            :to="{ name: 'admin.children.athletes.detail', params: { id: athlete.id } }"
+          >{{ athlete.firstName }} {{ athlete.lastName }}</RouterLink>
+          <IconBandage :size="16" />
+        </li>
+      </ul>
+      <p v-else class="content-grid__text">
+        {{ t("pages.admin.dashboard.injuredAthletesEmpty") }}
+      </p>
+    </Card>
+
     <Card :title="t('pages.admin.dashboard.filters.title')">
       <div class="admin-dashboard__filters">
         <div class="admin-dashboard__field">
@@ -94,7 +109,7 @@
         <div class="admin-dashboard__date-filters">
           <div class="admin-dashboard__filter-group">
             <label class="admin-dashboard__filter-label">{{ t('pages.admin.dashboard.athletePage.efforts.startDate') }}</label>
-            <input 
+            <input
               type="date"
               v-model="startDateFilter"
               class="admin-dashboard__filter-input"
@@ -103,7 +118,7 @@
           </div>
           <div class="admin-dashboard__filter-group">
             <label class="admin-dashboard__filter-label">{{ t('pages.admin.dashboard.athletePage.efforts.endDate') }}</label>
-            <input 
+            <input
               type="date"
               v-model="endDateFilter"
               class="admin-dashboard__filter-input"
@@ -111,43 +126,20 @@
             />
           </div>
         </div>
-        
+
         <!-- Chart -->
         <div v-if="effortChartData" class="admin-dashboard__chart-container">
-          <LineChart 
-            :chart-data="effortChartData" 
+          <LineChart
+            :chart-data="effortChartData"
             :options="chartOptions"
             class="admin-dashboard__chart"
           />
         </div>
-        
+
         <p v-if="athleteEfforts.length === 0" class="content-grid__text">
           {{ t("pages.admin.dashboard.athletePage.efforts.empty") }}
         </p>
       </Card>
-    </div>
-
-    <div v-else class="admin-dashboard__tiles">
-      <Card :title="t('pages.admin.dashboard.injuredAthletesTitle')">
-        <ul v-if="injuredAthletes.length > 0" class="admin-dashboard__notes-list">
-          <li v-for="athlete in injuredAthletes" :key="athlete.id" class="admin-dashboard__note-item">
-            <RouterLink
-              class="admin-dashboard__note-contenu"
-              :to="{ name: 'admin.children.athletes.detail', params: { id: athlete.id } }"
-            >{{ athlete.firstName }} {{ athlete.lastName }}</RouterLink>
-          </li>
-        </ul>
-        <p v-else class="content-grid__text">
-          {{ t("pages.admin.dashboard.injuredAthletesEmpty") }}
-        </p>
-      </Card>
-
-      <Card :title="t('pages.admin.dashboard.weeklyGraphsTitle')">
-        <p class="content-grid__text">
-          {{ t("pages.admin.dashboard.weeklyGraphsPlaceholder") }}
-        </p>
-      </Card>
-
     </div>
   </div>
 </template>
@@ -159,6 +151,7 @@ import { useI18n } from "vue3-i18n";
 import { useAthleteService, useTeamService } from "@/inversify.config";
 import Card from "@/components/layouts/items/Card.vue";
 import LineChart from "@/components/charts/LineChart.vue";
+import IconBandage from 'vue-material-design-icons/Bandage.vue';
 import { FormOption } from "@/types/formOption";
 import { Athlete, AthleteEffort, NoteBlessure, OverloadedAthlete, Team } from "@/types/entities";
 
@@ -463,5 +456,11 @@ async function loadAllAthletes(): Promise<Athlete[]> {
 
 .admin-dashboard__overload-row:hover {
   background-color: var(--color-green-lighter, #e8f5e9);
+}
+
+.admin-dashboard__note-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 </style>
