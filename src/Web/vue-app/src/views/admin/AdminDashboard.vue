@@ -97,66 +97,6 @@
     </Card>
 
     <div v-if="displayedAthlete" class="admin-dashboard__athlete-page">
-      <Card :title="t('pages.admin.dashboard.athletePage.infosTitle')">
-        <div class="admin-dashboard__athlete-info">
-          <div class="admin-dashboard__athlete-row">
-            <span class="admin-dashboard__athlete-label">{{ t("global.fullName") }}</span>
-            <span class="admin-dashboard__athlete-value">
-              {{ displayValue(displayedAthleteFullName) }}
-            </span>
-          </div>
-          <div class="admin-dashboard__athlete-row">
-            <span class="admin-dashboard__athlete-label">{{ t("global.email") }}</span>
-            <span class="admin-dashboard__athlete-value">
-              {{ displayValue(displayedAthlete.email) }}
-            </span>
-          </div>
-          <div class="admin-dashboard__athlete-row">
-            <span class="admin-dashboard__athlete-label">{{ t("global.dateOfBirth") }}</span>
-            <span class="admin-dashboard__athlete-value">
-              {{ displayValue(formatDateOnly(displayedAthlete.dateOfBirth)) }}
-            </span>
-          </div>
-          <div class="admin-dashboard__athlete-row">
-            <span class="admin-dashboard__athlete-label">{{ t("pages.admin.dashboard.athletePage.createdAtLabel") }}</span>
-            <span class="admin-dashboard__athlete-value">
-              {{ displayValue(formatDateOnly(displayedAthlete.createdAt)) }}
-            </span>
-          </div>
-        </div>
-      </Card>
-
-      <Card :title="t('pages.admin.dashboard.athletePage.injuryNotesTitle')">
-        <div class="admin-dashboard__injury-notes">
-          <div class="admin-dashboard__injury-form">
-            <textarea
-              class="admin-dashboard__injury-textarea"
-              v-model="newNoteContenu"
-              :placeholder="t('pages.admin.dashboard.athletePage.injuryNotesPlaceholder')"
-              rows="3"
-            ></textarea>
-            <button
-              type="button"
-              class="btn"
-              :disabled="isNoteButtonDisabled"
-              @click="handleAddNote"
-            >
-              {{ t("pages.admin.dashboard.athletePage.injuryNotesSubmit") }}
-            </button>
-            <p v-if="noteSubmitMessage" class="admin-dashboard__note-message">{{ noteSubmitMessage }}</p>
-          </div>
-          <ul v-if="injuryNotes.length > 0" class="admin-dashboard__notes-list">
-            <li v-for="note in injuryNotes" :key="note.id" class="admin-dashboard__note-item">
-              <span class="admin-dashboard__note-date">{{ formatDateOnly(note.createdAt) }}</span>
-              <span class="admin-dashboard__note-contenu">{{ note.contenu }}</span>
-            </li>
-          </ul>
-          <p v-else class="content-grid__text">
-            {{ t("pages.admin.dashboard.athletePage.injuryNotesEmpty") }}
-          </p>
-        </div>
-      </Card>
-
       <Card :title="t('pages.admin.dashboard.athletePage.weeklyTitle')">
         <!-- Date Filters -->
         <div class="admin-dashboard__date-filters">
@@ -216,17 +156,6 @@
         </p>
       </Card>
 
-      <Card :title="t('pages.admin.dashboard.prioritizedAthletesTitle')">
-        <p class="content-grid__text">
-          {{ t("pages.admin.dashboard.prioritizedAthletesPlaceholder") }}
-        </p>
-      </Card>
-
-      <Card :title="t('pages.admin.dashboard.watchlistTitle')">
-        <p class="content-grid__text">
-          {{ t("pages.admin.dashboard.watchlistPlaceholder") }}
-        </p>
-      </Card>
     </div>
   </div>
 </template>
