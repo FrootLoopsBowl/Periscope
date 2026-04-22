@@ -40,7 +40,7 @@
 import Loader from "@/components/layouts/items/Loader.vue";
 import Notifications from "@/components/layouts/items/Notifications.vue";
 import LangSwitcher from "@/components/layouts/items/LangSwitcher.vue";
-import NvLogo from "@/assets/nv_logo.png";
+import NvLogo from "@/assets/logo.png";
 </script>
 
 <style scoped>
