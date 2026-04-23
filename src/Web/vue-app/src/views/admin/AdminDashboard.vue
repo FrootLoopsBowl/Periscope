@@ -38,18 +38,33 @@
     </Card>
 
     <Card :title="t('pages.admin.dashboard.injuredAthletesTitle')">
-      <ul v-if="injuredAthletes.length > 0" class="admin-dashboard__notes-list">
-        <li v-for="athlete in injuredAthletes" :key="athlete.id" class="admin-dashboard__note-item">
-          <RouterLink
-            class="admin-dashboard__note-contenu"
-            :to="{ name: 'admin.children.athletes.detail', params: { id: athlete.id } }"
-          >{{ athlete.firstName }} {{ athlete.lastName }}</RouterLink>
-          <IconBandage :size="16" />
-        </li>
-      </ul>
-      <p v-else class="content-grid__text">
-        {{ t("pages.admin.dashboard.injuredAthletesEmpty") }}
-      </p>
+        <div v-if="injuredAthletes.length > 0" class="admin-dashboard__efforts-table">
+            <table class="admin-dashboard__table">
+                <thead>
+                    <tr>
+                        <th>{{ t("pages.admin.dashboard.overloadedTableFirstName") }}</th>
+                        <th>{{ t("pages.admin.dashboard.overloadedTableLastName") }}</th>
+                        <th>{{ t("pages.admin.dashboard.overloadedTableTeam") }}</th>
+                        <th>{{ t("pages.admin.dashboard.filters.injuredTableLastNote") }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="athlete in injuredAthletes"
+                        :key="athlete.id"
+                        class="admin-dashboard__overload-row"
+                        @click="router.push({ name: 'admin.children.athletes.detail', params: { id: athlete.id } })">
+                        <td>{{ athlete.firstName }}</td>
+                        <td>{{ athlete.lastName }}</td>
+                        <td>{{ athlete.teamName ?? '-' }}</td>
+                        <td>{{ athlete.lastInjuryNote || '-' }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p v-else class="content-grid__text">
+            {{ t("pages.admin.dashboard.injuredAthletesEmpty") }}
+        </p>
     </Card>
 
     <Card :title="t('pages.admin.dashboard.filters.title')">
@@ -167,7 +182,10 @@ const displayedAthleteId = ref<string>("");
 
 const teams = ref<Team[]>([]);
 const athletes = ref<Athlete[]>([]);
-const injuredAthletes = ref<Athlete[]>([]);
+type InjuredAthleteWithNote = Athlete & {
+    lastInjuryNote?: string;
+};
+const injuredAthletes = ref<InjuredAthleteWithNote[]>([]);
 const overloadedAthletes = ref<OverloadedAthlete[]>([]);
 const injuryNotes = ref<NoteBlessure[]>([]);
 const athleteEfforts = ref<AthleteEffort[]>([]);
@@ -237,7 +255,26 @@ watch(selectedTeamId, (newTeamId) => {
 onMounted(async () => {
   teams.value = await loadAllTeams();
   athletes.value = await loadAllAthletes();
-  injuredAthletes.value = await athleteService.getInjured();
+    const injured = await athleteService.getInjured();
+
+    const injuredWithNotes: InjuredAthleteWithNote[] = await Promise.all(
+        injured.map(async (athlete) => {
+            const notes = await athleteService.getNotesBlessure(athlete.id!);
+
+            const sortedNotes = [...notes].sort((a, b) => {
+                const timeA = new Date(a.createdAt ?? "").getTime();
+                const timeB = new Date(b.createdAt ?? "").getTime();
+                return timeB - timeA; // plus récente en premier
+            });
+
+            return {
+                ...athlete,
+                lastInjuryNote: sortedNotes[0]?.contenu ?? ""
+            };
+        })
+    );
+
+    injuredAthletes.value = injuredWithNotes;
   overloadedAthletes.value = await athleteService.getOverloaded();
 });
 
@@ -462,5 +499,10 @@ async function loadAllAthletes(): Promise<Athlete[]> {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.admin-dashboard__table th,
+.admin-dashboard__table td {
+    width: 25%;
 }
 </style>
