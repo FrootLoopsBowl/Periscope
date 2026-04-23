@@ -212,7 +212,8 @@
           "noTeams": "Aucune équipe dispo pour le moment.",
           "noAthletes": "Aucun athlète dispo pour le moment.",
           "search": "Rechercher",
-          "reset": "Réinitialiser"
+          "reset": "Réinitialiser",
+          "injuredTableLastNote": "Dernière note de blessure"
         },
         "athletePage": {
           "infosTitle": "Informations sur l'athlète",
