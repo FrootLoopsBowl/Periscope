@@ -195,4 +195,15 @@ async function save() {
 .modal-actions { display:flex; justify-content:flex-end; gap:0.5rem; margin-top:1rem }
 .label { font-size: 0.85rem; color: #333; }
 .text-error { color: #b91c1c; font-size: 0.85rem; }
+
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
 </style>

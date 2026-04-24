@@ -149,6 +149,11 @@
             </div>
           </div>
 
+          <!-- Barre de progression -->
+          <div v-if="isImporting" class="import-popup__progress">
+            <div class="import-popup__progress-shimmer"></div>
+          </div>
+
           <div class="import-popup__actions">
             <button
               type="button"
@@ -525,6 +530,32 @@ const athleteHeaders = computed(() => [
   padding: 1rem 1.5rem;
   border-top: 1px solid var(--color-grey-light, #e0e0e0);
   background: var(--color-grey-lighter, #fafafa);
+}
+
+/* Progress bar */
+.import-popup__progress {
+  position: relative;
+  height: 4px;
+  background: var(--color-grey-light, #e0e0e0);
+  overflow: hidden;
+}
+.import-popup__progress-shimmer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 40%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--color-green, #4caf50) 50%,
+    transparent 100%
+  );
+  animation: import-progress-shimmer 1.5s infinite linear;
+}
+@keyframes import-progress-shimmer {
+  from { transform: translateX(-250%); }
+  to   { transform: translateX(400%); }
 }
 
 .fade-leave-active,

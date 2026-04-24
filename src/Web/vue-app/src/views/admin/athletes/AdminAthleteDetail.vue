@@ -24,44 +24,22 @@
     <div class="flex flex-col gap-3 pb-6 border-b-2 border-green-light">
       <span class="text-xs font-montserrat uppercase tracking-widest text-green-dark">Administration</span>
       <div class="flex items-center justify-between flex-wrap gap-4">
-        <h1 class="text-4xl font-montserrat font-semibold text-grey-darker">
-          {{ athlete ? `${athlete.firstName} ${athlete.lastName}` : t('pages.athletes.detail.title') }}
-        </h1>
-        <BackLink />
+          <div class="flex items-center gap-3">
+              <h1 class="text-4xl font-montserrat font-semibold text-grey-darker">
+                  {{ athlete ? `${athlete.firstName} ${athlete.lastName}` : t('pages.athletes.detail.title') }}
+              </h1>
+              <RouterLink class="btn btn--small"
+                          :to="{ name: 'admin.children.athletes.edit', params: { id: athlete.id } }">
+                  <IconEdit class="icon icon--green" />
+              </RouterLink>
+          </div>
+          <BackLink />
       </div>
     </div>
 
     <Loader v-if="isLoading" />
 
     <template v-if="!isLoading && athlete">
-
-      <!-- Informations de l'athlète -->
-      <div class="bg-white rounded-xl border border-grey overflow-hidden" style="box-shadow: var(--shadow-bold)">
-        <div class="flex items-center gap-3 px-6 py-4 bg-green-lighter border-b border-green-light">
-          <span class="block w-1.5 h-7 rounded-full bg-green"></span>
-          <h2 class="font-montserrat font-semibold text-green-dark text-base">
-            {{ t('pages.athletes.detail.title') }}
-          </h2>
-        </div>
-        <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <p class="text-xs font-montserrat uppercase tracking-widest text-grey-dark mb-1">{{ t('global.firstName') }}</p>
-            <p class="font-montserrat text-grey-darker font-medium">{{ athlete.firstName }}</p>
-          </div>
-          <div>
-            <p class="text-xs font-montserrat uppercase tracking-widest text-grey-dark mb-1">{{ t('global.lastName') }}</p>
-            <p class="font-montserrat text-grey-darker font-medium">{{ athlete.lastName }}</p>
-          </div>
-          <div>
-            <p class="text-xs font-montserrat uppercase tracking-widest text-grey-dark mb-1">{{ t('global.email') }}</p>
-            <p class="font-montserrat text-grey-darker font-medium">{{ athlete.email }}</p>
-          </div>
-          <div>
-            <p class="text-xs font-montserrat uppercase tracking-widest text-grey-dark mb-1">{{ t('global.dateOfBirth') }}</p>
-            <p class="font-montserrat text-grey-darker font-medium">{{ formatDate(athlete.dateOfBirth) }}</p>
-          </div>
-        </div>
-      </div>
 
       <!-- Section suivi hebdomadaire -->
       <div class="bg-white rounded-xl border border-grey overflow-hidden" style="box-shadow: var(--shadow-bold)">
