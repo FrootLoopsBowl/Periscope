@@ -42,7 +42,8 @@ public class GetTeamEventsEndpoint : Endpoint<GetTeamEventsRequest, object>
             Id = e.Id,
             Type = e.Type.ToString(),
             StartDateTime = e.StartDateTime,
-            EndDateTime = e.EndDateTime
+            EndDateTime = e.EndDateTime,
+            Description = e.Description
         });
 
         await Send.OkAsync(response, cancellation: ct);

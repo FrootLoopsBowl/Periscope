@@ -6,4 +6,5 @@ public class TeamEventResponse
     public string Type { get; set; } = null!;
     public DateTime StartDateTime { get; set; }
     public DateTime EndDateTime { get; set; }
+    public string? Description { get; set; }
 }

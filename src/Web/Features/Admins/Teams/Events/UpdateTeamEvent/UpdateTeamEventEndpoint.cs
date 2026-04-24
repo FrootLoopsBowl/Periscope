@@ -32,7 +32,7 @@ public class UpdateTeamEventEndpoint : Endpoint<UpdateTeamEventRequest, EmptyRes
         }
 
         var type = Enum.Parse<EventType>(req.Type);
-        teamEvent.Update(type, req.StartDateTime, req.EndDateTime);
+        teamEvent.Update(type, req.StartDateTime, req.EndDateTime, req.Description);
         await _teamEventRepository.UpdateAsync(teamEvent);
 
         await Send.NoContentAsync(ct);

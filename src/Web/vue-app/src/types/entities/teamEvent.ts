@@ -3,4 +3,5 @@ export class TeamEvent {
   type?: string
   startDateTime?: string
   endDateTime?: string
+  description?: string | null
 }

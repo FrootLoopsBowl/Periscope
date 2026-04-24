@@ -39,6 +39,11 @@
 
     <template v-if="!isLoading && team">
 
+      <!-- Section calendrier -->
+      <div class="bg-white rounded-xl border border-grey overflow-hidden" style="box-shadow: var(--shadow-bold)">
+        <TeamCalendar :team-id="team.id!" />
+      </div>
+
       <!-- Section athlètes actuels -->
       <div class="bg-white rounded-xl border border-grey overflow-hidden" style="box-shadow: var(--shadow-bold)">
         <div class="flex items-center gap-3 px-6 py-4 bg-green-lighter border-b border-green-light">
@@ -185,11 +190,6 @@
           </div>
 
         </div>
-      </div>
-
-      <!-- Section calendrier -->
-      <div class="bg-white rounded-xl border border-grey overflow-hidden" style="box-shadow: var(--shadow-bold)">
-        <TeamCalendar :team-id="team.id!" />
       </div>
 
       <!-- Zone dangereuse -->

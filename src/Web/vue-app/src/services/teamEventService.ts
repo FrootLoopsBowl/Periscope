@@ -14,10 +14,10 @@ export class TeamEventService extends ApiService implements ITeamEventService {
       ._httpClient
       .get<any, AxiosResponse<TeamEvent[]>>(
         `${import.meta.env.VITE_API_BASE_URL}/teams/${teamId}/events?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`)
-      .catch(function (error: AxiosError): AxiosResponse<any> {
-        return error.response as AxiosResponse<any>
+      .catch(function (error: AxiosError): AxiosResponse<any> | undefined {
+        return error.response
       })
-    if (response.status === 200) {
+    if (response?.status === 200) {
       return response.data as TeamEvent[]
     }
     return []

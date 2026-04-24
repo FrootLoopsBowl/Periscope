@@ -416,6 +416,8 @@
         "dateLabel": "Date",
         "startLabel": "Heure de début",
         "endLabel": "Heure de fin",
+        "descriptionLabel": "Description",
+        "descriptionPlaceholder": "Ajouter une description (optionnel)...",
         "saveSuccess": "L'événement a été sauvegardé.",
         "saveError": "Erreur lors de la sauvegarde de l'événement.",
         "deleteSuccess": "L'événement a été supprimé.",

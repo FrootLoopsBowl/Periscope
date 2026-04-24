@@ -407,6 +407,8 @@
         "dateLabel": "Date",
         "startLabel": "Start time",
         "endLabel": "End time",
+        "descriptionLabel": "Description",
+        "descriptionPlaceholder": "Add a description (optional)...",
         "saveSuccess": "Event saved successfully.",
         "saveError": "Error saving the event.",
         "deleteSuccess": "Event deleted successfully.",

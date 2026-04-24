@@ -7,11 +7,12 @@ public class TeamEvent : Common.Entity
     public EventType Type { get; private set; }
     public DateTime StartDateTime { get; private set; }
     public DateTime EndDateTime { get; private set; }
+    public string? Description { get; private set; }
     public DateTime CreatedAt { get; private set; }
 
     public TeamEvent() { }
 
-    public TeamEvent(Guid teamId, EventType type, DateTime startDateTime, DateTime endDateTime)
+    public TeamEvent(Guid teamId, EventType type, DateTime startDateTime, DateTime endDateTime, string? description = null)
     {
         if (teamId == Guid.Empty)
             throw new ArgumentException("TeamId cannot be empty.", nameof(teamId));
@@ -22,10 +23,11 @@ public class TeamEvent : Common.Entity
         Type = type;
         StartDateTime = startDateTime;
         EndDateTime = endDateTime;
+        Description = description;
         CreatedAt = DateTime.UtcNow;
     }
 
-    public void Update(EventType type, DateTime startDateTime, DateTime endDateTime)
+    public void Update(EventType type, DateTime startDateTime, DateTime endDateTime, string? description = null)
     {
         if (startDateTime >= endDateTime)
             throw new ArgumentException("StartDateTime must be before EndDateTime.", nameof(startDateTime));
@@ -33,5 +35,6 @@ public class TeamEvent : Common.Entity
         Type = type;
         StartDateTime = startDateTime;
         EndDateTime = endDateTime;
+        Description = description;
     }
 }

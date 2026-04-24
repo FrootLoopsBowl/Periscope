@@ -35,7 +35,7 @@ public class CreateTeamEventEndpoint : Endpoint<CreateTeamEventRequest, TeamEven
         }
 
         var type = Enum.Parse<EventType>(req.Type);
-        var teamEvent = new TeamEvent(req.TeamId, type, req.StartDateTime, req.EndDateTime);
+        var teamEvent = new TeamEvent(req.TeamId, type, req.StartDateTime, req.EndDateTime, req.Description);
         await _teamEventRepository.CreateAsync(teamEvent);
 
         var response = new TeamEventResponse
@@ -43,7 +43,8 @@ public class CreateTeamEventEndpoint : Endpoint<CreateTeamEventRequest, TeamEven
             Id = teamEvent.Id,
             Type = teamEvent.Type.ToString(),
             StartDateTime = teamEvent.StartDateTime,
-            EndDateTime = teamEvent.EndDateTime
+            EndDateTime = teamEvent.EndDateTime,
+            Description = teamEvent.Description
         };
 
         HttpContext.Response.StatusCode = StatusCodes.Status201Created;
