@@ -1,0 +1,123 @@
+<h2>Vue du calendrier — page équipe</h2>
+<p class="subtitle">Quel style de calendrier préfères-tu pour afficher les événements d'une équipe ?</p>
+
+<div class="cards">
+
+  <div class="card" data-choice="month" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="font-family:sans-serif;font-size:12px;border:1px solid #ddd;border-radius:6px;overflow:hidden;">
+        <div style="background:#2d6a4f;color:white;padding:8px 12px;display:flex;justify-content:space-between;align-items:center;">
+          <span>◀</span><strong>Avril 2026</strong><span>▶</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(7,1fr);background:#f9f9f9;">
+          <div style="padding:4px;text-align:center;font-weight:bold;color:#666;font-size:10px;">Lun</div>
+          <div style="padding:4px;text-align:center;font-weight:bold;color:#666;font-size:10px;">Mar</div>
+          <div style="padding:4px;text-align:center;font-weight:bold;color:#666;font-size:10px;">Mer</div>
+          <div style="padding:4px;text-align:center;font-weight:bold;color:#666;font-size:10px;">Jeu</div>
+          <div style="padding:4px;text-align:center;font-weight:bold;color:#666;font-size:10px;">Ven</div>
+          <div style="padding:4px;text-align:center;font-weight:bold;color:#666;font-size:10px;">Sam</div>
+          <div style="padding:4px;text-align:center;font-weight:bold;color:#666;font-size:10px;">Dim</div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:#eee;">
+          <div style="background:white;padding:4px;min-height:36px;font-size:10px;color:#999;">31</div>
+          <div style="background:white;padding:4px;min-height:36px;font-size:10px;">1</div>
+          <div style="background:white;padding:4px;min-height:36px;font-size:10px;">2</div>
+          <div style="background:white;padding:4px;min-height:36px;font-size:10px;">3</div>
+          <div style="background:white;padding:4px;min-height:36px;font-size:10px;">4</div>
+          <div style="background:white;padding:4px;min-height:36px;font-size:10px;">5</div>
+          <div style="background:white;padding:4px;min-height:36px;font-size:10px;">6</div>
+
+          <div style="background:white;padding:4px;min-height:36px;font-size:10px;">7</div>
+          <div style="background:white;padding:4px;min-height:36px;font-size:10px;">8</div>
+          <div style="background:white;padding:4px;min-height:36px;font-size:10px;">9<div style="background:#4caf50;color:white;border-radius:3px;padding:1px 3px;font-size:9px;margin-top:2px;">Pratique</div></div>
+          <div style="background:white;padding:4px;min-height:36px;font-size:10px;">10</div>
+          <div style="background:white;padding:4px;min-height:36px;font-size:10px;">11</div>
+          <div style="background:white;padding:4px;min-height:36px;font-size:10px;">12<div style="background:#1565c0;color:white;border-radius:3px;padding:1px 3px;font-size:9px;margin-top:2px;">Match</div></div>
+          <div style="background:white;padding:4px;min-height:36px;font-size:10px;">13</div>
+
+          <div style="background:white;padding:4px;min-height:36px;font-size:10px;">14</div>
+          <div style="background:white;padding:4px;min-height:36px;font-size:10px;">15</div>
+          <div style="background:white;padding:4px;min-height:36px;font-size:10px;">16<div style="background:#4caf50;color:white;border-radius:3px;padding:1px 3px;font-size:9px;margin-top:2px;">Pratique</div></div>
+          <div style="background:white;padding:4px;min-height:36px;font-size:10px;">17</div>
+          <div style="background:white;padding:4px;min-height:36px;font-size:10px;">18</div>
+          <div style="background:white;padding:4px;min-height:36px;font-size:10px;">19<div style="background:#1565c0;color:white;border-radius:3px;padding:1px 3px;font-size:9px;margin-top:2px;">Match</div></div>
+          <div style="background:white;padding:4px;min-height:36px;font-size:10px;">20</div>
+
+          <div style="background:#e8f5e9;padding:4px;min-height:36px;font-size:10px;font-weight:bold;border:1px solid #4caf50;">21</div>
+          <div style="background:white;padding:4px;min-height:36px;font-size:10px;">22</div>
+          <div style="background:white;padding:4px;min-height:36px;font-size:10px;">23<div style="background:#4caf50;color:white;border-radius:3px;padding:1px 3px;font-size:9px;margin-top:2px;">Pratique</div></div>
+          <div style="background:white;padding:4px;min-height:36px;font-size:10px;">24</div>
+          <div style="background:white;padding:4px;min-height:36px;font-size:10px;">25</div>
+          <div style="background:white;padding:4px;min-height:36px;font-size:10px;">26</div>
+          <div style="background:white;padding:4px;min-height:36px;font-size:10px;">27</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — Vue Mois</h3>
+      <p>Toutes les semaines du mois visibles d'un coup. Cliquer sur un jour pour ajouter un événement. Idéal pour planifier sur plusieurs semaines.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="week" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="font-family:sans-serif;font-size:12px;border:1px solid #ddd;border-radius:6px;overflow:hidden;">
+        <div style="background:#2d6a4f;color:white;padding:8px 12px;display:flex;justify-content:space-between;align-items:center;">
+          <span>◀</span><strong>14 – 20 Avril 2026</strong><span>▶</span>
+        </div>
+        <div style="display:grid;grid-template-columns:40px repeat(7,1fr);background:#f9f9f9;border-bottom:1px solid #ddd;">
+          <div style="padding:4px;"></div>
+          <div style="padding:4px;text-align:center;font-size:10px;font-weight:bold;color:#666;">Lun 14</div>
+          <div style="padding:4px;text-align:center;font-size:10px;font-weight:bold;color:#666;">Mar 15</div>
+          <div style="padding:4px;text-align:center;font-size:10px;font-weight:bold;color:#2d6a4f;border-bottom:2px solid #2d6a4f;">Mer 16</div>
+          <div style="padding:4px;text-align:center;font-size:10px;font-weight:bold;color:#666;">Jeu 17</div>
+          <div style="padding:4px;text-align:center;font-size:10px;font-weight:bold;color:#666;">Ven 18</div>
+          <div style="padding:4px;text-align:center;font-size:10px;font-weight:bold;color:#666;">Sam 19</div>
+          <div style="padding:4px;text-align:center;font-size:10px;font-weight:bold;color:#666;">Dim 20</div>
+        </div>
+        <div style="display:grid;grid-template-columns:40px repeat(7,1fr);gap:0;">
+          <div style="font-size:9px;color:#999;padding:2px 4px;border-right:1px solid #eee;">18h</div>
+          <div style="border-right:1px solid #eee;min-height:28px;background:#fff;"></div>
+          <div style="border-right:1px solid #eee;min-height:28px;background:#fff;"></div>
+          <div style="border-right:1px solid #eee;min-height:28px;background:#e8f5e9;"><div style="background:#4caf50;color:white;font-size:9px;padding:2px 4px;border-radius:3px;margin:2px;">Pratique 18h–19h30</div></div>
+          <div style="border-right:1px solid #eee;min-height:28px;background:#fff;"></div>
+          <div style="border-right:1px solid #eee;min-height:28px;background:#fff;"></div>
+          <div style="border-right:1px solid #eee;min-height:28px;background:#fff;"><div style="background:#1565c0;color:white;font-size:9px;padding:2px 4px;border-radius:3px;margin:2px;">Match 14h–16h</div></div>
+          <div style="min-height:28px;background:#fff;"></div>
+
+          <div style="font-size:9px;color:#999;padding:2px 4px;border-right:1px solid #eee;">19h</div>
+          <div style="border-right:1px solid #eee;min-height:28px;background:#fff;"></div>
+          <div style="border-right:1px solid #eee;min-height:28px;background:#fff;"></div>
+          <div style="border-right:1px solid #eee;min-height:28px;background:#e8f5e9;"></div>
+          <div style="border-right:1px solid #eee;min-height:28px;background:#fff;"></div>
+          <div style="border-right:1px solid #eee;min-height:28px;background:#fff;"></div>
+          <div style="border-right:1px solid #eee;min-height:28px;background:#fff;"></div>
+          <div style="min-height:28px;background:#fff;"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — Vue Semaine</h3>
+      <p>Une semaine à la fois avec les heures visibles sur l'axe vertical. Précis pour voir quand exactement sont les événements. Navigation semaine par semaine.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="both" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="font-family:sans-serif;font-size:11px;padding:8px;background:#f9f9f9;border-radius:6px;">
+        <div style="display:flex;gap:6px;margin-bottom:8px;">
+          <button style="background:#2d6a4f;color:white;border:none;border-radius:4px;padding:3px 10px;font-size:10px;cursor:pointer;">Mois</button>
+          <button style="background:white;color:#2d6a4f;border:1px solid #2d6a4f;border-radius:4px;padding:3px 10px;font-size:10px;cursor:pointer;">Semaine</button>
+        </div>
+        <div style="font-size:10px;color:#555;text-align:center;padding:20px;background:white;border:1px dashed #ccc;border-radius:4px;">
+          Bascule entre vue Mois et vue Semaine<br>selon le besoin
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C — Les deux (toggle)</h3>
+      <p>Boutons pour basculer entre vue Mois et vue Semaine. Plus flexible, mais un peu plus complexe à implémenter.</p>
+    </div>
+  </div>
+
+</div>
