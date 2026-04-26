@@ -128,6 +128,11 @@
         </div>
       </div>
 
+      <!-- Section calendrier de l'équipe -->
+      <div class="bg-white rounded-xl border border-grey overflow-hidden" style="box-shadow: var(--shadow-bold)">
+        <AthleteCalendar :team-id="athlete.teamId ?? null" />
+      </div>
+
       <!-- Section notes de blessure -->
       <div class="bg-white rounded-xl border border-grey overflow-hidden" style="box-shadow: var(--shadow-bold)">
         <div class="flex items-center gap-3 px-6 py-4 bg-green-lighter border-b border-green-light">
@@ -286,6 +291,7 @@ import LineChart from "@/components/charts/LineChart.vue"
 import IconEdit from "@/assets/icons/icon__edit.svg"
 import IconDelete from "@/assets/icons/icon__delete.svg"
 import EditEffortModal from '@/components/athletes/EditEffortModal.vue'
+import AthleteCalendar from '@/components/calendar/AthleteCalendar.vue'
 
 const {t} = useI18n()
 

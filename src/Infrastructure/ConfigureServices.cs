@@ -13,6 +13,7 @@ using Infrastructure.Repositories.AthleteEfforts;
 using Infrastructure.Repositories.Authentication;
 using Infrastructure.Repositories.Books;
 using Infrastructure.Repositories.Teams;
+using Infrastructure.Repositories.TeamEvents;
 using Infrastructure.Repositories.Members;
 using Infrastructure.Repositories.Blessures;
 using Infrastructure.Repositories.Entraineurs;
@@ -70,6 +71,7 @@ public static class ConfigureServices
         services.AddScoped<IAthleteRepository, AthleteRepository>();
         services.AddScoped<IAthleteEffortRepository, AthleteEffortRepository>();
         services.AddScoped<ITeamRepository, TeamRepository>();
+        services.AddScoped<ITeamEventRepository, TeamEventRepository>();
         services.AddScoped<IBookRepository, BookRepository>();
         services.AddScoped<IMemberRepository, MemberRepository>();
         services.AddScoped<IEntraineurRepository, EntraineurRepository>();

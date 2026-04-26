@@ -7,5 +7,6 @@ export const TYPES = {
   IBookService: Symbol.for("IBookService"),
   IMemberService: Symbol.for("IMemberService"),
   ITeamService: Symbol.for("ITeamService"),
+  ITeamEventService: Symbol.for("ITeamEventService"),
   IUserService: Symbol.for("IUserService")
 };

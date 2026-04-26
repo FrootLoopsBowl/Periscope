@@ -42,6 +42,7 @@ public class GarneauTemplateDbContext : IdentityDbContext<User, Role, Guid,
     public DbSet<NoteBlessure> NotesBlessure { get; set; } = null!;
     public DbSet<AthleteEffort> AthleteEfforts { get; set; } = null!;
     public DbSet<Team> Teams { get; set; } = null!;
+    public DbSet<TeamEvent> TeamEvents { get; set; } = null!;
     public DbSet<Member> Members { get; set; } = null!;
     public DbSet<Entraineur> Entraineurs { get; set; } = null!;
     public DbSet<Book> Books { get; set; } = null!;
