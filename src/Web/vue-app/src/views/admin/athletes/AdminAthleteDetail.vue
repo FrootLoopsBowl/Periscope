@@ -79,7 +79,14 @@
             <LineChart :chart-data="effortChartData" :options="chartOptions" class="h-full" />
           </div>
 
-          <div v-if="athleteEfforts.length > 0" class="overflow-x-auto">
+          <div>
+            <div class="mb-3">
+              <button type="button" class="w-full border border-grey rounded-lg bg-white flex items-center justify-center p-2 leading-none" @click="showEfforts = !showEfforts" :aria-expanded="String(showEfforts)">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h- w-5 transform origin-center block transition-transform" :class="{ 'rotate-180': showEfforts }" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" style="transform-origin:center center;"><path fill-rule="evenodd" d="M10 3a1 1 0 01.707.293l5 5a1 1 0 11-1.414 1.414L10 5.414 5.707 9.707A1 1 0 114.293 8.293l5-5A1 1 0 0110 3z" clip-rule="evenodd"/></svg>
+              </button>
+            </div>
+
+            <div v-if="showEfforts && athleteEfforts.length > 0" class="overflow-x-auto">
             <table class="w-full min-w-[36rem] border border-grey-light rounded-lg overflow-hidden">
               <thead class="bg-green-lighter">
                 <tr>
@@ -122,9 +129,10 @@
               </tbody>
             </table>
           </div>
-          <p v-else class="font-montserrat text-grey-dark italic">
+          <p v-else-if="showEfforts" class="font-montserrat text-grey-dark italic">
             {{ t('pages.admin.dashboard.athletePage.efforts.empty') }}
           </p>
+        </div>
         </div>
       </div>
 
@@ -326,6 +334,7 @@ endOfCurrentWeek.setDate(startOfCurrentWeek.getDate() + 6)
 const toDateInputValue = (date: Date): string => date.toISOString().split("T")[0]
 const startDateFilter = ref<string>(toDateInputValue(startOfRange))
 const endDateFilter = ref<string>(toDateInputValue(endOfCurrentWeek))
+const showEfforts = ref<boolean>(false)
 
 const isNoteButtonDisabled = computed(() => newNoteContenu.value.trim().length === 0 || isSubmittingNote.value)
 
@@ -421,7 +430,8 @@ async function loadEfforts() {
     const timeB = new Date(b.createdAt ?? "").getTime()
     const safeTimeA = Number.isNaN(timeA) ? 0 : timeA
     const safeTimeB = Number.isNaN(timeB) ? 0 : timeB
-    return safeTimeA - safeTimeB
+    // sort by newest first
+    return safeTimeB - safeTimeA
   })
 
   athleteEfforts.value = sortedEfforts
