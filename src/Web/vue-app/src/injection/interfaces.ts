@@ -10,10 +10,12 @@ import {
   IForgotPasswordRequest,
   ILoginRequest,
   IResetPasswordRequest,
-  ITwoFactorRequest
+  ITwoFactorRequest,
+  ICreateTeamEventRequest,
+  IUpdateTeamEventRequest
 } from "@/types/requests"
 import {PaginatedResponse, SucceededOrNotResponse} from "@/types/responses"
-import {Administrator, Athlete, AthleteEffort, NoteBlessure, OverloadedAthlete, Book, Member, Team, User} from "@/types/entities"
+import {Administrator, Athlete, AthleteEffort, NoteBlessure, OverloadedAthlete, Book, Member, Team, TeamEvent, User} from "@/types/entities"
 import {Guid} from "@/types";
 import { IUpdateAthleteRequest, IUpdateTeamRequest } from "../types/requests/updateAthleteRequest";
 
@@ -118,4 +120,11 @@ export interface ITeamService {
 export interface IUserService {
   getCurrentUser(): Promise<User>
   changePassword(request: IChangePasswordRequest): Promise<SucceededOrNotResponse>
+}
+
+export interface ITeamEventService {
+  getEvents(teamId: string, from: string, to: string): Promise<TeamEvent[]>
+  createEvent(teamId: string, request: ICreateTeamEventRequest): Promise<SucceededOrNotResponse>
+  updateEvent(teamId: string, eventId: string, request: IUpdateTeamEventRequest): Promise<SucceededOrNotResponse>
+  deleteEvent(teamId: string, eventId: string): Promise<SucceededOrNotResponse>
 }
