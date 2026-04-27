@@ -12,6 +12,7 @@
                v-model="resetPasswordRequest.password"
                :label="t('global.password')"
                :rules="[required, validateNewPassword]"
+               :maxlength="256"
                name="password"
                type="password"
                @validated="handleValidation"/>
@@ -19,6 +20,7 @@
                v-model="resetPasswordRequest.passwordConfirmation"
                :label="t('global.passwordConfirmation')"
                :rules="[required, validatePasswordConfirmation]"
+               :maxlength="256"
                name="passwordConfirmation"
                type="password"
                @validated="handleValidation"/>

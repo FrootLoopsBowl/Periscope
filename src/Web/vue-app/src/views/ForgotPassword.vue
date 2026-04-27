@@ -12,6 +12,7 @@
                v-model="username"
                :label="t('global.username')"
                :rules="[required]"
+               :maxlength="50"
                name="username"
                type="email"
                @validated="handleValidation"/>

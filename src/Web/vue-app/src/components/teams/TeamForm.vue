@@ -6,6 +6,7 @@
         v-model="team.name"
         :label="t('global.name')"
         :rules="[required]"
+        :maxlength="50"
         name="name"
         type="text"
         @validated="handleValidation"

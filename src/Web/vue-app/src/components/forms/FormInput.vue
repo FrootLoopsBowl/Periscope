@@ -10,6 +10,7 @@
         :list="list"
         :min="type == 'number' ? '0' : ''"
         :max="max ?? ''"
+        :maxlength="maxlength ?? undefined"
         :name="name"
         :placeholder="placeholder"
         :type="type"
@@ -46,6 +47,7 @@ const props = defineProps<{
   tooltip?: string,
   list?: string
   max?: string
+  maxlength?: number
 }>();
 
 // eslint-disable-next-line

@@ -8,6 +8,7 @@
                v-model="loginRequest.username"
                :label="t('global.username')"
                :rules="[required]"
+               :maxlength="50"
                name="username"
                type="email"
                @validated="handleValidation"/>
@@ -15,6 +16,7 @@
                v-model="loginRequest.password"
                :label="t('global.password')"
                :rules="[required]"
+               :maxlength="256"
                name="password"
                type="password"
                @validated="handleValidation">
