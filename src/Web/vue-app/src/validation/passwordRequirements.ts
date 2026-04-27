@@ -6,8 +6,6 @@ export interface PasswordRequirement {
 
 const MinimumPasswordLength = 8;
 const MinimumUniqueCharacters = 6;
-const PredictablePassword = "qwerty123!";
-
 export function getPasswordRequirements(password: string, translate: (key: string) => string, translationPrefix: string): PasswordRequirement[] {
   return [
     {
@@ -39,15 +37,6 @@ export function getPasswordRequirements(password: string, translate: (key: strin
       key: "unique",
       label: translate(`${translationPrefix}.passwordRequiresUniqueCharacters`),
       valid: new Set(password).size >= MinimumUniqueCharacters
-    },
-    {
-      key: "predictable",
-      label: translate(`${translationPrefix}.passwordTooPredictable`),
-      valid: !isPredictablePassword(password)
     }
   ];
-}
-
-function isPredictablePassword(password: string) {
-  return password.toLowerCase() === PredictablePassword;
 }
