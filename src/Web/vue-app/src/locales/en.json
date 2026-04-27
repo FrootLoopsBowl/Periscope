@@ -111,15 +111,15 @@
   },
   "pages": {
     "login": {
-      "username": "Username",
+      "username": "Email address",
       "password": "Password",
       "passwordConfirmation": "Password confirmation",
       "submit": "Log in",
       "forgotPassword": "Forgot password?",
       "validation": {
-        "invalidUsername": "The username is not valid.",
+        "invalidUsername": "The email address is not valid.",
         "memberApprobationRevoked": "Your approbation was revoked.",
-        "errorOccured": "Username or password is not valid."
+        "errorOccured": "Email address or password is not valid."
       }
     },
     "twoFactor": {
@@ -133,16 +133,18 @@
       }
     },
     "forgotPassword": {
-      "tooltip": "If username is valid, an email will be sent to the address specified with a link to reset your password",
+      "username": "Email address",
+      "tooltip": "If the email address is valid, an email will be sent to the address specified with a link to reset your password",
       "validation": {
         "success": "Reset password email sent.",
-        "invalidUsername": "The username is not valid.",
+        "invalidUsername": "The email address is not valid.",
         "invalidResetPasswordRelativeUrl": "The reset password URL could not be found.",
         "errorOccured": "An error occured while sending reset password email."
       }
     },
     "resetPassword": {
       "tooltip": "Choose a new password to recover access to your account.",
+      "passwordRequirementsTitle": "Your new password must contain:",
       "validation": {
         "success": "The password was successfully reset. You'll be redirected to the login page.",
         "invalidLink": "The reset link is invalid or incomplete.",
@@ -155,6 +157,7 @@
         "passwordRequiresDigit": "Must contain a digit.",
         "passwordRequiresUpper": "Must contain uppercase letter.",
         "passwordRequiresLower": "Must contain lowercase letter.",
+        "passwordRequiresUniqueCharacters": "Must contain at least 6 different characters.",
         "passwordTooPredictable": "Please choose a password that is a little less predictable.",
         "passwordMismatch": "The password entered does not match your current password.",
         "passwordAndConfirmationMustMatch": "The password and its confirmation must match.",
@@ -173,6 +176,7 @@
       "currentPassword": "Current password",
       "newPassword": "New password",
       "newPasswordConfirmation": "New password confirmation",
+      "passwordRequirementsTitle": "Your new password must contain:",
       "changePasswordSubmit": "Change password",
       "validation": {
         "success": "Your password was changed successfully. You will be logged out and redirected to the login page.",
@@ -184,6 +188,7 @@
         "passwordRequiresDigit": "Must contain a digit.",
         "passwordRequiresUpper": "Must contain uppercase letter.",
         "passwordRequiresLower": "Must contain lowercase letter.",
+        "passwordRequiresUniqueCharacters": "Must contain at least 6 different characters.",
         "passwordTooPredictable": "Please choose a password that is a little less predictable.",
         "passwordMismatch": "The password entered does not match your current password.",
         "passwordAndConfirmationMustMatch": "The password and its confirmation must match.",

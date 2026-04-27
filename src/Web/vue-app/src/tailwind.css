@@ -491,6 +491,10 @@
   flex-shrink: 0;
 }
 
+.vue3-easy-data-table__row--clickable {
+  cursor: pointer;
+}
+
 .vue3-easy-data-table__action .icon * {
   transition: fill 0.2s var(--ease-snappy);
 }

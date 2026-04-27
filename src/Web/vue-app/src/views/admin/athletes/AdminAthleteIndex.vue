@@ -226,8 +226,8 @@ const tableAthletes = computed(() =>
     lastName: x.lastName,
     email: x.email,
     team: x.teamName ?? t('global.undefined'),
+    detailLink: router.resolve({ name: 'admin.children.athletes.detail', params: { id: x.id } }).href,
     actions: {
-      view: router.resolve({ name: 'admin.children.athletes.detail', params: { id: x.id } }).href,
       resend: true,
       edit: router.resolve({ name: 'admin.children.athletes.edit', params: { id: x.id } }).href,
       delete: true,

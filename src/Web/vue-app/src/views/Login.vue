@@ -6,7 +6,7 @@
     <Loader v-if="preventMultipleSubmit" />
     <FormInput :ref="addFormInputRef"
                v-model="loginRequest.username"
-               :label="t('global.username')"
+               :label="t('pages.login.username')"
                :rules="[required]"
                name="username"
                type="email"

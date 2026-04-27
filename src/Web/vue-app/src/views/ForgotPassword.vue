@@ -10,7 +10,7 @@
     </FormTooltip>
     <FormInput :ref="addFormInputRef"
                v-model="username"
-               :label="t('global.username')"
+               :label="t('pages.forgotPassword.username')"
                :rules="[required]"
                name="username"
                type="email"
