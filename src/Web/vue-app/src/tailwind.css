@@ -2630,6 +2630,7 @@ form input[type="checkbox"] + label::before {
 .admin-dashboard__tiles {
   display: grid;
   gap: 24px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .admin-dashboard__athlete-page {
@@ -2739,19 +2740,6 @@ form input[type="checkbox"] + label::before {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .admin-dashboard__tiles {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .admin-dashboard__athlete-page {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (min-width: 1225px) {
-  .admin-dashboard__tiles {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
 }
 
 @media (min-width: 1225px) {
