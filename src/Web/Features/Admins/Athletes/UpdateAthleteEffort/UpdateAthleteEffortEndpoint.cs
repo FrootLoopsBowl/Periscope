@@ -45,17 +45,9 @@ public class UpdateAthleteEffortEndpoint : Endpoint<UpdateAthleteEffortRequest, 
             return;
         }
 
-        // if training date provided, ensure there's no other effort for the same athlete on that date
         if (req.TrainingDate.HasValue)
         {
             var date = DateTime.SpecifyKind(req.TrainingDate.Value.Date, DateTimeKind.Utc);
-            var effortsOnDate = (await _athleteEffortRepository.GetEffortsSinceAsync(date)).Where(e => e.AthleteId == req.AthleteId && e.CreatedAt.Date == date.Date && e.Id != existing.Id).ToList();
-            if (effortsOnDate.Any())
-            {
-                HttpContext.Response.StatusCode = StatusCodes.Status409Conflict;
-                await HttpContext.Response.WriteAsJsonAsync(new { error = "An effort already exists for this athlete on the selected date." }, ct);
-                return;
-            }
             existing.SetTrainingDate(date);
         }
 

@@ -122,10 +122,6 @@ async function save() {
   dateError.value = null
   const originalDate = props.effort?.createdAt ? new Date(props.effort.createdAt).toISOString().split('T')[0] : undefined
   const newDate = local.value.trainingDate
-  if (newDate && props.existingDates && props.existingDates.includes(newDate) && newDate !== originalDate) {
-    dateError.value = t('pages.admin.dashboard.athletePage.efforts.dateConflict') || 'Il existe déjà des données pour cette date.'
-    return
-  }
 
   saving.value = true
   try {

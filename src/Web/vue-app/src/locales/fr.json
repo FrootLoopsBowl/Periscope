@@ -362,6 +362,10 @@
           "invalidDateOfBirth": "La date de naissance est invalide.",
           "athleteWithEmailAlreadyExists": "Un athlète avec ce courriel existe déjà."
         }
+      },
+      "calendar": {
+        "title": "Calendrier de l'équipe",
+        "noTeam": "Cet athlète n'appartient à aucune équipe."
       }
     },
     "teams": {
@@ -406,6 +410,24 @@
           "failedMessage": "Une erreur est survenue lors de la modification de l'équipe.",
           "teamWithNameAlreadyExists": "Une équipe avec ce nom existe déjà."
         }
+      },
+      "calendar": {
+        "title": "Calendrier",
+        "addEvent": "Ajouter un événement",
+        "editEvent": "Modifier l'événement",
+        "deleteEvent": "Supprimer",
+        "typeLabel": "Type",
+        "typePratique": "Pratique",
+        "typeMatch": "Match",
+        "dateLabel": "Date",
+        "startLabel": "Heure de début",
+        "endLabel": "Heure de fin",
+        "descriptionLabel": "Description",
+        "descriptionPlaceholder": "Ajouter une description (optionnel)...",
+        "saveSuccess": "L'événement a été sauvegardé.",
+        "saveError": "Erreur lors de la sauvegarde de l'événement.",
+        "deleteSuccess": "L'événement a été supprimé.",
+        "deleteError": "Erreur lors de la suppression de l'événement."
       }
     },
     "members": {
