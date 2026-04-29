@@ -27,6 +27,7 @@
           name="name-fr"
           :ref="addFormInputRef"
           :label="t(props.nameFrLabel ?? 'products.form.name-fr')"
+          :maxlength="200"
           @validated="handleValidation" />
         <FormInput
           v-model="product.nameEn"
@@ -34,6 +35,7 @@
           name="name-en"
           :ref="addFormInputRef"
           :label="t(props.nameEnLabel ?? 'products.form.name-en')"
+          :maxlength="200"
           @validated="handleValidation" />
       </FormRow>
 

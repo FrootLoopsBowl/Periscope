@@ -23,6 +23,7 @@
             name="author"
             :ref="addFormInputRef"
             :label="t('book.author')"
+            :maxlength="200"
             @validated="handleValidation" />
           <FormInput
             v-model="book.editor"
@@ -30,6 +31,7 @@
             name="editor"
             :ref="addFormInputRef"
             :label="t('book.editor')"
+            :maxlength="200"
             @validated="handleValidation" />
         </FormRow>
 
@@ -40,6 +42,7 @@
             name="isbn"
             :ref="addFormInputRef"
             :label="t('book.isbn')"
+            :maxlength="17"
             @validated="handleValidation" />
           <FormInput
             v-model="book.yearOfPublication"

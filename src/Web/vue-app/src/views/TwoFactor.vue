@@ -11,6 +11,7 @@
                v-model="code"
                :label="t('pages.twoFactor.code')"
                :rules="[required]"
+               :maxlength="10"
                name="code"
                type="text"
                @validated="handleValidation"/>
