@@ -185,32 +185,66 @@
             </div>
           </div>
           <ul v-if="injuryNotes.length > 0" class="flex flex-col gap-2">
-            <li v-for="note in injuryNotes" :key="note.id" class="flex flex-col gap-1 border-b border-grey pb-2">
-              <span class="text-xs font-montserrat text-grey-dark">{{ formatDate(note.createdAt) }}</span>
-              <template v-if="editingNoteId === note.id">
-                <textarea
-                  class="border border-grey rounded-lg px-4 py-2 font-montserrat text-grey-darker focus:outline-none focus:border-green"
-                  v-model="editingNoteContenu"
-                  rows="3"
-                ></textarea>
-                <div class="flex gap-2">
-                  <button type="button" class="btn btn--primary" :disabled="editingNoteContenu.trim().length === 0" @click="handleSaveEdit(note.id!)">
-                    {{ t('pages.admin.dashboard.athletePage.injuryNotesEditSave') }}
-                  </button>
-                  <button type="button" class="btn" @click="cancelEdit">
-                    {{ t('pages.admin.dashboard.athletePage.injuryNotesEditCancel') }}
-                  </button>
+            <li v-for="note in paginatedInjuryNotes" :key="note.id" class="border-b border-grey pb-3">
+              <div class="flex flex-col gap-1 min-w-0">
+                <div class="flex items-center gap-2">
+                  <span class="text-xs font-montserrat text-grey-dark">{{ formatDate(note.createdAt) }}</span>
+                  <template v-if="editingNoteId !== note.id">
+                    <button
+                      type="button"
+                      class="inline-flex items-center justify-center text-green transition-colors hover:text-green-dark"
+                      @click="startEdit(note)"
+                      :aria-label="t('global.actions.update')"
+                    >
+                      <IconEdit class="h-4 w-4" />
+                    </button>
+                    <button
+                      type="button"
+                      class="inline-flex items-center justify-center text-red-500 transition-colors hover:text-red-700"
+                      @click="handleDeleteNote(note.id!)"
+                      :aria-label="t('global.actions.delete')"
+                    >
+                      <IconDelete class="h-4 w-4" />
+                    </button>
+                  </template>
                 </div>
-              </template>
-              <template v-else>
-                <span class="font-montserrat text-grey-darker">{{ note.contenu }}</span>
-                <div class="flex gap-2 mt-1">
-                  <button type="button" class="btn" @click="startEdit(note)"><IconEdit class="icon icon--green" /></button>
-                  <button type="button" class="btn btn--red" @click="handleDeleteNote(note.id!)"><IconDelete class="icon icon--green" /></button>
-                </div>
-              </template>
+                  <template v-if="editingNoteId === note.id">
+                    <textarea
+                      class="border border-grey rounded-lg px-4 py-2 font-montserrat text-grey-darker focus:outline-none focus:border-green"
+                      v-model="editingNoteContenu"
+                      rows="3"
+                    ></textarea>
+                    <div class="flex gap-2">
+                      <button type="button" class="btn btn--primary" :disabled="editingNoteContenu.trim().length === 0" @click="handleSaveEdit(note.id!)">
+                        {{ t('pages.admin.dashboard.athletePage.injuryNotesEditSave') }}
+                      </button>
+                      <button type="button" class="btn" @click="cancelEdit">
+                        {{ t('pages.admin.dashboard.athletePage.injuryNotesEditCancel') }}
+                      </button>
+                    </div>
+                  </template>
+                  <template v-else>
+                    <span class="font-montserrat text-grey-darker break-words">{{ note.contenu }}</span>
+                  </template>
+              </div>
             </li>
           </ul>
+          <div v-if="injuryNotes.length > notesPerPage" class="flex items-center justify-center gap-2 flex-wrap">
+            <div class="flex items-center justify-center gap-2 flex-wrap">
+              <button
+                v-for="page in notesPageNumbers"
+                :key="page"
+                type="button"
+                class="btn"
+                :class="page === currentNotesPage
+                  ? 'btn--primary underline underline-offset-4 decoration-2'
+                  : 'opacity-80 hover:opacity-100'"
+                @click="goToNotesPage(page)"
+              >
+                {{ page }}
+              </button>
+            </div>
+          </div>
           <p v-else class="font-montserrat text-grey-dark italic">
             {{ t('pages.admin.dashboard.athletePage.injuryNotesEmpty') }}
           </p>
@@ -322,6 +356,8 @@ const editingNoteId = ref<string | null>(null)
 const editingNoteContenu = ref<string>("")
 const showDeleteNoteModal = ref(false)
 const pendingDeleteNoteId = ref<string | null>(null)
+const notesPerPage = 3
+const currentNotesPage = ref(1)
 const athleteEfforts = ref<AthleteEffort[]>([])
 const effortChartData = ref<{ labels: string[]; datasets: Array<Record<string, unknown>> } | null>(null)
 const editingEffort = ref<any | null>(null)
@@ -343,6 +379,12 @@ const endDateFilter = ref<string>(toDateInputValue(endOfCurrentWeek))
 const showEfforts = ref<boolean>(false)
 
 const isNoteButtonDisabled = computed(() => newNoteContenu.value.trim().length === 0 || isSubmittingNote.value)
+const totalNotesPages = computed(() => Math.max(1, Math.ceil(injuryNotes.value.length / notesPerPage)))
+const notesPageNumbers = computed(() => Array.from({ length: totalNotesPages.value }, (_, index) => index + 1))
+const paginatedInjuryNotes = computed(() => {
+  const startIndex = (currentNotesPage.value - 1) * notesPerPage
+  return injuryNotes.value.slice(startIndex, startIndex + notesPerPage)
+})
 
 onMounted(async () => {
   await Promise.all([loadAthlete(), loadTeams(), loadNotes(), loadEfforts()])
@@ -427,6 +469,7 @@ async function handleToggleInjured() {
 
 async function loadNotes() {
   injuryNotes.value = await athleteService.getNotesBlessure(props.id)
+  clampCurrentNotesPage()
 }
 
 async function loadEfforts() {
@@ -477,6 +520,7 @@ async function handleAddNote() {
     newNoteContenu.value = ""
     noteSubmitMessage.value = t('pages.admin.dashboard.athletePage.injuryNotesSubmitSuccess')
     injuryNotes.value = await athleteService.getNotesBlessure(props.id)
+    currentNotesPage.value = 1
   } else {
     noteSubmitMessage.value = t('pages.admin.dashboard.athletePage.injuryNotesSubmitError')
   }
@@ -499,6 +543,7 @@ async function handleSaveEdit(noteId: string) {
   if (result.succeeded) {
     cancelEdit()
     injuryNotes.value = await athleteService.getNotesBlessure(props.id)
+    clampCurrentNotesPage()
     notifySuccess(t('pages.admin.dashboard.athletePage.injuryNotesEditSuccess'))
   } else {
     notifyError(t('pages.admin.dashboard.athletePage.injuryNotesEditError'))
@@ -517,10 +562,19 @@ async function onConfirmDeleteNote() {
   pendingDeleteNoteId.value = null
   if (result.succeeded) {
     injuryNotes.value = await athleteService.getNotesBlessure(props.id)
+    clampCurrentNotesPage()
     notifySuccess(t('pages.admin.dashboard.athletePage.injuryNotesDeleteSuccess'))
   } else {
     notifyError(t('pages.admin.dashboard.athletePage.injuryNotesDeleteError'))
   }
+}
+
+function clampCurrentNotesPage() {
+  currentNotesPage.value = Math.min(currentNotesPage.value, totalNotesPages.value)
+}
+
+function goToNotesPage(page: number) {
+  currentNotesPage.value = page
 }
 
 function formatDate(dateStr?: string): string {
