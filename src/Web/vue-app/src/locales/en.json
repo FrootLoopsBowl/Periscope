@@ -232,6 +232,9 @@
           "injuryNotesDeleteConfirm": "Delete this note?",
           "injuryNotesDeleteModalTitle": "Delete injury note",
           "injuryNotesDeleteModalMessage": "Are you sure you want to delete this note? This action is irreversible.",
+          "injuryNotesPagination": "Page {current} of {total}",
+          "injuryNotesPrevious": "Previous",
+          "injuryNotesNext": "Next",
           "fitStatus": "Fit",
           "injuredStatus": "Injured",
           "markedAsInjured": "The athlete has been marked as injured.",
@@ -592,6 +595,7 @@
   },
   "validation": {
     "empty": "Please enter a value.",
+    "maxLength": "This field cannot exceed {max} characters.",
     "email": "Please enter valid email.",
     "min": "The value must be at least {min}.",
     "max": "The value must be lower or equal to {max}.",

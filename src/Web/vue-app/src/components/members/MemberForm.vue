@@ -5,6 +5,7 @@
                  v-model="member.firstName"
                  :label="t('global.firstName')"
                  :rules="[required]"
+                 :maxlength="50"
                  name="firstName"
                  type="text"
                  @validated="handleValidation"/>
@@ -12,6 +13,7 @@
                  v-model="member.lastName"
                  :label="t('global.lastName')"
                  :rules="[required]"
+                 :maxlength="50"
                  name="lastName"
                  type="text"
                  @validated="handleValidation"/>
@@ -19,6 +21,7 @@
                  v-model="member.email"
                  :label="t('global.email')"
                  :rules="[required]"
+                 :maxlength="50"
                  name="email"
                  type="text"
                  @validated="handleValidation"/>
@@ -30,6 +33,7 @@
                    :label="t('global.phoneNumber')"
                    :placeholder="t('global.phoneNumberFormat')"
                    :rules="[required, mustMatchPhoneNumberFormat]"
+                   :maxlength="12"
                    name="phoneNumber"
                    type="tel"
                    @validated="handleValidation"/>
@@ -50,6 +54,7 @@
                  v-model="member.street"
                  :label="t('global.street')"
                  :rules="[required]"
+                 :maxlength="200"
                  name="street"
                  type="text"
                  @validated="handleValidation"/>
@@ -59,6 +64,7 @@
                  v-model="member.city"
                  :label="t('global.city')"
                  :rules="[required]"
+                 :maxlength="100"
                  name="city"
                  type="text"
                  @validated="handleValidation"/>
@@ -66,6 +72,7 @@
                  v-model="member.zipCode"
                  :label="t('global.zipCode')"
                  :rules="[required, mustMatchZipCodeFormat]"
+                 :maxlength="7"
                  name="zipCode"
                  type="zip"
                  @validated="handleValidation"/>

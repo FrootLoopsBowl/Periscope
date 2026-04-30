@@ -241,6 +241,9 @@
           "injuryNotesDeleteConfirm": "Supprimer cette note ?",
           "injuryNotesDeleteModalTitle": "Supprimer la note de blessure",
           "injuryNotesDeleteModalMessage": "Êtes-vous sûr de vouloir supprimer cette note ? Cette action est irréversible.",
+          "injuryNotesPagination": "Page {current} sur {total}",
+          "injuryNotesPrevious": "Précédent",
+          "injuryNotesNext": "Suivant",
           "fitStatus": "Apte à jouer",
           "injuredStatus": "Blessé",
           "markedAsInjured": "L'athlète a été marqué comme blessé.",
@@ -610,6 +613,7 @@
   },
   "validation": {
     "empty": "Veuillez renseigner ce champ.",
+    "maxLength": "Ce champ ne peut pas dépasser {max} caractères.",
     "email": "Veuillez entrer un adresse courriel valide.",
     "min": "La valeur doit être d'au moins {min}.",
     "max": "La valeur doit être plus petite ou égale à {max}.",

@@ -62,6 +62,7 @@ const props = defineProps<{
   tooltip?: string,
   list?: string
   max?: string
+  maxlength?: number
 }>();
 
 // eslint-disable-next-line
