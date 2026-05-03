@@ -258,7 +258,15 @@
             "startDate": "Date de début",
             "startDatePlaceholder": "YYYY-MM-DD",
             "endDate": "Date de fin",
-            "endDatePlaceholder": "YYYY-MM-DD"
+            "endDatePlaceholder": "YYYY-MM-DD",
+            "chartTitleLoad": "Charges d'entraînement (par semaine)",
+            "chartTitlePleasure": "Plaisir (par semaine)",
+            "chartEffortSeries": "Effort (moy.)",
+            "chartDurationSeries": "Durée totale (min)",
+            "chartAxisEffort": "Niveau d'effort",
+            "chartAxisDuration": "Minutes",
+            "chartAxisPleasure": "Plaisir",
+            "chartAxisWeek": "Semaine (début)"
           }
         },
         "weeklyGraphsTitle": "Graph de suivi hebdomadaires",

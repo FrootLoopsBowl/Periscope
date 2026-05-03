@@ -142,13 +142,26 @@
           </div>
         </div>
 
-        <!-- Chart -->
-        <div v-if="effortChartData" class="admin-dashboard__chart-container">
-          <LineChart
-            :chart-data="effortChartData"
-            :options="chartOptions"
-            class="admin-dashboard__chart"
-          />
+        <!-- Charts (charges + plaisir, agrégation hebdo côté client) -->
+        <div v-if="loadChartData" class="admin-dashboard__chart-block">
+          <h3 class="admin-dashboard__chart-title">{{ t('pages.admin.dashboard.athletePage.efforts.chartTitleLoad') }}</h3>
+          <div class="admin-dashboard__chart-container">
+            <LineChart
+              :chart-data="loadChartData"
+              :options="loadChartOptions"
+              class="admin-dashboard__chart"
+            />
+          </div>
+        </div>
+        <div v-if="pleasureChartData" class="admin-dashboard__chart-block">
+          <h3 class="admin-dashboard__chart-title">{{ t('pages.admin.dashboard.athletePage.efforts.chartTitlePleasure') }}</h3>
+          <div class="admin-dashboard__chart-container">
+            <LineChart
+              :chart-data="pleasureChartData"
+              :options="pleasureChartOptions"
+              class="admin-dashboard__chart"
+            />
+          </div>
         </div>
 
         <p v-if="athleteEfforts.length === 0" class="content-grid__text">
@@ -161,6 +174,13 @@
 
 <script lang="ts" setup>
 import { computed, onMounted, ref, watch } from "vue";
+import {
+  aggregateEffortsByWeek,
+  buildWeeklyLoadChart,
+  buildWeeklyPleasureChart,
+  weeklyLoadChartOptions,
+  weeklyPleasureChartOptions,
+} from "@/utils/weeklyEffortCharts";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue3-i18n";
 import { useAthleteService, useTeamService } from "@/inversify.config";
@@ -189,7 +209,11 @@ const injuredAthletes = ref<InjuredAthleteWithNote[]>([]);
 const overloadedAthletes = ref<OverloadedAthlete[]>([]);
 const injuryNotes = ref<NoteBlessure[]>([]);
 const athleteEfforts = ref<AthleteEffort[]>([]);
-const effortChartData = ref<any>(null);
+const loadChartData = ref<Record<string, unknown> | null>(null);
+const pleasureChartData = ref<Record<string, unknown> | null>(null);
+
+const loadChartOptions = computed(() => weeklyLoadChartOptions(t));
+const pleasureChartOptions = computed(() => weeklyPleasureChartOptions(t));
 const today = new Date();
 const mondayBasedDay = (today.getDay() + 6) % 7;
 const startOfCurrentWeek = new Date(today);
@@ -281,44 +305,28 @@ onMounted(async () => {
 watch([displayedAthleteId, startDateFilter, endDateFilter], async ([newId, newStartDate, newEndDate]) => {
   injuryNotes.value = [];
   athleteEfforts.value = [];
-  effortChartData.value = null;
+  loadChartData.value = null;
+  pleasureChartData.value = null;
   newNoteContenu.value = "";
   noteSubmitMessage.value = "";
   if (newId) {
     injuryNotes.value = await athleteService.getNotesBlessure(newId);
-    const effortsResponse = await athleteService.getAthleteEfforts(newId, 1, 10, newStartDate, newEndDate);
+    const effortsResponse = await athleteService.getAthleteEfforts(newId, 1, 500, newStartDate, newEndDate);
     const sortedEfforts = [...(effortsResponse.items ?? [])].sort((a, b) => {
       const timeA = new Date(a.createdAt ?? "").getTime();
       const timeB = new Date(b.createdAt ?? "").getTime();
       const safeTimeA = Number.isNaN(timeA) ? 0 : timeA;
       const safeTimeB = Number.isNaN(timeB) ? 0 : timeB;
-      return safeTimeA - safeTimeB;
+      return safeTimeB - safeTimeA;
     });
     athleteEfforts.value = sortedEfforts;
-    
-    // Generate chart data
+
     if (sortedEfforts.length > 0) {
-      effortChartData.value = {
-        labels: sortedEfforts.map(e => formatDateOnly(e.createdAt)),
-        datasets: [
-          {
-            label: 'Effort/Temps',
-            data: sortedEfforts.map(e => ((e.durationMinutes ?? 0) * (e.effort ?? 0)) / 100),
-            borderColor: '#42b983',
-            backgroundColor: 'rgba(66, 185, 131, 0.1)',
-            tension: 0.1,
-            yAxisID: 'y'
-          },
-          {
-            label: t('pages.admin.dashboard.athletePage.efforts.pleasure'),
-            data: sortedEfforts.map(e => e.pleasure !== undefined && e.pleasure !== null ? e.pleasure : 0),
-            borderColor: '#4dabf7',
-            backgroundColor: 'rgba(77, 171, 247, 0.1)',
-            tension: 0.1,
-            yAxisID: 'y'
-          }
-        ]
-      };
+      const buckets = aggregateEffortsByWeek(sortedEfforts);
+      if (buckets.length > 0) {
+        loadChartData.value = buildWeeklyLoadChart(buckets, t);
+        pleasureChartData.value = buildWeeklyPleasureChart(buckets, t);
+      }
     }
   }
 });
@@ -401,26 +409,6 @@ async function loadAllAthletes(): Promise<Athlete[]> {
 
   return allAthletes;
 }
-
-  const chartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    scales: {
-      y: {
-        beginAtZero: true,
-        title: {
-          display: true,
-        text: 'Effort/Temps et plaisir'
-        }
-      },
-      x: {
-        title: {
-          display: true,
-          text: t('pages.admin.dashboard.athletePage.efforts.date')
-        }
-      }
-    }
-  };
 </script>
 
 <style scoped>
@@ -449,6 +437,17 @@ async function loadAllAthletes(): Promise<Athlete[]> {
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 1rem;
+}
+
+.admin-dashboard__chart-block {
+  margin-bottom: 1rem;
+}
+
+.admin-dashboard__chart-title {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2c3e50;
 }
 
 .admin-dashboard__chart-container {
