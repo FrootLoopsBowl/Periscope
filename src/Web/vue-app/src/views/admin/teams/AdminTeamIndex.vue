@@ -38,6 +38,7 @@
       :headers="teamHeaders"
       :is-loading="teamsAreLoading"
       :items="tableTeams"
+      :total-items="paginatedResponse.totalItems"
       @delete="onDelete"
       @reload="loadTeams"
     />
