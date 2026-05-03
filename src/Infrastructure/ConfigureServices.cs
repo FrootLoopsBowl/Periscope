@@ -13,6 +13,7 @@ using Infrastructure.Repositories.AthleteEfforts;
 using Infrastructure.Repositories.Authentication;
 using Infrastructure.Repositories.Books;
 using Infrastructure.Repositories.Teams;
+using Infrastructure.Repositories.TeamEvents;
 using Infrastructure.Repositories.Members;
 using Infrastructure.Repositories.Blessures;
 using Infrastructure.Repositories.Entraineurs;
@@ -70,6 +71,7 @@ public static class ConfigureServices
         services.AddScoped<IAthleteRepository, AthleteRepository>();
         services.AddScoped<IAthleteEffortRepository, AthleteEffortRepository>();
         services.AddScoped<ITeamRepository, TeamRepository>();
+        services.AddScoped<ITeamEventRepository, TeamEventRepository>();
         services.AddScoped<IBookRepository, BookRepository>();
         services.AddScoped<IMemberRepository, MemberRepository>();
         services.AddScoped<IEntraineurRepository, EntraineurRepository>();
@@ -90,7 +92,7 @@ public static class ConfigureServices
                 options.Stores.MaxLengthForKeys = 128;
                 options.User.RequireUniqueEmail = true;
                 options.SignIn.RequireConfirmedEmail = true;
-                options.Password.RequiredLength = 10;
+                options.Password.RequiredLength = 8;
                 options.Password.RequireUppercase = true;
                 options.Password.RequireLowercase = true;
                 options.Password.RequireDigit = true;
@@ -102,6 +104,11 @@ public static class ConfigureServices
             .AddDefaultTokenProviders()
             .AddEntityFrameworkStores<GarneauTemplateDbContext>()
             .AddSignInManager<SignInManager<User>>();
+
+        services.Configure<DataProtectionTokenProviderOptions>(options =>
+        {
+            options.TokenLifespan = TimeSpan.FromMinutes(15);
+        });
 
         // Add and configure Argon2 password hasher
         services.AddScoped<IPasswordHasher<User>, Argon2PasswordHasher<User>>();

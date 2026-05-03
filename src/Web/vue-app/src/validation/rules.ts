@@ -122,6 +122,18 @@ export const mustMatchPhoneNumberFormat: Rule = (value: string): Status => {
   };
 };
 
+export function maxLength(max: number): Rule {
+  return function (value: string): Status {
+    const result = !value || value.length <= max;
+    return {
+      valid: result,
+      message: result
+        ? undefined
+        : i18n.t('validation.maxLength').replace("{max}", max.toString()),
+    };
+  };
+}
+
 export const mustMatchEmailFormat: Rule = (value: string): Status => {
   const emailRegex = new RegExp(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
   const valid = emailRegex.test(value)

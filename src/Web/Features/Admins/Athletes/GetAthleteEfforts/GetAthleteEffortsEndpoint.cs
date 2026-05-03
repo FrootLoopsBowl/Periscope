@@ -24,17 +24,12 @@ public class GetAthleteEffortsEndpoint : Endpoint<GetAthleteEffortsRequest, obje
 
     public override async Task HandleAsync(GetAthleteEffortsRequest req, CancellationToken ct)
     {
-        var query = _athleteEffortRepository.GetForAthletePaginated(req.AthleteId, req.PageIndex, req.PageSize);
-        
-        // Apply date filtering if provided
-        if (req.StartDate.HasValue || req.EndDate.HasValue)
-        {
-            var startDate = req.StartDate ?? DateTime.MinValue;
-            var endDate = req.EndDate ?? DateTime.MaxValue;
-            
-            query.Items = query.Items.Where(e => e.CreatedAt >= startDate && e.CreatedAt <= endDate).ToList();
-            query.TotalItems = query.Items.Count();
-        }
+        var query = _athleteEffortRepository.GetForAthletePaginated(
+            req.AthleteId,
+            req.PageIndex,
+            req.PageSize,
+            req.StartDate,
+            req.EndDate);
         
         var response = new 
         {

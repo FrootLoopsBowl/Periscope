@@ -111,15 +111,15 @@
   },
   "pages": {
     "login": {
-      "username": "Nom d'utilisateur",
+      "username": "Adresse courriel",
       "password": "Mot de passe",
       "passwordConfirmation": "Confirmation du mot de passe",
       "submit": "Se connecter",
       "forgotPassword": "Mot de passe oublié ?",
       "validation": {
-        "invalidUsername": "Le nom d'utilisateur est invalide.",
+        "invalidUsername": "L'adresse courriel est invalide.",
         "memberApprobationRevoked": "Votre approbation a été révoquée.",
-        "errorOccured": "Nom d'utilisateur ou mot de passe invalide."
+        "errorOccured": "Adresse courriel ou mot de passe invalide."
       }
     },
     "twoFactor": {
@@ -133,16 +133,18 @@
       }
     },
     "forgotPassword": {
-      "tooltip": "Si le nom d'utilisateur est valide, un email sera envoyé à l'adresse indiquée avec un lien pour réinitialiser votre mot de passe",
+      "username": "Adresse courriel",
+      "tooltip": "Si l'adresse courriel est valide, un email sera envoyé à l'adresse indiquée avec un lien pour réinitialiser votre mot de passe",
       "validation": {
         "success": "Courriel de réinitalisation du mot de passe envoyé.",
-        "invalidUsername": "Le nom d'utilisateur est invalide.",
+        "invalidUsername": "L'adresse courriel est invalide.",
         "invalidResetPasswordRelativeUrl": "L'URL de réinitialisation du mot de passe est introuvable.",
         "errorOccured": "Une erreur est survenue lors de l'envoi du courriel de réinitialisation du mot de passe."
       }
     },
     "resetPassword": {
       "tooltip": "Choisissez un nouveau mot de passe pour récupérer l'accès à votre compte.",
+      "passwordRequirementsTitle": "Votre nouveau mot de passe doit contenir :",
       "validation": {
         "success": "Mot de passe réinitalisé avec succès. Vous serez redirigé à la page de connexion.",
         "invalidLink": "Le lien de réinitialisation est invalide ou incomplet.",
@@ -155,6 +157,7 @@
         "passwordRequiresDigit": "Doit contenir un chiffre.",
         "passwordRequiresUpper": "Doit contenir une majuscule.",
         "passwordRequiresLower": "Doit contenir une minuscule.",
+        "passwordRequiresUniqueCharacters": "Doit contenir au moins 6 caractères différents.",
         "passwordTooPredictable": "Veuillez choisir un mot de passe un peu moins prévisible.",
         "passwordMismatch": "Le mot de passe entré ne correspond pas à votre mot de passe actuel.",
         "passwordAndConfirmationMustMatch": "Le mot de passe et sa confirmation doivent être identiques.",
@@ -173,6 +176,7 @@
       "currentPassword": "Mot de passe actuel",
       "newPassword": "Nouveau mot de passe",
       "newPasswordConfirmation": "Confirmation du nouveau mot de passe",
+      "passwordRequirementsTitle": "Votre nouveau mot de passe doit contenir :",
       "changePasswordSubmit": "Modifier le mot de passe",
       "validation": {
         "success": "Votre mot de passe a été modifié avec succès. Vous allez être déconnecté et redirigé vers la page de connexion.",
@@ -184,6 +188,7 @@
         "passwordRequiresDigit": "Doit contenir un chiffre.",
         "passwordRequiresUpper": "Doit contenir une majuscule.",
         "passwordRequiresLower": "Doit contenir une minuscule.",
+        "passwordRequiresUniqueCharacters": "Doit contenir au moins 6 caractères différents.",
         "passwordTooPredictable": "Veuillez choisir un mot de passe un peu moins prévisible.",
         "passwordMismatch": "Le mot de passe entré ne correspond pas à votre mot de passe actuel.",
         "passwordAndConfirmationMustMatch": "Le mot de passe et sa confirmation doivent être identiques.",
@@ -212,7 +217,8 @@
           "noTeams": "Aucune équipe dispo pour le moment.",
           "noAthletes": "Aucun athlète dispo pour le moment.",
           "search": "Rechercher",
-          "reset": "Réinitialiser"
+          "reset": "Réinitialiser",
+          "injuredTableLastNote": "Dernière note de blessure"
         },
         "athletePage": {
           "infosTitle": "Informations sur l'athlète",
@@ -235,6 +241,9 @@
           "injuryNotesDeleteConfirm": "Supprimer cette note ?",
           "injuryNotesDeleteModalTitle": "Supprimer la note de blessure",
           "injuryNotesDeleteModalMessage": "Êtes-vous sûr de vouloir supprimer cette note ? Cette action est irréversible.",
+          "injuryNotesPagination": "Page {current} sur {total}",
+          "injuryNotesPrevious": "Précédent",
+          "injuryNotesNext": "Suivant",
           "fitStatus": "Apte à jouer",
           "injuredStatus": "Blessé",
           "markedAsInjured": "L'athlète a été marqué comme blessé.",
@@ -249,7 +258,13 @@
             "startDate": "Date de début",
             "startDatePlaceholder": "YYYY-MM-DD",
             "endDate": "Date de fin",
-            "endDatePlaceholder": "YYYY-MM-DD"
+            "endDatePlaceholder": "YYYY-MM-DD",
+            "chartTitleLoad": "Charges d'entraînement (par semaine)",
+            "chartTitlePleasure": "Plaisir (par semaine)",
+            "chartTrainingLoadSeries": "Charge d'entraînement",
+            "chartAxisTrainingLoad": "Charge",
+            "chartAxisPleasure": "Plaisir",
+            "chartAxisWeek": "Semaine (début)"
           }
         },
         "weeklyGraphsTitle": "Graph de suivi hebdomadaires",
@@ -356,6 +371,10 @@
           "invalidDateOfBirth": "La date de naissance est invalide.",
           "athleteWithEmailAlreadyExists": "Un athlète avec ce courriel existe déjà."
         }
+      },
+      "calendar": {
+        "title": "Calendrier de l'équipe",
+        "noTeam": "Cet athlète n'appartient à aucune équipe."
       }
     },
     "teams": {
@@ -400,6 +419,24 @@
           "failedMessage": "Une erreur est survenue lors de la modification de l'équipe.",
           "teamWithNameAlreadyExists": "Une équipe avec ce nom existe déjà."
         }
+      },
+      "calendar": {
+        "title": "Calendrier",
+        "addEvent": "Ajouter un événement",
+        "editEvent": "Modifier l'événement",
+        "deleteEvent": "Supprimer",
+        "typeLabel": "Type",
+        "typePratique": "Pratique",
+        "typeMatch": "Match",
+        "dateLabel": "Date",
+        "startLabel": "Heure de début",
+        "endLabel": "Heure de fin",
+        "descriptionLabel": "Description",
+        "descriptionPlaceholder": "Ajouter une description (optionnel)...",
+        "saveSuccess": "L'événement a été sauvegardé.",
+        "saveError": "Erreur lors de la sauvegarde de l'événement.",
+        "deleteSuccess": "L'événement a été supprimé.",
+        "deleteError": "Erreur lors de la suppression de l'événement."
       }
     },
     "members": {
@@ -582,6 +619,7 @@
   },
   "validation": {
     "empty": "Veuillez renseigner ce champ.",
+    "maxLength": "Ce champ ne peut pas dépasser {max} caractères.",
     "email": "Veuillez entrer un adresse courriel valide.",
     "min": "La valeur doit être d'au moins {min}.",
     "max": "La valeur doit être plus petite ou égale à {max}.",

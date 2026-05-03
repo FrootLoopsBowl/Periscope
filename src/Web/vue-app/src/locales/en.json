@@ -111,15 +111,15 @@
   },
   "pages": {
     "login": {
-      "username": "Username",
+      "username": "Email address",
       "password": "Password",
       "passwordConfirmation": "Password confirmation",
       "submit": "Log in",
       "forgotPassword": "Forgot password?",
       "validation": {
-        "invalidUsername": "The username is not valid.",
+        "invalidUsername": "The email address is not valid.",
         "memberApprobationRevoked": "Your approbation was revoked.",
-        "errorOccured": "Username or password is not valid."
+        "errorOccured": "Email address or password is not valid."
       }
     },
     "twoFactor": {
@@ -133,16 +133,18 @@
       }
     },
     "forgotPassword": {
-      "tooltip": "If username is valid, an email will be sent to the address specified with a link to reset your password",
+      "username": "Email address",
+      "tooltip": "If the email address is valid, an email will be sent to the address specified with a link to reset your password",
       "validation": {
         "success": "Reset password email sent.",
-        "invalidUsername": "The username is not valid.",
+        "invalidUsername": "The email address is not valid.",
         "invalidResetPasswordRelativeUrl": "The reset password URL could not be found.",
         "errorOccured": "An error occured while sending reset password email."
       }
     },
     "resetPassword": {
       "tooltip": "Choose a new password to recover access to your account.",
+      "passwordRequirementsTitle": "Your new password must contain:",
       "validation": {
         "success": "The password was successfully reset. You'll be redirected to the login page.",
         "invalidLink": "The reset link is invalid or incomplete.",
@@ -155,6 +157,7 @@
         "passwordRequiresDigit": "Must contain a digit.",
         "passwordRequiresUpper": "Must contain uppercase letter.",
         "passwordRequiresLower": "Must contain lowercase letter.",
+        "passwordRequiresUniqueCharacters": "Must contain at least 6 different characters.",
         "passwordTooPredictable": "Please choose a password that is a little less predictable.",
         "passwordMismatch": "The password entered does not match your current password.",
         "passwordAndConfirmationMustMatch": "The password and its confirmation must match.",
@@ -173,6 +176,7 @@
       "currentPassword": "Current password",
       "newPassword": "New password",
       "newPasswordConfirmation": "New password confirmation",
+      "passwordRequirementsTitle": "Your new password must contain:",
       "changePasswordSubmit": "Change password",
       "validation": {
         "success": "Your password was changed successfully. You will be logged out and redirected to the login page.",
@@ -184,6 +188,7 @@
         "passwordRequiresDigit": "Must contain a digit.",
         "passwordRequiresUpper": "Must contain uppercase letter.",
         "passwordRequiresLower": "Must contain lowercase letter.",
+        "passwordRequiresUniqueCharacters": "Must contain at least 6 different characters.",
         "passwordTooPredictable": "Please choose a password that is a little less predictable.",
         "passwordMismatch": "The password entered does not match your current password.",
         "passwordAndConfirmationMustMatch": "The password and its confirmation must match.",
@@ -203,7 +208,8 @@
           "noTeams": "No team available at the moment.",
           "noAthletes": "No athlete available at the moment.",
           "search": "Search",
-          "reset": "Reset"
+          "reset": "Reset",
+          "injuredTableLastNote": "Lastest injury note"
         },
         "athletePage": {
           "infosTitle": "Athlete information",
@@ -226,6 +232,9 @@
           "injuryNotesDeleteConfirm": "Delete this note?",
           "injuryNotesDeleteModalTitle": "Delete injury note",
           "injuryNotesDeleteModalMessage": "Are you sure you want to delete this note? This action is irreversible.",
+          "injuryNotesPagination": "Page {current} of {total}",
+          "injuryNotesPrevious": "Previous",
+          "injuryNotesNext": "Next",
           "fitStatus": "Fit",
           "injuredStatus": "Injured",
           "markedAsInjured": "The athlete has been marked as injured.",
@@ -240,7 +249,13 @@
             "startDate": "Start Date",
             "startDatePlaceholder": "YYYY-MM-DD",
             "endDate": "End Date",
-            "endDatePlaceholder": "YYYY-MM-DD"
+            "endDatePlaceholder": "YYYY-MM-DD",
+            "chartTitleLoad": "Training load (weekly)",
+            "chartTitlePleasure": "Pleasure (weekly)",
+            "chartTrainingLoadSeries": "Training load",
+            "chartAxisTrainingLoad": "Load",
+            "chartAxisPleasure": "Pleasure",
+            "chartAxisWeek": "Week (start)"
           }
         },
         "weeklyGraphsTitle": "Weekly tracking graphs",
@@ -347,6 +362,10 @@
           "invalidDateOfBirth": "The date of birth is invalid.",
           "athleteWithEmailAlreadyExists": "An athlete with this email already exists."
         }
+      },
+      "calendar": {
+        "title": "Team calendar",
+        "noTeam": "This athlete does not belong to any team."
       }
     },
     "teams": {
@@ -391,6 +410,24 @@
           "failedMessage": "An error occured during team update.",
           "teamWithNameAlreadyExists": "A team with this name already exists."
         }
+      },
+      "calendar": {
+        "title": "Calendar",
+        "addEvent": "Add event",
+        "editEvent": "Edit event",
+        "deleteEvent": "Delete",
+        "typeLabel": "Type",
+        "typePratique": "Practice",
+        "typeMatch": "Match",
+        "dateLabel": "Date",
+        "startLabel": "Start time",
+        "endLabel": "End time",
+        "descriptionLabel": "Description",
+        "descriptionPlaceholder": "Add a description (optional)...",
+        "saveSuccess": "Event saved successfully.",
+        "saveError": "Error saving the event.",
+        "deleteSuccess": "Event deleted successfully.",
+        "deleteError": "Error deleting the event."
       }
     },
     "members": {
@@ -564,6 +601,7 @@
   },
   "validation": {
     "empty": "Please enter a value.",
+    "maxLength": "This field cannot exceed {max} characters.",
     "email": "Please enter valid email.",
     "min": "The value must be at least {min}.",
     "max": "The value must be lower or equal to {max}.",

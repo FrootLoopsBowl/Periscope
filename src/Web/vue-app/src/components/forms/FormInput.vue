@@ -2,20 +2,34 @@
   <div :class="{'error':!status.valid}" class="form__field">
     <slot name="before-input"></slot>
 
-    <input
-        :id="name"
-        v-model="inputValue"
-        :aria-describedby="`error__${name}`"
-        :aria-invalid="!status.valid"
-        :list="list"
-        :min="type == 'number' ? '0' : ''"
-        :max="max ?? ''"
-        :name="name"
-        :placeholder="placeholder"
-        :type="type"
-        @blur="handleBlur"
-        @input="handleInput"
-    />
+    <div class="form-input__control">
+      <input
+          :id="name"
+          v-model="inputValue"
+          :aria-describedby="`error__${name}`"
+          :aria-invalid="!status.valid"
+          :list="list"
+          :min="type == 'number' ? '0' : ''"
+          :max="max ?? ''"
+          :name="name"
+          :placeholder="placeholder"
+          :type="resolvedInputType"
+          :class="{ 'form-input__field--password': isPasswordField }"
+          @blur="handleBlur"
+          @input="handleInput"
+      />
+
+      <button
+          v-if="isPasswordField"
+          type="button"
+          class="form-input__toggle"
+          :aria-label="isPasswordVisible ? 'Hide password' : 'Show password'"
+          @click="togglePasswordVisibility"
+      >
+        <IconEyeOff v-if="isPasswordVisible" :size="18" />
+        <IconEye v-else :size="18" />
+      </button>
+    </div>
 
     <label :for="name">
       {{ label ? label : name }}
@@ -31,9 +45,11 @@
 
 <script lang="ts" setup>
 import IconHelpCircle from "vue-material-design-icons/HelpCircle.vue"
+import IconEye from "vue-material-design-icons/Eye.vue"
+import IconEyeOff from "vue-material-design-icons/EyeOff.vue"
 import {Rule} from '@/validation/rules'
 import {Status, validate} from '@/validation'
-import {ref, watch} from "vue";
+import {computed, ref, watch} from "vue";
 
 // eslint-disable-next-line
 const props = defineProps<{
@@ -46,6 +62,7 @@ const props = defineProps<{
   tooltip?: string,
   list?: string
   max?: string
+  maxlength?: number
 }>();
 
 // eslint-disable-next-line
@@ -66,6 +83,9 @@ const emit = defineEmits<{
 
 const status = ref<Status>({valid: true});
 const isRequired = !(props.rules != undefined && props.rules.length == 0);
+const isPasswordVisible = ref(false)
+const isPasswordField = computed(() => props.type === 'password')
+const resolvedInputType = computed(() => isPasswordField.value && isPasswordVisible.value ? 'text' : props.type)
 
 function handleInput() {
   validateInput();
@@ -82,4 +102,37 @@ function validateInput() {
   status.value = validate(inputValue.value as string, validationRules)
   emit("validated", props.name, status.value);
 }
+
+function togglePasswordVisibility() {
+  isPasswordVisible.value = !isPasswordVisible.value
+}
 </script>
+
+<style scoped>
+.form-input__control {
+  position: relative;
+}
+
+.form-input__field--password {
+  padding-right: 2.75rem;
+}
+
+.form-input__toggle {
+  position: absolute;
+  top: 50%;
+  right: 0.75rem;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-grey-medium);
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.form-input__toggle:hover {
+  color: var(--color-grey-dark);
+}
+</style>

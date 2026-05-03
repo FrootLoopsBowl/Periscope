@@ -55,7 +55,6 @@
                                    class="form__input athlete-submission__input athlete-submission__input--large"
                                    type="number"
                                    v-model.number="duration"
-                                   min="1"
                                    placeholder="Ex : 60"
                                    @input="onDurationInput"
                                    required />
@@ -171,6 +170,7 @@
     const effort = ref<number | null>(null)
     const pleasure = ref<number | null>(null)
     const duration = ref<number | null>(null)
+    const durationInput = ref<string>("")
     const submitting = ref(false)
     const submitSuccess = ref(false)
     const submitError = ref<string | null>(null)
@@ -228,13 +228,20 @@
     }
 
     function onDurationInput(e: Event) {
-        const value = Number((e.target as HTMLInputElement).value)
+        const raw = (e.target as HTMLInputElement).value
+        // remove non-digit characters
+        const filtered = raw.replace(/[^0-9]/g, "")
+        durationInput.value = filtered
+        if (filtered === "") {
+            duration.value = null
+            return
+        }
+        const value = Number(filtered)
         if (Number.isNaN(value)) {
             duration.value = null
             return
         }
-        if (value < 1) duration.value = 1
-        else duration.value = value
+        duration.value = value < 1 ? 1 : value
     }
 
     onMounted(async () => {
@@ -394,6 +401,17 @@
          box-shadow: 0 4px 18px rgba(78, 73, 52, 0.07);
          transition: border-color 0.2s, box-shadow 0.2s;
      }
+
+
+    input[type=number]::-webkit-outer-spin-button,
+    input[type=number]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
 
      .athlete-submission__field-head {
          display: flex;

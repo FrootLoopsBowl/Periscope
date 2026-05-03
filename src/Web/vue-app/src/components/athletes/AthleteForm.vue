@@ -5,6 +5,7 @@
                  v-model="athlete.firstName"
                  :label="t('global.firstName')"
                  :rules="[required]"
+                 :maxlength="50"
                  name="firstName"
                  type="text"
                  @validated="handleValidation"/>
@@ -12,6 +13,7 @@
                  v-model="athlete.lastName"
                  :label="t('global.lastName')"
                  :rules="[required]"
+                 :maxlength="50"
                  name="lastName"
                  type="text"
                  @validated="handleValidation"/>
@@ -19,6 +21,7 @@
                  v-model="athlete.email"
                  :label="t('global.email')"
                  :rules="[required, mustMatchEmailFormat]"
+                 :maxlength="50"
                  name="email"
                  type="text"
                  @validated="handleValidation"/>

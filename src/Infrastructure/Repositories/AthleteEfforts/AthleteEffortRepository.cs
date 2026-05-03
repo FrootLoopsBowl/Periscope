@@ -21,11 +21,23 @@ public class AthleteEffortRepository : IAthleteEffortRepository
         await _context.SaveChangesAsync();
     }
 
-    public PaginatedList<AthleteEffort> GetForAthletePaginated(Guid athleteId, int pageIndex, int pageSize)
+    public PaginatedList<AthleteEffort> GetForAthletePaginated(Guid athleteId, int pageIndex, int pageSize, DateTime? startDate = null, DateTime? endDate = null)
     {
         var query = _context.Set<AthleteEffort>().Where(x => x.AthleteId == athleteId).AsNoTracking();
-        var items = query.OrderByDescending(x => x.CreatedAt).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
-        return new PaginatedList<AthleteEffort>(items, query.Count());
+
+        if (startDate.HasValue)
+            query = query.Where(e => e.CreatedAt >= startDate.Value.Date);
+
+        if (endDate.HasValue)
+        {
+            var endExclusive = endDate.Value.Date.AddDays(1);
+            query = query.Where(e => e.CreatedAt < endExclusive);
+        }
+
+        var ordered = query.OrderByDescending(x => x.CreatedAt);
+        var total = ordered.Count();
+        var items = ordered.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
+        return new PaginatedList<AthleteEffort>(items, total);
     }
 
     public async Task<List<AthleteEffort>> GetEffortsSinceAsync(DateTime since)

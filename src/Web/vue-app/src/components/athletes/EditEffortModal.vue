@@ -122,10 +122,6 @@ async function save() {
   dateError.value = null
   const originalDate = props.effort?.createdAt ? new Date(props.effort.createdAt).toISOString().split('T')[0] : undefined
   const newDate = local.value.trainingDate
-  if (newDate && props.existingDates && props.existingDates.includes(newDate) && newDate !== originalDate) {
-    dateError.value = t('pages.admin.dashboard.athletePage.efforts.dateConflict') || 'Il existe déjà des données pour cette date.'
-    return
-  }
 
   saving.value = true
   try {
@@ -195,4 +191,15 @@ async function save() {
 .modal-actions { display:flex; justify-content:flex-end; gap:0.5rem; margin-top:1rem }
 .label { font-size: 0.85rem; color: #333; }
 .text-error { color: #b91c1c; font-size: 0.85rem; }
+
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
 </style>

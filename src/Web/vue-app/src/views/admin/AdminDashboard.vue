@@ -37,6 +37,36 @@
       </p>
     </Card>
 
+    <Card :title="t('pages.admin.dashboard.injuredAthletesTitle')">
+        <div v-if="injuredAthletes.length > 0" class="admin-dashboard__efforts-table">
+            <table class="admin-dashboard__table">
+                <thead>
+                    <tr>
+                        <th>{{ t("pages.admin.dashboard.overloadedTableFirstName") }}</th>
+                        <th>{{ t("pages.admin.dashboard.overloadedTableLastName") }}</th>
+                        <th>{{ t("pages.admin.dashboard.overloadedTableTeam") }}</th>
+                        <th>{{ t("pages.admin.dashboard.filters.injuredTableLastNote") }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="athlete in injuredAthletes"
+                        :key="athlete.id"
+                        class="admin-dashboard__overload-row"
+                        @click="router.push({ name: 'admin.children.athletes.detail', params: { id: athlete.id } })">
+                        <td>{{ athlete.firstName }}</td>
+                        <td>{{ athlete.lastName }}</td>
+                        <td>{{ athlete.teamName ?? '-' }}</td>
+                        <td>{{ athlete.lastInjuryNote || '-' }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p v-else class="content-grid__text">
+            {{ t("pages.admin.dashboard.injuredAthletesEmpty") }}
+        </p>
+    </Card>
+
     <Card :title="t('pages.admin.dashboard.filters.title')">
       <div class="admin-dashboard__filters">
         <div class="admin-dashboard__field">
@@ -71,6 +101,7 @@
               id="athlete-select"
               class="admin-dashboard__select"
               v-model="selectedAthleteId"
+              @change ="handleSearch"
             >
               <option value="">
                 {{ t("pages.admin.dashboard.filters.selectPlaceholder") }}
@@ -85,15 +116,6 @@
           </p>
         </div>
       </div>
-
-      <div class="admin-dashboard__actions">
-        <button type="button" class="btn" :disabled="isSearchDisabled" @click="handleSearch">
-          {{ t("pages.admin.dashboard.filters.search") }}
-        </button>
-        <button type="button" class="btn admin-dashboard__btn-reset" @click="handleReset">
-          {{ t("pages.admin.dashboard.filters.reset") }}
-        </button>
-      </div>
     </Card>
 
     <div v-if="displayedAthlete" class="admin-dashboard__athlete-page">
@@ -102,7 +124,7 @@
         <div class="admin-dashboard__date-filters">
           <div class="admin-dashboard__filter-group">
             <label class="admin-dashboard__filter-label">{{ t('pages.admin.dashboard.athletePage.efforts.startDate') }}</label>
-            <input 
+            <input
               type="date"
               v-model="startDateFilter"
               class="admin-dashboard__filter-input"
@@ -111,7 +133,7 @@
           </div>
           <div class="admin-dashboard__filter-group">
             <label class="admin-dashboard__filter-label">{{ t('pages.admin.dashboard.athletePage.efforts.endDate') }}</label>
-            <input 
+            <input
               type="date"
               v-model="endDateFilter"
               class="admin-dashboard__filter-input"
@@ -119,54 +141,52 @@
             />
           </div>
         </div>
-        
-        <!-- Chart -->
-        <div v-if="effortChartData" class="admin-dashboard__chart-container">
-          <LineChart 
-            :chart-data="effortChartData" 
-            :options="chartOptions"
-            class="admin-dashboard__chart"
-          />
+
+        <!-- Charts (charges + plaisir, agrégation hebdo côté client) -->
+        <div v-if="loadChartData" class="admin-dashboard__chart-block">
+          <h3 class="admin-dashboard__chart-title">{{ t('pages.admin.dashboard.athletePage.efforts.chartTitleLoad') }}</h3>
+          <div class="admin-dashboard__chart-container">
+            <LineChart
+              :chart-data="loadChartData"
+              :options="loadChartOptions"
+              class="admin-dashboard__chart"
+            />
+          </div>
         </div>
-        
+        <div v-if="pleasureChartData" class="admin-dashboard__chart-block">
+          <h3 class="admin-dashboard__chart-title">{{ t('pages.admin.dashboard.athletePage.efforts.chartTitlePleasure') }}</h3>
+          <div class="admin-dashboard__chart-container">
+            <LineChart
+              :chart-data="pleasureChartData"
+              :options="pleasureChartOptions"
+              class="admin-dashboard__chart"
+            />
+          </div>
+        </div>
+
         <p v-if="athleteEfforts.length === 0" class="content-grid__text">
           {{ t("pages.admin.dashboard.athletePage.efforts.empty") }}
         </p>
       </Card>
-    </div>
-
-    <div v-else class="admin-dashboard__tiles">
-      <Card :title="t('pages.admin.dashboard.injuredAthletesTitle')">
-        <ul v-if="injuredAthletes.length > 0" class="admin-dashboard__notes-list">
-          <li v-for="athlete in injuredAthletes" :key="athlete.id" class="admin-dashboard__note-item">
-            <RouterLink
-              class="admin-dashboard__note-contenu"
-              :to="{ name: 'admin.children.athletes.detail', params: { id: athlete.id } }"
-            >{{ athlete.firstName }} {{ athlete.lastName }}</RouterLink>
-          </li>
-        </ul>
-        <p v-else class="content-grid__text">
-          {{ t("pages.admin.dashboard.injuredAthletesEmpty") }}
-        </p>
-      </Card>
-
-      <Card :title="t('pages.admin.dashboard.weeklyGraphsTitle')">
-        <p class="content-grid__text">
-          {{ t("pages.admin.dashboard.weeklyGraphsPlaceholder") }}
-        </p>
-      </Card>
-
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { computed, onMounted, ref, watch } from "vue";
+import {
+  aggregateEffortsByWeek,
+  buildWeeklyLoadChart,
+  buildWeeklyPleasureChart,
+  weeklyLoadChartOptions,
+  weeklyPleasureChartOptions,
+} from "@/utils/weeklyEffortCharts";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue3-i18n";
 import { useAthleteService, useTeamService } from "@/inversify.config";
 import Card from "@/components/layouts/items/Card.vue";
 import LineChart from "@/components/charts/LineChart.vue";
+import IconBandage from 'vue-material-design-icons/Bandage.vue';
 import { FormOption } from "@/types/formOption";
 import { Athlete, AthleteEffort, NoteBlessure, OverloadedAthlete, Team } from "@/types/entities";
 
@@ -182,11 +202,18 @@ const displayedAthleteId = ref<string>("");
 
 const teams = ref<Team[]>([]);
 const athletes = ref<Athlete[]>([]);
-const injuredAthletes = ref<Athlete[]>([]);
+type InjuredAthleteWithNote = Athlete & {
+    lastInjuryNote?: string;
+};
+const injuredAthletes = ref<InjuredAthleteWithNote[]>([]);
 const overloadedAthletes = ref<OverloadedAthlete[]>([]);
 const injuryNotes = ref<NoteBlessure[]>([]);
 const athleteEfforts = ref<AthleteEffort[]>([]);
-const effortChartData = ref<any>(null);
+const loadChartData = ref<Record<string, unknown> | null>(null);
+const pleasureChartData = ref<Record<string, unknown> | null>(null);
+
+const loadChartOptions = computed(() => weeklyLoadChartOptions(t));
+const pleasureChartOptions = computed(() => weeklyPleasureChartOptions(t));
 const today = new Date();
 const mondayBasedDay = (today.getDay() + 6) % 7;
 const startOfCurrentWeek = new Date(today);
@@ -252,51 +279,54 @@ watch(selectedTeamId, (newTeamId) => {
 onMounted(async () => {
   teams.value = await loadAllTeams();
   athletes.value = await loadAllAthletes();
-  injuredAthletes.value = await athleteService.getInjured();
+    const injured = await athleteService.getInjured();
+
+    const injuredWithNotes: InjuredAthleteWithNote[] = await Promise.all(
+        injured.map(async (athlete) => {
+            const notes = await athleteService.getNotesBlessure(athlete.id!);
+
+            const sortedNotes = [...notes].sort((a, b) => {
+                const timeA = new Date(a.createdAt ?? "").getTime();
+                const timeB = new Date(b.createdAt ?? "").getTime();
+                return timeB - timeA; // plus récente en premier
+            });
+
+            return {
+                ...athlete,
+                lastInjuryNote: sortedNotes[0]?.contenu ?? ""
+            };
+        })
+    );
+
+    injuredAthletes.value = injuredWithNotes;
   overloadedAthletes.value = await athleteService.getOverloaded();
 });
 
 watch([displayedAthleteId, startDateFilter, endDateFilter], async ([newId, newStartDate, newEndDate]) => {
   injuryNotes.value = [];
   athleteEfforts.value = [];
-  effortChartData.value = null;
+  loadChartData.value = null;
+  pleasureChartData.value = null;
   newNoteContenu.value = "";
   noteSubmitMessage.value = "";
   if (newId) {
     injuryNotes.value = await athleteService.getNotesBlessure(newId);
-    const effortsResponse = await athleteService.getAthleteEfforts(newId, 1, 10, newStartDate, newEndDate);
+    const effortsResponse = await athleteService.getAthleteEfforts(newId, 1, 500, newStartDate, newEndDate);
     const sortedEfforts = [...(effortsResponse.items ?? [])].sort((a, b) => {
       const timeA = new Date(a.createdAt ?? "").getTime();
       const timeB = new Date(b.createdAt ?? "").getTime();
       const safeTimeA = Number.isNaN(timeA) ? 0 : timeA;
       const safeTimeB = Number.isNaN(timeB) ? 0 : timeB;
-      return safeTimeA - safeTimeB;
+      return safeTimeB - safeTimeA;
     });
     athleteEfforts.value = sortedEfforts;
-    
-    // Generate chart data
+
     if (sortedEfforts.length > 0) {
-      effortChartData.value = {
-        labels: sortedEfforts.map(e => formatDateOnly(e.createdAt)),
-        datasets: [
-          {
-            label: 'Effort/Temps',
-            data: sortedEfforts.map(e => ((e.durationMinutes ?? 0) * (e.effort ?? 0)) / 100),
-            borderColor: '#42b983',
-            backgroundColor: 'rgba(66, 185, 131, 0.1)',
-            tension: 0.1,
-            yAxisID: 'y'
-          },
-          {
-            label: t('pages.admin.dashboard.athletePage.efforts.pleasure'),
-            data: sortedEfforts.map(e => e.pleasure !== undefined && e.pleasure !== null ? e.pleasure : 0),
-            borderColor: '#4dabf7',
-            backgroundColor: 'rgba(77, 171, 247, 0.1)',
-            tension: 0.1,
-            yAxisID: 'y'
-          }
-        ]
-      };
+      const buckets = aggregateEffortsByWeek(sortedEfforts);
+      if (buckets.length > 0) {
+        loadChartData.value = buildWeeklyLoadChart(buckets, t);
+        pleasureChartData.value = buildWeeklyPleasureChart(buckets, t);
+      }
     }
   }
 });
@@ -379,26 +409,6 @@ async function loadAllAthletes(): Promise<Athlete[]> {
 
   return allAthletes;
 }
-
-  const chartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    scales: {
-      y: {
-        beginAtZero: true,
-        title: {
-          display: true,
-        text: 'Effort/Temps et plaisir'
-        }
-      },
-      x: {
-        title: {
-          display: true,
-          text: t('pages.admin.dashboard.athletePage.efforts.date')
-        }
-      }
-    }
-  };
 </script>
 
 <style scoped>
@@ -427,6 +437,17 @@ async function loadAllAthletes(): Promise<Athlete[]> {
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 1rem;
+}
+
+.admin-dashboard__chart-block {
+  margin-bottom: 1rem;
+}
+
+.admin-dashboard__chart-title {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2c3e50;
 }
 
 .admin-dashboard__chart-container {
@@ -471,5 +492,16 @@ async function loadAllAthletes(): Promise<Athlete[]> {
 
 .admin-dashboard__overload-row:hover {
   background-color: var(--color-green-lighter, #e8f5e9);
+}
+
+.admin-dashboard__note-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.admin-dashboard__table th,
+.admin-dashboard__table td {
+    width: 25%;
 }
 </style>
