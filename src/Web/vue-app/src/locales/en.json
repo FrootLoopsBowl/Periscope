@@ -252,10 +252,8 @@
             "endDatePlaceholder": "YYYY-MM-DD",
             "chartTitleLoad": "Training load (weekly)",
             "chartTitlePleasure": "Pleasure (weekly)",
-            "chartEffortSeries": "Effort (avg.)",
-            "chartDurationSeries": "Total duration (min)",
-            "chartAxisEffort": "Effort level",
-            "chartAxisDuration": "Minutes",
+            "chartTrainingLoadSeries": "Training load",
+            "chartAxisTrainingLoad": "Load",
             "chartAxisPleasure": "Pleasure",
             "chartAxisWeek": "Week (start)"
           }
