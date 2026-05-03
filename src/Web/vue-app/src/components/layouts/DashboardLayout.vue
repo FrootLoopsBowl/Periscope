@@ -9,7 +9,6 @@
 
       <div>
         <div class="dashboard__content-header" v-if="!isMobile">
-          <UserAvatar/>
           <LangSwitcher/>
         </div>
 
@@ -35,9 +34,8 @@ import Navbar from "@/components/navigation/Navbar.vue";
 import LogoutPopup from "@/components/layouts/items/LogoutPopup.vue";
 import Notifications from "@/components/layouts/items/Notifications.vue";
 import Loader from "@/components/layouts/items/Loader.vue";
-import {useWindowSize} from "vue-window-size";
-import UserAvatar from "@/components/account/UserAvatar.vue";
 import LangSwitcher from "@/components/layouts/items/LangSwitcher.vue";
+import {useWindowSize} from "vue-window-size";
 import {Administrator, Member} from "@/types";
 import {Role} from "@/types/enums";
 import {useAdministratorStore} from "@/stores/administratorStore";

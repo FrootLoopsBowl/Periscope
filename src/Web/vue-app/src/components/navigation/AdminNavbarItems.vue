@@ -11,7 +11,9 @@
       </RouterLink>
     </li>
     <li>
-      <Subnav :routeKey="'admin'" :exclude="['members', 'teams']"/>
+      <RouterLink :to="{ name: 'admin.children.athletes.index' }" class="navbar__navlink">
+        {{ t('routes.admin.children.athletes.name') }}
+      </RouterLink>
     </li>
     <li>
       <TeamNavList />
@@ -21,7 +23,6 @@
 
 <script lang="ts" setup>
 import { useI18n } from "vue3-i18n";
-import Subnav from "./Subnav.vue";
 import TeamNavList from "./TeamNavList.vue";
 
 const {t} = useI18n()
