@@ -105,6 +105,11 @@ public static class ConfigureServices
             .AddEntityFrameworkStores<GarneauTemplateDbContext>()
             .AddSignInManager<SignInManager<User>>();
 
+        services.Configure<DataProtectionTokenProviderOptions>(options =>
+        {
+            options.TokenLifespan = TimeSpan.FromMinutes(15);
+        });
+
         // Add and configure Argon2 password hasher
         services.AddScoped<IPasswordHasher<User>, Argon2PasswordHasher<User>>();
         services.Configure<Argon2PasswordHasherOptions>(options =>
