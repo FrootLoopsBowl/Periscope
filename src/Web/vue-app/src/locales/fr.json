@@ -261,10 +261,8 @@
             "endDatePlaceholder": "YYYY-MM-DD",
             "chartTitleLoad": "Charges d'entraînement (par semaine)",
             "chartTitlePleasure": "Plaisir (par semaine)",
-            "chartEffortSeries": "Effort (moy.)",
-            "chartDurationSeries": "Durée totale (min)",
-            "chartAxisEffort": "Niveau d'effort",
-            "chartAxisDuration": "Minutes",
+            "chartTrainingLoadSeries": "Charge d'entraînement",
+            "chartAxisTrainingLoad": "Charge",
             "chartAxisPleasure": "Plaisir",
             "chartAxisWeek": "Semaine (début)"
           }

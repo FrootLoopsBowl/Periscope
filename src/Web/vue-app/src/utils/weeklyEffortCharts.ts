@@ -5,8 +5,7 @@ export type TranslateFn = (key: string) => string;
 export interface WeeklyBucket {
   weekStartMs: number;
   label: string;
-  avgEffort: number;
-  sumDurationMinutes: number;
+  trainingLoad: number;
   avgPleasure: number | null;
 }
 
@@ -42,17 +41,14 @@ export function aggregateEffortsByWeek(efforts: AthleteEffort[], locale = "fr-CA
   for (const arr of groups.values()) {
     const first = arr[0];
     const weekStart = mondayStart(new Date(first.createdAt ?? ""));
-    const sumEffort = arr.reduce((s, x) => s + (x.effort ?? 0), 0);
-    const avgEffort = arr.length ? sumEffort / arr.length : 0;
-    const sumDurationMinutes = arr.reduce((s, x) => s + (x.durationMinutes ?? 0), 0);
+    const trainingLoad = arr.reduce((s, x) => s + (x.effort ?? 0) * (x.durationMinutes ?? 0), 0);
     const pleasures = arr.map((x) => x.pleasure).filter((p): p is number => typeof p === "number");
     const avgPleasure = pleasures.length ? pleasures.reduce((a, b) => a + b, 0) / pleasures.length : null;
 
     buckets.push({
       weekStartMs: weekStart.getTime(),
       label: formatter.format(weekStart),
-      avgEffort,
-      sumDurationMinutes,
+      trainingLoad,
       avgPleasure,
     });
   }
@@ -66,20 +62,12 @@ export function buildWeeklyLoadChart(buckets: WeeklyBucket[], t: TranslateFn) {
     labels: buckets.map((b) => b.label),
     datasets: [
       {
-        label: t("pages.admin.dashboard.athletePage.efforts.chartEffortSeries"),
-        data: buckets.map((b) => b.avgEffort),
+        label: t("pages.admin.dashboard.athletePage.efforts.chartTrainingLoadSeries"),
+        data: buckets.map((b) => b.trainingLoad),
         borderColor: "#42b983",
         backgroundColor: "rgba(66, 185, 131, 0.1)",
         tension: 0.1,
         yAxisID: "y",
-      },
-      {
-        label: t("pages.admin.dashboard.athletePage.efforts.chartDurationSeries"),
-        data: buckets.map((b) => b.sumDurationMinutes),
-        borderColor: "#e67700",
-        backgroundColor: "rgba(230, 119, 0, 0.08)",
-        tension: 0.1,
-        yAxisID: "y1",
       },
     ],
   };
@@ -109,19 +97,9 @@ export function weeklyLoadChartOptions(t: TranslateFn) {
     scales: {
       y: {
         beginAtZero: true,
-        position: "left" as const,
         title: {
           display: true,
-          text: t("pages.admin.dashboard.athletePage.efforts.chartAxisEffort"),
-        },
-      },
-      y1: {
-        beginAtZero: true,
-        position: "right" as const,
-        grid: { drawOnChartArea: false },
-        title: {
-          display: true,
-          text: t("pages.admin.dashboard.athletePage.efforts.chartAxisDuration"),
+          text: t("pages.admin.dashboard.athletePage.efforts.chartAxisTrainingLoad"),
         },
       },
       x: {
