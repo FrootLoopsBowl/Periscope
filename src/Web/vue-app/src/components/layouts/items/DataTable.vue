@@ -11,6 +11,8 @@
       :rows-per-page="isSoloItem ? 1 : 10"
       :search-value="searchValue"
       :table-min-height="0"
+      :server-items-length="serverItemsLength"
+      v-model:server-options="serverOptions"
       alternating
       buttons-pagination
       header-item-class-name="vue3-easy-data-table__header-item"
@@ -64,7 +66,8 @@
 </template>
 
 <script lang="ts" setup>
-import type {FilterOption, Header, Item} from "vue3-easy-data-table"
+import type {FilterOption, Header, Item, ServerOptions} from "vue3-easy-data-table"
+import {ref, watch, computed} from "vue"
 import {useI18n} from "vue3-i18n"
 import IconEdit from "@/assets/icons/icon__edit.svg"
 import IconDelete from "@/assets/icons/icon__delete.svg"
@@ -74,20 +77,32 @@ import IconMail from "@/assets/icons/icon__mail.svg"
 const {t} = useI18n()
 
 // eslint-disable-next-line
-defineProps<{
+const props = defineProps<{
   headers: Header[],
   items: Item[],
   filterOptions?: FilterOption[],
   isLoading?: boolean,
   searchValue?: string
   isSoloItem?: boolean
+  totalItems?: number
 }>()
 
 // eslint-disable-next-line
 const emit = defineEmits<{
   (event: "delete", item: any): void
   (event: "resend", item: any): void
+  (event: "reload", pageIndex: number, pageSize: number): void
 }>()
+
+const serverOptions = ref<ServerOptions>({ page: 1, rowsPerPage: 10 })
+
+const serverItemsLength = computed(() => props.totalItems !== undefined ? props.totalItems : -1)
+
+watch(serverOptions, (options) => {
+  if (props.totalItems !== undefined) {
+    emit('reload', options.page, options.rowsPerPage)
+  }
+}, { deep: true })
 
 function handleDelete(item: any) {
   emit("delete", item)

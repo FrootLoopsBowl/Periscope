@@ -177,6 +177,7 @@
       :headers="athleteHeaders"
       :is-loading="athletesAreLoading"
       :items="tableAthletes"
+      :total-items="paginatedResponse.totalItems"
       @delete="onDelete"
       @resend="onResendLink"
       @reload="loadAthletes"

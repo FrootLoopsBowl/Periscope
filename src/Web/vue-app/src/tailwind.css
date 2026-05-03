@@ -561,7 +561,7 @@
 
 .vue3-easy-data-table .next-page__click-button .arrow,
 .vue3-easy-data-table .previous-page__click-button .arrow {
-  background-image: url(@/assets/icons/icon__arrow--blue.png) !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 15'%3E%3Cpath fill='%235e2028' d='m13 14.367-1.4-1.374 4.6-4.511H0V6.52h16.2L11.6 2.01 13 .636 20 7.5l-7 6.865Z'/%3E%3C/svg%3E") !important;
   background-repeat: no-repeat !important;
   background-position: center !important;
   background-size: contain !important;
@@ -1810,6 +1810,9 @@ form input[type="checkbox"] + label::before {
 .navbar__navlink.router-link-active {
   color: var(--color-white);
   background-color: rgba(255, 255, 255, 0.14);
+}
+
+.navbar__navlink.router-link-exact-active {
   pointer-events: none;
 }
 
