@@ -245,7 +245,7 @@
               </button>
             </div>
           </div>
-          <p v-else class="font-montserrat text-grey-dark italic">
+          <p v-else-if="injuryNotes.length === 0" class="font-montserrat text-grey-dark italic">
             {{ t('pages.admin.dashboard.athletePage.injuryNotesEmpty') }}
           </p>
         </div>
