@@ -17,7 +17,7 @@ function mondayStart(d: Date): Date {
   return local;
 }
 
-/** Regroupe les séances par semaine (lundi → dimanche), semaines les plus récentes en premier. */
+/** Regroupe les séances par semaine (lundi → dimanche), semaines les plus récentes en dernier. */
 export function aggregateEffortsByWeek(efforts: AthleteEffort[], locale = "fr-CA"): WeeklyBucket[] {
   const groups = new Map<string, AthleteEffort[]>();
 
@@ -53,7 +53,7 @@ export function aggregateEffortsByWeek(efforts: AthleteEffort[], locale = "fr-CA
     });
   }
 
-  buckets.sort((a, b) => b.weekStartMs - a.weekStartMs);
+  buckets.sort((a, b) => a.weekStartMs - b.weekStartMs);
   return buckets;
 }
 

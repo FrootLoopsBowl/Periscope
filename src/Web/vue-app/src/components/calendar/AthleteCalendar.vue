@@ -146,6 +146,9 @@ function onViewChange({ startDate, endDate }: { startDate: Date; endDate: Date }
   border-radius: 4px;
   padding: 1px 4px;
   cursor: pointer;
+  display: block;
+  width: 100%;
+  text-align: center;
 }
 
 :deep(.event-match) {
@@ -154,6 +157,9 @@ function onViewChange({ startDate, endDate }: { startDate: Date; endDate: Date }
   border-radius: 4px;
   padding: 1px 4px;
   cursor: pointer;
+  display: block;
+  width: 100%;
+  text-align: center;
 }
 
 .calendar-modal {
@@ -163,6 +169,21 @@ function onViewChange({ startDate, endDate }: { startDate: Date; endDate: Date }
   align-items: center;
   justify-content: center;
   z-index: 1000;
+}
+
+:deep(.vuecal--month-view .vuecal__cell-content .vuecal__event) {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 100% !important;
+  box-sizing: border-box;
+  padding: 0 !important;
+}
+
+:deep(.vuecal--month-view .vuecal__cell-content .vuecal__event .vuecal__event-title) {
+  width: 100% !important;
+  text-align: center !important;
+  display: block !important;
 }
 
 .calendar-modal__bg {
