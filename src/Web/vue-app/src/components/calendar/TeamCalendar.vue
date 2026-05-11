@@ -315,6 +315,7 @@ async function handleDelete() {
   color: white;
   border-radius: 4px;
   padding: 1px 4px;
+  cursor: pointer;
 }
 
 :deep(.event-match) {
@@ -322,6 +323,22 @@ async function handleDelete() {
   color: white;
   border-radius: 4px;
   padding: 1px 4px;
+  cursor: pointer;
+}
+
+:deep(.vuecal--month-view .vuecal__cell-content .vuecal__event) {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 100% !important;
+  box-sizing: border-box;
+  padding: 0 !important;
+}
+
+:deep(.vuecal--month-view .vuecal__cell-content .vuecal__event .vuecal__event-title) {
+  width: 100% !important;
+  text-align: center !important;
+  display: block !important;
 }
 
 .calendar-modal {
