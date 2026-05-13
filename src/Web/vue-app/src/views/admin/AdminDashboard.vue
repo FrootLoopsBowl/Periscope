@@ -149,6 +149,7 @@
             <LineChart
               :chart-data="loadChartData"
               :options="loadChartOptions"
+              chart-js-type="bar"
               class="admin-dashboard__chart"
             />
           </div>
@@ -317,7 +318,7 @@ watch([displayedAthleteId, startDateFilter, endDateFilter], async ([newId, newSt
       const timeB = new Date(b.createdAt ?? "").getTime();
       const safeTimeA = Number.isNaN(timeA) ? 0 : timeA;
       const safeTimeB = Number.isNaN(timeB) ? 0 : timeB;
-      return safeTimeB - safeTimeA;
+      return safeTimeA - safeTimeB;
     });
     athleteEfforts.value = sortedEfforts;
 

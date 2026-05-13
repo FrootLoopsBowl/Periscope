@@ -78,7 +78,7 @@
           <div v-if="loadChartData" class="flex flex-col gap-2">
             <h3 class="font-montserrat font-semibold text-grey-darker text-sm">{{ t('pages.admin.dashboard.athletePage.efforts.chartTitleLoad') }}</h3>
             <div class="h-72 bg-white rounded-lg p-4 border border-grey-light">
-              <LineChart :chart-data="loadChartData" :options="loadChartOptions" class="h-full" />
+              <LineChart :chart-data="loadChartData" :options="loadChartOptions" chart-js-type="bar" class="h-full" />
             </div>
           </div>
           <div v-if="pleasureChartData" class="flex flex-col gap-2 mt-4">
@@ -499,7 +499,7 @@ async function loadEfforts() {
     const timeB = new Date(b.createdAt ?? "").getTime()
     const safeTimeA = Number.isNaN(timeA) ? 0 : timeA
     const safeTimeB = Number.isNaN(timeB) ? 0 : timeB
-    return safeTimeB - safeTimeA
+    return safeTimeA - safeTimeB
   })
 
   athleteEfforts.value = sortedEfforts

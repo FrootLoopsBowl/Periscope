@@ -253,6 +253,7 @@
             "chartTitleLoad": "Training load (weekly)",
             "chartTitlePleasure": "Pleasure (weekly)",
             "chartTrainingLoadSeries": "Training load",
+            "chartMaxLoadSeries": "Maximum load",
             "chartAxisTrainingLoad": "Load",
             "chartAxisPleasure": "Pleasure",
             "chartAxisWeek": "Week (start)"

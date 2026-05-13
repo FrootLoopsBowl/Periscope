@@ -57,16 +57,42 @@ export function aggregateEffortsByWeek(efforts: AthleteEffort[], locale = "fr-CA
   return buckets;
 }
 
+const CHARGE_MAX_MULTIPLIER = 1.1;
+const PRIOR_WEEKS_FOR_MAX = 5;
+
+/** Moyenne des `PRIOR_WEEKS_FOR_MAX` semaines précédentes × `CHARGE_MAX_MULTIPLIER` par semaine (null si moins de 5 semaines d'historique). */
+export function chargeMaximalePerWeek(buckets: WeeklyBucket[]): (number | null)[] {
+  return buckets.map((_, i) => {
+    if (i < PRIOR_WEEKS_FOR_MAX) return null;
+    const slice = buckets.slice(i - PRIOR_WEEKS_FOR_MAX, i);
+    const avg = slice.reduce((s, b) => s + b.trainingLoad, 0) / PRIOR_WEEKS_FOR_MAX;
+    return avg * CHARGE_MAX_MULTIPLIER;
+  });
+}
+
 export function buildWeeklyLoadChart(buckets: WeeklyBucket[], t: TranslateFn) {
+  const maxSeries = chargeMaximalePerWeek(buckets);
   return {
     labels: buckets.map((b) => b.label),
     datasets: [
       {
+        type: "line" as const,
+        order: 2,
         label: t("pages.admin.dashboard.athletePage.efforts.chartTrainingLoadSeries"),
         data: buckets.map((b) => b.trainingLoad),
         borderColor: "#42b983",
         backgroundColor: "rgba(66, 185, 131, 0.1)",
         tension: 0.1,
+        yAxisID: "y",
+      },
+      {
+        type: "bar" as const,
+        order: 1,
+        label: t("pages.admin.dashboard.athletePage.efforts.chartMaxLoadSeries"),
+        data: maxSeries,
+        backgroundColor: "rgba(220, 38, 38, 0.55)",
+        borderColor: "rgb(185, 28, 28)",
+        borderWidth: 1,
         yAxisID: "y",
       },
     ],
@@ -94,6 +120,12 @@ export function weeklyLoadChartOptions(t: TranslateFn) {
     responsive: true,
     maintainAspectRatio: false,
     interaction: { mode: "index" as const, intersect: false },
+    datasets: {
+      bar: {
+        categoryPercentage: 0.55,
+        barPercentage: 0.85,
+      },
+    },
     scales: {
       y: {
         beginAtZero: true,
