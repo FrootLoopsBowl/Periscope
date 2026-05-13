@@ -253,6 +253,7 @@
             "chartTitleLoad": "Training load (weekly)",
             "chartTitlePleasure": "Pleasure (weekly)",
             "chartTrainingLoadSeries": "Training load",
+            "chartMaxLoadSeries": "Maximum load",
             "chartAxisTrainingLoad": "Load",
             "chartAxisPleasure": "Pleasure",
             "chartAxisWeek": "Week (start)"
@@ -426,6 +427,7 @@
         "descriptionPlaceholder": "Add a description (optional)...",
         "saveSuccess": "Event saved successfully.",
         "saveError": "Error saving the event.",
+        "saveErrorDateRange": "The end time must be after the start time.",
         "deleteSuccess": "Event deleted successfully.",
         "deleteError": "Error deleting the event."
       }
@@ -578,6 +580,7 @@
     "formErrorNotification": "There are errors in the form.",
     "quickLinks": "Quick links",
     "undefined": "N/A",
+    "help": "Help",
     "logout": "Logout",
     "table": {
       "of": "of",

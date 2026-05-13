@@ -222,6 +222,11 @@ async function reload() {
 }
 
 async function handleCreate() {
+
+  if (createForm.value.endTime <= createForm.value.startTime) {
+    notifyError(t('pages.teams.calendar.saveErrorDateRange'))
+    return
+  }
   isSaving.value = true
   const result = await teamEventService.createEvent(props.teamId, {
     type: createForm.value.type,
@@ -241,6 +246,10 @@ async function handleCreate() {
 
 async function handleUpdate() {
   if (!selectedEvent.value?.id) return
+  if (editForm.value.endTime <= editForm.value.startTime) {
+    notifyError(t('pages.teams.calendar.saveErrorDateRange'))
+    return
+  }
   isSaving.value = true
   const result = await teamEventService.updateEvent(props.teamId, selectedEvent.value.id, {
     type: editForm.value.type,
@@ -315,6 +324,7 @@ async function handleDelete() {
   color: white;
   border-radius: 4px;
   padding: 1px 4px;
+  cursor: pointer;
 }
 
 :deep(.event-match) {
@@ -322,6 +332,22 @@ async function handleDelete() {
   color: white;
   border-radius: 4px;
   padding: 1px 4px;
+  cursor: pointer;
+}
+
+:deep(.vuecal--month-view .vuecal__cell-content .vuecal__event) {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 100% !important;
+  box-sizing: border-box;
+  padding: 0 !important;
+}
+
+:deep(.vuecal--month-view .vuecal__cell-content .vuecal__event .vuecal__event-title) {
+  width: 100% !important;
+  text-align: center !important;
+  display: block !important;
 }
 
 .calendar-modal {

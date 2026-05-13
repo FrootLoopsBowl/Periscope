@@ -262,6 +262,7 @@
             "chartTitleLoad": "Charges d'entraînement (par semaine)",
             "chartTitlePleasure": "Plaisir (par semaine)",
             "chartTrainingLoadSeries": "Charge d'entraînement",
+            "chartMaxLoadSeries": "Charge maximale",
             "chartAxisTrainingLoad": "Charge",
             "chartAxisPleasure": "Plaisir",
             "chartAxisWeek": "Semaine (début)"
@@ -435,6 +436,7 @@
         "descriptionPlaceholder": "Ajouter une description (optionnel)...",
         "saveSuccess": "L'événement a été sauvegardé.",
         "saveError": "Erreur lors de la sauvegarde de l'événement.",
+        "saveErrorDateRange": "L'heure de fin doit être après l'heure de début.",
         "deleteSuccess": "L'événement a été supprimé.",
         "deleteError": "Erreur lors de la suppression de l'événement."
       }
@@ -596,6 +598,7 @@
     "formErrorNotification": "Il y a des erreurs dans le formulaire.",
     "quickLinks": "Liens rapides",
     "undefined": "ND",
+    "help": "Aide",
     "logout": "Déconnexion",
     "table": {
       "of": "de",

@@ -90,8 +90,8 @@
 
           <div>
             <div class="mb-3">
-              <button type="button" class="w-full border border-grey rounded-lg bg-white flex items-center justify-center p-2 leading-none" @click="showEfforts = !showEfforts" :aria-expanded="String(showEfforts)">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h- w-5 transform origin-center block transition-transform" :class="{ 'rotate-180': showEfforts }" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" style="transform-origin:center center;"><path fill-rule="evenodd" d="M10 3a1 1 0 01.707.293l5 5a1 1 0 11-1.414 1.414L10 5.414 5.707 9.707A1 1 0 114.293 8.293l5-5A1 1 0 0110 3z" clip-rule="evenodd"/></svg>
+              <button type="button" class="w-full border border-grey rounded-lg bg-white text-center px-4 py-2 font-montserrat text-sm" @click="showEfforts = !showEfforts" aria-label="Voir entrainements">
+                Voir entrainements
               </button>
             </div>
 
@@ -254,7 +254,7 @@
               </button>
             </div>
           </div>
-          <p v-else class="font-montserrat text-grey-dark italic">
+          <p v-else-if="injuryNotes.length === 0" class="font-montserrat text-grey-dark italic">
             {{ t('pages.admin.dashboard.athletePage.injuryNotesEmpty') }}
           </p>
         </div>
@@ -499,7 +499,7 @@ async function loadEfforts() {
     const timeB = new Date(b.createdAt ?? "").getTime()
     const safeTimeA = Number.isNaN(timeA) ? 0 : timeA
     const safeTimeB = Number.isNaN(timeB) ? 0 : timeB
-    return safeTimeB - safeTimeA
+    return safeTimeA - safeTimeB
   })
 
   athleteEfforts.value = sortedEfforts
@@ -507,7 +507,10 @@ async function loadEfforts() {
   pleasureChartData.value = null
 
   if (sortedEfforts.length > 0) {
-    const buckets = aggregateEffortsByWeek(sortedEfforts)
+    const buckets = aggregateEffortsByWeek(sortedEfforts, "fr-CA", {
+      start: startDateFilter.value,
+      end: endDateFilter.value,
+    })
     if (buckets.length > 0) {
       loadChartData.value = buildWeeklyLoadChart(buckets, t)
       pleasureChartData.value = buildWeeklyPleasureChart(buckets, t)

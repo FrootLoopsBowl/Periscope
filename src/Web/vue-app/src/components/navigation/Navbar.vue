@@ -28,6 +28,13 @@
     </Transition>
 
     <div class="navbar__footer">
+      <a
+          class="navbar__help"
+          :href="userGuidePath"
+          download
+      >
+        {{ t('global.help') }}
+      </a>
       <LogoutButton classes="navbar__logout"/>
     </div>
   </div>
@@ -52,6 +59,7 @@ const props = defineProps<{
 const {t} = useI18n()
 
 const userStore = useUserStore()
+const userGuidePath = `${import.meta.env.BASE_URL}aide/guide-utilisateur-admin.pdf`
 
 let isExpanded = ref<boolean>(true);
 let content = ref<HTMLElement>();
