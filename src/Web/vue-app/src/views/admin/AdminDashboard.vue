@@ -149,7 +149,6 @@
             <LineChart
               :chart-data="loadChartData"
               :options="loadChartOptions"
-              chart-js-type="bar"
               class="admin-dashboard__chart"
             />
           </div>
@@ -323,7 +322,10 @@ watch([displayedAthleteId, startDateFilter, endDateFilter], async ([newId, newSt
     athleteEfforts.value = sortedEfforts;
 
     if (sortedEfforts.length > 0) {
-      const buckets = aggregateEffortsByWeek(sortedEfforts);
+      const buckets = aggregateEffortsByWeek(sortedEfforts, "fr-CA", {
+        start: newStartDate,
+        end: newEndDate,
+      });
       if (buckets.length > 0) {
         loadChartData.value = buildWeeklyLoadChart(buckets, t);
         pleasureChartData.value = buildWeeklyPleasureChart(buckets, t);
