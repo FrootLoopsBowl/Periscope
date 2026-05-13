@@ -194,16 +194,67 @@ public class ImportAthletesEndpoint : Endpoint<ImportAthletesRequest, ImportAthl
 
     private static async Task<List<string>> ReadLinesAsync(Microsoft.AspNetCore.Http.IFormFile file, CancellationToken ct)
     {
-        var lines = new List<string>();
         using var stream = file.OpenReadStream();
-        using var reader = new StreamReader(stream, Encoding.UTF8, detectEncodingFromByteOrderMarks: true);
-        while (!reader.EndOfStream)
-        {
-            var line = await reader.ReadLineAsync(ct);
-            if (line is not null)
-                lines.Add(line);
-        }
+        var bytes = new byte[stream.Length];
+        _ = await stream.ReadAsync(bytes, ct);
+
+        var encoding = DetectEncoding(bytes, out var bomLength);
+        var content = encoding.GetString(bytes, bomLength, bytes.Length - bomLength);
+
+        var rawLines = content.Split(["\r\n", "\r", "\n"], StringSplitOptions.None);
+        var lines = new List<string>(rawLines);
+        if (lines.Count > 0 && string.IsNullOrEmpty(lines[^1]))
+            lines.RemoveAt(lines.Count - 1);
         return lines;
+    }
+
+    private static Encoding DetectEncoding(byte[] bytes, out int bomLength)
+    {
+        // UTF-8 BOM (EF BB BF)
+        if (bytes.Length >= 3 && bytes[0] == 0xEF && bytes[1] == 0xBB && bytes[2] == 0xBF)
+        {
+            bomLength = 3;
+            return Encoding.UTF8;
+        }
+        // UTF-16 LE BOM (FF FE)
+        if (bytes.Length >= 2 && bytes[0] == 0xFF && bytes[1] == 0xFE)
+        {
+            bomLength = 2;
+            return Encoding.Unicode;
+        }
+        // UTF-16 BE BOM (FE FF)
+        if (bytes.Length >= 2 && bytes[0] == 0xFE && bytes[1] == 0xFF)
+        {
+            bomLength = 2;
+            return Encoding.BigEndianUnicode;
+        }
+
+        bomLength = 0;
+        // Sans BOM: tenter UTF-8 strict, sinon fallback Windows-1252 (Excel français)
+        return IsValidUtf8(bytes) ? Encoding.UTF8 : Encoding.GetEncoding(1252);
+    }
+
+    private static bool IsValidUtf8(byte[] bytes)
+    {
+        var i = 0;
+        while (i < bytes.Length)
+        {
+            var b = bytes[i];
+            int extra;
+            if (b < 0x80) { i++; continue; }
+            else if (b < 0xC2 || b > 0xF4) return false;
+            else if (b < 0xE0) extra = 1;
+            else if (b < 0xF0) extra = 2;
+            else extra = 3;
+
+            for (var j = 1; j <= extra; j++)
+            {
+                if (i + j >= bytes.Length || (bytes[i + j] & 0xC0) != 0x80)
+                    return false;
+            }
+            i += 1 + extra;
+        }
+        return true;
     }
 
     private static List<string> ParseCsvLine(string line, char separator)
