@@ -222,6 +222,11 @@ async function reload() {
 }
 
 async function handleCreate() {
+
+  if (createForm.value.endTime <= createForm.value.startTime) {
+    notifyError(t('pages.teams.calendar.saveErrorDateRange'))
+    return
+  }
   isSaving.value = true
   const result = await teamEventService.createEvent(props.teamId, {
     type: createForm.value.type,
@@ -241,6 +246,10 @@ async function handleCreate() {
 
 async function handleUpdate() {
   if (!selectedEvent.value?.id) return
+  if (editForm.value.endTime <= editForm.value.startTime) {
+    notifyError(t('pages.teams.calendar.saveErrorDateRange'))
+    return
+  }
   isSaving.value = true
   const result = await teamEventService.updateEvent(props.teamId, selectedEvent.value.id, {
     type: editForm.value.type,

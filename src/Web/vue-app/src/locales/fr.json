@@ -436,6 +436,7 @@
         "descriptionPlaceholder": "Ajouter une description (optionnel)...",
         "saveSuccess": "L'événement a été sauvegardé.",
         "saveError": "Erreur lors de la sauvegarde de l'événement.",
+        "saveErrorDateRange": "L'heure de fin doit être après l'heure de début.",
         "deleteSuccess": "L'événement a été supprimé.",
         "deleteError": "Erreur lors de la suppression de l'événement."
       }
