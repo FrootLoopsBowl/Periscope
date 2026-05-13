@@ -262,6 +262,7 @@
             "chartTitleLoad": "Charges d'entraînement (par semaine)",
             "chartTitlePleasure": "Plaisir (par semaine)",
             "chartTrainingLoadSeries": "Charge d'entraînement",
+            "chartMaxLoadSeries": "Charge maximale",
             "chartAxisTrainingLoad": "Charge",
             "chartAxisPleasure": "Plaisir",
             "chartAxisWeek": "Semaine (début)"

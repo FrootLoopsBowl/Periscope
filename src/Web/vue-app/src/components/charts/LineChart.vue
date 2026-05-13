@@ -13,6 +13,11 @@ const props = defineProps({
   options: {
     type: Object,
     default: () => ({})
+  },
+  /** Type racine Chart.js (`bar` pour graphiques mixtes barre + ligne). */
+  chartJsType: {
+    type: String,
+    default: 'line'
   }
 });
 
@@ -26,14 +31,18 @@ const renderChart = () => {
   
   if (chartCanvas.value) {
     chartInstance = new Chart(chartCanvas.value, {
-      type: 'line',
+      type: props.chartJsType,
       data: props.chartData,
       options: props.options
     });
   }
 };
 
-watch(() => props.chartData, renderChart, { deep: true });
+watch(
+  () => ({ data: props.chartData, chartJsType: props.chartJsType, options: props.options }),
+  renderChart,
+  { deep: true }
+);
 onMounted(renderChart);
 </script>
 

@@ -499,7 +499,7 @@ async function loadEfforts() {
     const timeB = new Date(b.createdAt ?? "").getTime()
     const safeTimeA = Number.isNaN(timeA) ? 0 : timeA
     const safeTimeB = Number.isNaN(timeB) ? 0 : timeB
-    return safeTimeB - safeTimeA
+    return safeTimeA - safeTimeB
   })
 
   athleteEfforts.value = sortedEfforts
@@ -507,7 +507,10 @@ async function loadEfforts() {
   pleasureChartData.value = null
 
   if (sortedEfforts.length > 0) {
-    const buckets = aggregateEffortsByWeek(sortedEfforts)
+    const buckets = aggregateEffortsByWeek(sortedEfforts, "fr-CA", {
+      start: startDateFilter.value,
+      end: endDateFilter.value,
+    })
     if (buckets.length > 0) {
       loadChartData.value = buildWeeklyLoadChart(buckets, t)
       pleasureChartData.value = buildWeeklyPleasureChart(buckets, t)
