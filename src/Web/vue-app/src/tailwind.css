@@ -1820,7 +1820,12 @@ form input[type="checkbox"] + label::before {
   pointer-events: none;
 }
 
+.navbar__help,
 .navbar__logout {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 9.5rem;
   color: var(--color-green-medium);
   background-color: var(--color-white);
   border: none;
@@ -1828,11 +1833,14 @@ form input[type="checkbox"] + label::before {
   padding: 10px 20px;
   font-weight: 700;
   font-family: var(--font-montserrat);
+  text-align: center;
+  text-decoration: none;
   cursor: pointer;
   transition: opacity 0.2s var(--ease-snappy);
 }
 
 @media (hover: hover) {
+  .navbar__help:hover,
   .navbar__logout:hover {
     opacity: 0.85;
   }
